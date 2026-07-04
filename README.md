@@ -4,7 +4,7 @@
 
 A Codex skill package for bootstrapping, auditing, repairing, and compacting durable project-local operating rules for long-running agent-assisted projects.
 
-It installs a project operating model with main planning threads, long-lived module/support/operations/research threads, project-state docs, handoffs, runbooks, ADRs, cross-thread dispatch, checkpoint recovery, Return Inbox workflows, model routing, localization, and context governance, LV2 docs-only compaction, and cross-tool/thread compaction locks.
+It installs a project operating model with main planning threads, long-lived module/support/operations/research threads, project-state docs, current PRD, current technical design, current workboard, handoffs, runbooks, ADRs, cross-thread dispatch, checkpoint recovery, Return Inbox workflows, model routing, localization, and context governance, LV2 docs-only compaction, and cross-tool/thread compaction locks.
 
 ## Core Principle
 
@@ -31,10 +31,17 @@ project-agent-operating-model/
 
 1. Invoke `$project-agent-operating-model` only when initializing, restructuring, repairing, compacting, or upgrading a project operating model.
 2. Copy `project-skeleton/` into the target project root, or copy specific templates from `references/`.
-3. For routine development, rely on project-local `AGENTS.md` and `docs/thread-operating-model.md`.
+3. For routine development, rely on project-local `AGENTS.md`, `docs/thread-operating-model.md`, `docs/current-prd.md`, `docs/current-technical-design.md`, and `docs/current-work.md`.
 4. For cross-thread dispatch, choose a Model Tier by task difficulty first, then choose a Model Version. Default to the latest available compatible version for the selected tier.
 5. Record requested/actual model/version, quota pool, fallback, and selection reason in `docs/thread-registry.md` and `docs/thread-runs/<task-id>.md`.
 6. Use LV2 controlled autonomous compaction for docs-only cleanup, protected by `docs/.locks/context-compaction.lock`.
+
+## Current Snapshot Layer
+
+- `docs/current-prd.md` is the current product-requirements snapshot.
+- `docs/current-technical-design.md` is the current technical implementation snapshot.
+- `docs/current-work.md` is the solution-neutral current objectives / WIP / next work / risks snapshot. It records **what to do**, not **how to do it**.
+- Large projects may split PRD and technical design into global overview plus module docs.
 
 ## Context Governance
 

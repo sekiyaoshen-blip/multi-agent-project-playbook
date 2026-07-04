@@ -4,7 +4,7 @@ description: >
   Bootstrap, audit, repair, compact, or upgrade a durable project-agent
   operating model for long-running agent-assisted projects. Installs
   project-local rules for main planning threads, module/support/operations/
-  research threads, AGENTS.md, project-state docs, thread registry, handoffs,
+  research threads, AGENTS.md, project-state docs, current PRD, current technical design, current workboard, thread registry, handoffs,
   runbooks, ADRs, cross-thread dispatch, checkpoints, return inboxes, model
   tier/version routing, localization, context budgets, LV2 compaction, compaction locks, archives, and compaction.
   Use for project setup, restructuring, migration, collaboration-model repair,
@@ -71,6 +71,7 @@ Before applying the structure, check whether this operating model is actually th
 - If the user wants every detail synced to the main thread, push back and define what is main-thread relevant.
 - If the user wants long-lived module threads, install module runbooks so threads can recover after long histories or conversation compaction.
 - If the repo already has project docs, adapt to the existing structure instead of forcing new file names.
+- If existing PRDs, architecture docs, or todo boards already exist, map them to `current-prd.md`, `current-technical-design.md`, and `current-work.md` instead of duplicating them.
 
 ## Operating Modes
 
@@ -100,6 +101,9 @@ Create:
 - `AGENTS.md`
 - `docs/thread-operating-model.md`
 - `docs/project-brief.md`
+- `docs/current-prd.md`
+- `docs/current-technical-design.md`
+- `docs/current-work.md`
 - `docs/roadmap.md`
 - `docs/status.md`
 - `docs/thread-registry.md`
@@ -119,6 +123,9 @@ AGENTS.md
 docs/
   thread-operating-model.md
   project-brief.md
+  current-prd.md
+  current-technical-design.md
+  current-work.md
   roadmap.md
   status.md
   thread-registry.md
@@ -129,6 +136,8 @@ docs/
       status.md
       handoff.md
       runbook.md
+      current-prd.md                  # optional for large projects
+      current-technical-design.md     # optional for large projects
   .locks/
     context-compaction.lock.example
   thread-runs/
@@ -156,7 +165,7 @@ For a new project:
 2. Choose Minimal, Standard, or Full Mode.
 3. Install `AGENTS.md` from `references/agents.template.md`.
 4. Install `docs/thread-operating-model.md` from `references/thread-operating-model.template.md`.
-5. Create project-state docs from the templates in `references/`.
+5. Create project-state docs from the templates in `references/`, including the current product snapshot (`current-prd.md`), current technical snapshot (`current-technical-design.md`), and current active-work snapshot (`current-work.md`) for Standard and Full Mode.
 6. Create `docs/archive/` folders for compactions, roadmap history, module history, and historical task material.
 7. Create `docs/.locks/` and install `docs/.locks/context-compaction.lock.example` from `references/compaction-lock.template.md`.
 8. Fill `docs/thread-registry.md` with main thread, module threads, visible native thread links, fallback session/callable refs, and current state.
@@ -165,10 +174,10 @@ For a new project:
 
 For an existing project:
 
-1. Inventory existing docs, README files, architecture notes, modules, packages, services, tests, and project instructions.
+1. Inventory existing docs, README files, PRDs, architecture notes, technical specs, todo boards, issue trackers, modules, packages, services, tests, and project instructions.
 2. Infer module boundaries from code ownership, routes, packages, data models, APIs, and user workflows.
 3. Preserve existing conventions where possible.
-4. Add only the missing layer: `thread-operating-model.md`, registry, status, handoff, runbook, ADR, or thread-runs as needed.
+4. Add only the missing layer: `current-prd.md`, `current-technical-design.md`, `current-work.md`, `thread-operating-model.md`, registry, status, handoff, runbook, ADR, or thread-runs as needed.
 5. Backfill current state from code and current docs. Do not pretend old project history is complete.
 6. Install or update `AGENTS.md` with a lightweight pointer to the detailed operating model.
 7. If the project already has bloated docs, run a context compaction sweep and archive stale material before adding more rules.
@@ -181,10 +190,15 @@ Use the included reference files:
 - `references/agents.template.md` -> project `AGENTS.md`
 - `references/thread-operating-model.template.md` -> `docs/thread-operating-model.md`
 - `references/project-brief.template.md` -> `docs/project-brief.md`
+- `references/current-prd.template.md` -> `docs/current-prd.md`
+- `references/current-technical-design.template.md` -> `docs/current-technical-design.md`
+- `references/current-work.template.md` -> `docs/current-work.md`
 - `references/roadmap.template.md` -> `docs/roadmap.md`
 - `references/global-status.template.md` -> `docs/status.md`
 - `references/thread-registry.template.md` -> `docs/thread-registry.md`
 - `references/module-status.template.md` -> `docs/modules/<module>/status.md`
+- `references/module-current-prd.template.md` -> optional `docs/modules/<module>/current-prd.md` for large projects
+- `references/module-current-technical-design.template.md` -> optional `docs/modules/<module>/current-technical-design.md` for large projects
 - `references/handoff.template.md` -> `docs/modules/<module>/handoff.md`
 - `references/runbook.template.md` -> `docs/modules/<module>/runbook.md`
 - `references/adr.template.md` -> `docs/decisions/ADR-0001-title.md`
@@ -200,6 +214,7 @@ The installed project contract must preserve these rules:
 
 - Treat chat threads as work surfaces, not as the source of truth.
 - Put durable project state in repo/workspace docs.
+- Keep `docs/current-prd.md` as the current product snapshot, `docs/current-technical-design.md` as the current technical implementation snapshot, and `docs/current-work.md` as the solution-neutral active-work snapshot. `current-work.md` records what to do, not how to do it.
 - Main thread owns roadmap, module boundaries, prioritization, cross-module decisions, active dispatch, return review, and recovery sweep.
 - Module threads own implementation, local debugging, verification, status, handoff, and runbook updates for their module.
 - Prefer visible native Codex Desktop thread operations for cross-thread work.
@@ -210,7 +225,7 @@ The installed project contract must preserve these rules:
 - Child/module threads do not directly interrupt the main thread as the stable return path; they write Return Packets into `docs/thread-runs/inbox/main/`.
 - Main thread consumes return packets in queue order and updates the dispatch queue.
 - Human-facing project communication follows the project/user/system language; code identifiers, paths, commands, API/schema/config fields, errors, logs, tests, package names, model names, quota-pool names, and stable template fields stay English or original.
-- Active project-state docs are current snapshots, not append-only logs.
+- Active project-state docs are current snapshots, not append-only logs. The current PRD, current technical design, and current workboard must also be rewritten as current snapshots, not used as changelogs.
 - Each fact should have one primary home; other docs should link instead of duplicating full content.
 - Keep active docs within context budgets; archive stale, historical, closed, or processed material.
 - Archives are not read by default; read them only for historical investigation, regression analysis, audits, or compaction.
@@ -238,6 +253,7 @@ When auditing an enabled project, check:
 - Are ADRs present for durable cross-module decisions?
 - Are original engineering anchors preserved inside localized documentation?
 - Are active docs current snapshots instead of append-only logs?
+- Are `docs/current-prd.md`, `docs/current-technical-design.md`, and `docs/current-work.md` current snapshots rather than changelogs or implementation scratchpads?
 - Does each fact have a single primary home, with links instead of duplicated full content?
 - Are handoffs compact and rewritten, not endlessly appended?
 - Are runbooks focused on current recovery context, with old dated history archived?

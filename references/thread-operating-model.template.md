@@ -16,6 +16,105 @@ Use this model:
 - Module runbooks: own module-thread memory recovery, including useful attempts, findings, pending questions, local decisions, debug notes, and continuation points.
 - ADRs: own decisions that affect architecture, data contracts, product scope, deployment, security, cost, or multiple modules.
 
+## Current Snapshot Documents
+
+Use three global snapshot documents to make the project easy to inherit by a new human or AI agent.
+
+These documents are current snapshots, not logs:
+
+- `docs/current-prd.md`: current product requirements and product behavior truth.
+- `docs/current-technical-design.md`: current technical implementation and architecture truth.
+- `docs/current-work.md`: current objectives, active work, next work, deferred follow-ups, risks, and decisions needed, expressed as what to do rather than how to do it.
+
+Relationship to existing docs:
+
+- `docs/project-brief.md` is stable product framing: mission, users, non-goals, constraints.
+- `docs/current-prd.md` is the current product state and accepted requirements.
+- `docs/current-technical-design.md` is how the current PRD is implemented technically.
+- `docs/current-work.md` is the active working set and near-term priorities; it is a what-to-do board, not an implementation plan.
+- `docs/roadmap.md` is milestone and phase planning.
+- `docs/status.md` is a short global system/status snapshot.
+- `docs/thread-registry.md` is the active thread/task control plane.
+
+For large projects, split the first two snapshot docs into a global overview plus module-level detail:
+
+- `docs/current-prd.md`
+- `docs/modules/<module>/current-prd.md`
+- `docs/current-technical-design.md`
+- `docs/modules/<module>/current-technical-design.md`
+
+Keep the global docs short enough that a new agent can read them quickly. Link to module docs for detail.
+
+### Current PRD Update Rule
+
+Update `docs/current-prd.md` when:
+
+- user-visible behavior changes,
+- product scope changes,
+- current capabilities, workflows, personas, or product surfaces change,
+- requirements are added, accepted, deferred, deprecated, or removed,
+- an iteration or optimization changes current product truth.
+
+Do not put implementation details, debug notes, task logs, or full history in the PRD.
+
+### Current Technical Design Update Rule
+
+Update `docs/current-technical-design.md` when:
+
+- architecture changes,
+- module boundaries change,
+- APIs, schemas, events, shared types, configs, deployment, or data flows change,
+- an ADR changes current implementation,
+- a refactor changes how future developers should work,
+- code diverges from the current technical design.
+
+Do not put raw logs, transient debugging attempts, or long historical alternatives in the technical design.
+
+### Current Workboard Update Rule
+
+`docs/current-work.md` records what needs to be done, not how it should be done. Keep it solution-neutral so different humans and AI agents can propose different approaches to the same problem.
+
+Update `docs/current-work.md` when:
+
+- the current core objective set changes,
+- work starts, blocks, returns, closes, or changes priority,
+- a follow-up should be preserved but is not immediate,
+- a risk or open decision becomes relevant to near-term planning,
+- a milestone closes or a new planning cycle starts.
+
+Do not duplicate full dispatch queue rows, Return Packets, historical task detail, implementation plans, step-by-step approaches, prompt drafts, or technical solution details in the workboard. Link to `docs/thread-registry.md`, `docs/thread-runs/<task-id>.md`, `docs/current-technical-design.md`, ADRs, module docs, or archives.
+
+### Current Workboard What-To-Do-Only Rule
+
+`docs/current-work.md` records what needs to be done, not how it should be done.
+
+It may include:
+
+- desired outcomes,
+- current objectives,
+- active work items,
+- priorities,
+- owners,
+- states,
+- success signals,
+- dependencies and constraints,
+- risks,
+- open decisions,
+- deferred follow-ups.
+
+It must not prescribe implementation strategy, architecture, algorithms, code-level steps, debug paths, tool commands, or a single preferred solution unless that solution has already been accepted in `docs/current-technical-design.md`, an ADR, or a reviewed task record.
+
+This keeps the workboard solution-neutral so different humans and AI agents can propose different approaches to the same problem.
+
+Put the how elsewhere:
+
+- current implementation truth: `docs/current-technical-design.md`,
+- accepted durable decisions: ADRs in `docs/decisions/`,
+- task execution plans and checkpoints: `docs/thread-runs/<task-id>.md`,
+- module-local attempts and findings: module `runbook.md`,
+- main-thread relevant implementation results: module `handoff.md`,
+- scoped execution instructions: dispatch task payloads.
+
 ## Source Of Truth Priority
 
 When sources conflict, use this priority order:
@@ -23,11 +122,12 @@ When sources conflict, use this priority order:
 1. Current code and tests
 2. Current build, CI, runtime behavior, or deployment config
 3. Accepted ADRs
-4. `docs/roadmap.md` and `docs/thread-registry.md`
-5. Module `status.md`
-6. Module `handoff.md`
-7. Module `runbook.md`
-8. Chat history or unstated assumptions
+4. `docs/current-prd.md` and `docs/current-technical-design.md`
+5. `docs/current-work.md`, `docs/roadmap.md`, and `docs/thread-registry.md`
+6. `docs/status.md` and module `status.md`
+7. Module `handoff.md`
+8. Module `runbook.md`
+9. Archives, chat history, or unstated assumptions
 
 Do not silently merge conflicting sources. Report the conflict and update stale documents. If the conflict affects architecture, shared contracts, deployment, security, cost, or product scope, create or update an ADR.
 
@@ -126,6 +226,9 @@ Keep active docs within practical size limits. These are guidance budgets, not h
 | `AGENTS.md` | Lightweight project instructions and pointers | 80-120 lines | Move detail to `docs/thread-operating-model.md` |
 | `docs/thread-operating-model.md` | Stable operating rules, not project history | 300-600 lines | Move project-specific history to archives or separate references |
 | `docs/thread-registry.md` | Active threads, active dispatch queue, Return Inbox index | 100-200 lines | Close/archive stale tasks and superseded thread refs |
+| `docs/current-prd.md` | Current product requirements and product behavior truth | 150-300 lines | Split module details into `docs/modules/<module>/current-prd.md` |
+| `docs/current-technical-design.md` | Current implementation and architecture truth | 200-400 lines | Split module details into `docs/modules/<module>/current-technical-design.md` |
+| `docs/current-work.md` | What-to-do board: objectives, WIP, next work, deferred follow-ups, risks, decisions; no implementation plans | 80-180 lines | Close/archive old work and link to registry/thread-runs |
 | `docs/roadmap.md` | Current phase, active milestones, active dependencies | 150-250 lines | Move completed phases to `docs/archive/roadmap/` |
 | `docs/status.md` | Current global state | 80-150 lines | Remove old completed detail or archive it |
 | Module `status.md` | Current module state and scope | 80-150 lines | Move old detail to module archive or runbook summary |
@@ -138,7 +241,10 @@ Keep active docs within practical size limits. These are guidance budgets, not h
 
 Each fact should have one primary home:
 
-- Product direction and non-goals: `docs/project-brief.md`
+- Stable product direction, users, constraints, and non-goals: `docs/project-brief.md`
+- Current product requirements and product behavior truth: `docs/current-prd.md`
+- Current technical implementation and architecture truth: `docs/current-technical-design.md`
+- Current objectives, WIP, deferred follow-ups, risks, and decisions needed, without implementation plans: `docs/current-work.md`
 - Current priorities, milestones, and dependencies: `docs/roadmap.md`
 - Active thread identities and dispatch queue: `docs/thread-registry.md`
 - Current module behavior and scope: module `status.md`
@@ -154,6 +260,9 @@ Other documents may link to the primary home, but should not copy the full conte
 
 Do not keep stale entries in active docs merely because they were once true.
 
+- `current-prd.md` describes current product truth.
+- `current-technical-design.md` describes current technical truth.
+- `current-work.md` describes the current active working set as what-to-do, not how-to-do.
 - `status.md` describes what is true now.
 - `handoff.md` describes what the main thread needs now.
 - `roadmap.md` describes the current planning state.
@@ -285,19 +394,24 @@ Module threads should normally read:
 
 1. `AGENTS.md`
 2. Relevant rows in `docs/thread-registry.md`
-3. Their module `status.md`
-4. Their module `handoff.md`
-5. The current recovery context in their module `runbook.md`
-6. Relevant ADRs only when contracts or architecture are involved
-7. Relevant `docs/thread-runs/<task-id>.md` only for dispatched tasks
+3. Relevant sections of `docs/current-prd.md`, `docs/current-technical-design.md`, and `docs/current-work.md` when the task affects product behavior, technical design, or active priorities
+4. Their module `status.md`
+5. Their module `handoff.md`
+6. The current recovery context in their module `runbook.md`
+7. Relevant module PRD/design docs if present
+8. Relevant ADRs only when contracts or architecture are involved
+9. Relevant `docs/thread-runs/<task-id>.md` only for dispatched tasks
 
 Main thread should normally read:
 
 1. `AGENTS.md`
 2. `docs/project-brief.md`
-3. `docs/roadmap.md`
-4. `docs/status.md`
-5. `docs/thread-registry.md`
+3. `docs/current-prd.md`
+4. `docs/current-technical-design.md`
+5. `docs/current-work.md`
+6. `docs/roadmap.md`
+7. `docs/status.md`
+8. `docs/thread-registry.md`
 6. Module handoffs, not full module runbooks
 7. Relevant ADRs
 8. Unprocessed Return Packets, one at a time
@@ -957,6 +1071,9 @@ At the end of every meaningful task in an enabled project, update documentation 
 - Update `status.md` when current module behavior, scope, backlog, assumptions, or local risks changed.
 - Update `handoff.md` when the main thread needs to know about behavior, contracts, risks, decisions needed, verification gaps, or milestone progress.
 - Add or update an ADR when a decision affects more than one module, a shared contract, architecture, deployment, security, cost, or product scope.
+- Update `current-prd.md` when current product behavior, requirements, workflows, capabilities, personas, or product scope changed.
+- Update `current-technical-design.md` when current architecture, modules, APIs, schemas, data flows, deployment, or implementation strategy changed.
+- Update `current-work.md` when active objectives, WIP, next work, deferred follow-ups, risks, decisions needed, or priorities changed; keep it solution-neutral and do not add implementation plans.
 - Update `roadmap.md` when scope, priority, dependencies, milestones, or ownership changed.
 - Update `thread-registry.md` when thread identity, dispatch queue, return packet state, last run, next sync trigger, or ownership changes.
 
@@ -966,7 +1083,7 @@ Active docs should be rewritten as current snapshots. Prefer replacing stale sec
 
 ## Commit And Documentation Rule
 
-When preparing a commit, include project-state documentation updates in the same change set if the code change changes project state, behavior, contracts, risk, roadmap status, or continuation context.
+When preparing a commit, include project-state documentation updates in the same change set if the code change changes project state, product behavior, technical design, contracts, risk, current work, roadmap status, or continuation context.
 
 Do not require documentation updates for:
 
@@ -982,7 +1099,7 @@ Never commit automatically unless the user or project policy explicitly asks for
 
 When acting as the main thread:
 
-1. Read the minimum active context needed: `AGENTS.md`, `docs/project-brief.md`, `docs/roadmap.md`, `docs/status.md`, `docs/thread-registry.md`, module handoffs, unprocessed Return Packets, and relevant ADRs.
+1. Read the minimum active context needed: `AGENTS.md`, `docs/project-brief.md`, `docs/current-prd.md`, `docs/current-technical-design.md`, `docs/current-work.md`, `docs/roadmap.md`, `docs/status.md`, `docs/thread-registry.md`, module handoffs, unprocessed Return Packets, and relevant ADRs.
 2. Do not read archives, all module runbooks, or all thread-runs by default.
 3. Run recovery sweep for stale, quota-paused, or lease-expired active tasks.
 4. Run context compaction sweep when active docs exceed budgets, contradictions appear, stale assumptions spread, or a replacement main/module thread is about to start.

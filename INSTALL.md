@@ -58,6 +58,9 @@ Then customize:
 - `CLAUDE.md` if using Claude Code or another compatible agent
 - `docs/thread-operating-model.md`
 - `docs/project-brief.md`
+- `docs/current-prd.md`
+- `docs/current-technical-design.md`
+- `docs/current-work.md`
 - `docs/roadmap.md`
 - `docs/status.md`
 - `docs/thread-registry.md`
@@ -68,6 +71,16 @@ Rename `example-module` to your actual module name.
 Customize Model Routing in `docs/thread-operating-model.md` and `docs/thread-registry.md` so `fast`, `standard`, `high-reasoning`, and `specialized` map to the model choices available in your Codex Desktop / CLI / IDE environment. By default, each tier should use the latest available compatible model version. If `gpt-5.3-codex-spark` / GPT-5.3-SPARK is available with an independent quota pool, map suitable fast or low-risk standard work to Spark before spending `gpt-5.5` quota.
 
 
+
+## Current Snapshot Layer
+
+The installed operating model includes three onboarding-friendly current snapshot docs:
+
+- `docs/current-prd.md`: current product requirements and behavior truth.
+- `docs/current-technical-design.md`: current implementation and architecture truth.
+- `docs/current-work.md`: current goals, WIP, next work, deferred follow-ups, risks, and decisions needed. It is solution-neutral and records what to do, not how to do it.
+
+Update these as current snapshots after meaningful iterations; do not turn them into changelogs. Keep `current-work.md` solution-neutral: record objectives, problems, priorities, risks, and decisions needed, but place implementation strategy in technical design, ADRs, thread-runs, dispatch tasks, or module docs. Large projects can split PRD and technical design into global overview plus module docs.
 
 ## Context Governance
 

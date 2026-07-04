@@ -4,6 +4,14 @@ Last updated: YYYY-MM-DD
 
 This file is a current global snapshot. Do not keep stale completed history here; archive or summarize old detail.
 
+## Snapshot Links
+
+- Current PRD: `docs/current-prd.md`
+- Current technical design: `docs/current-technical-design.md`
+- Current workboard: `docs/current-work.md`
+- Roadmap: `docs/roadmap.md`
+
+
 ## Current Goal
 
 Describe the current active project-level goal.

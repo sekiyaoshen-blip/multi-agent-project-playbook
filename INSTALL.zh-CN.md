@@ -65,6 +65,9 @@ project-agent-operating-model/
 - `CLAUDE.md`，如果使用 Claude Code 或其他兼容 Agent
 - `docs/thread-operating-model.md`
 - `docs/project-brief.md`
+- `docs/current-prd.md`
+- `docs/current-technical-design.md`
+- `docs/current-work.md`
 - `docs/roadmap.md`
 - `docs/status.md`
 - `docs/thread-registry.md`
@@ -86,6 +89,16 @@ project-agent-operating-model/
 选择模型时，应先选择任务难度对应的模型层级，再选择具体模型版本。默认使用该层级中可用的最新兼容版本。
 
 如果你的环境里有独立配额池的 `gpt-5.3-codex-spark` / GPT-5.3-SPARK，可以优先把适合的快速任务或低风险标准任务路由到 Spark，避免过早消耗 `gpt-5.5` 配额。
+
+## 当前快照层
+
+安装后的项目运行模型包含三个面向新线程接手的当前快照文档：
+
+- `docs/current-prd.md`：当前产品需求和行为事实。
+- `docs/current-technical-design.md`：当前技术实现和架构事实。
+- `docs/current-work.md`：当前目标、进行中事项、下一步、延后事项、风险和待决策问题。
+
+这些文档应该在重要迭代后被重写成当前快照，不要变成 changelog。`current-work.md` 要保持方案中立，只记录“做什么”，不要写“怎么做”。实现策略应放到技术设计、ADR、thread-run、派单任务或模块文档中。
 
 ## 上下文治理
 

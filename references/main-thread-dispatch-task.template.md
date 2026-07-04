@@ -55,6 +55,9 @@
 
 ## Relevant Files / Docs
 
+- `docs/current-prd.md`
+- `docs/current-technical-design.md`
+- `docs/current-work.md`
 - `docs/roadmap.md`
 - `docs/thread-registry.md`
 - `docs/thread-runs/<task-id>.md`
@@ -93,6 +96,7 @@ When completed, blocked, failed, or needing a decision, write:
 
 ## Sync Back
 
+- Update `docs/current-prd.md`, `docs/current-technical-design.md`, or `docs/current-work.md` if current product, technical, or active-work truth changed; keep `current-work.md` solution-neutral and move implementation approach into this task, technical design, ADRs, or module docs
 - Update `docs/modules/<module>/status.md`
 - Update `docs/modules/<module>/handoff.md`
 - Update `docs/modules/<module>/runbook.md` if meaningful local context was created

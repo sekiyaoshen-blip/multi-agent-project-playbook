@@ -12,3 +12,6 @@
 - Added explicit compaction check trigger points and LV2 execution trigger points.
 - Added optional `CLAUDE.md` template to share `AGENTS.md` with Claude Code workflows.
 - Added one-prompt installation instructions for Codex, Claude Code, and other local agents.
+
+- Added current snapshot layer: `docs/current-prd.md`, `docs/current-technical-design.md`, and `docs/current-work.md`, plus optional module PRD/technical-design templates.
+- Clarified `docs/current-work.md` as a solution-neutral what-to-do board: record outcomes, priorities, owners, risks, and decisions needed, but keep implementation strategies and how-to plans in technical design, ADRs, thread-runs, dispatch payloads, or module docs.

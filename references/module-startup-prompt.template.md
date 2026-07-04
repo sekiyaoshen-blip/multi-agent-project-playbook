@@ -7,6 +7,8 @@ Read first, using the project read budget:
 - `AGENTS.md`
 - Relevant sections of `docs/thread-operating-model.md` only when needed
 - Relevant rows in `docs/thread-registry.md`
+- Relevant sections of `docs/current-prd.md`, `docs/current-technical-design.md`, and `docs/current-work.md` when the task affects product behavior, technical design, or active priorities
+- Optional `docs/modules/<module>/current-prd.md` or `docs/modules/<module>/current-technical-design.md` if the project splits large docs by module
 - `docs/modules/<module>/status.md`
 - `docs/modules/<module>/handoff.md`
 - Current recovery context in `docs/modules/<module>/runbook.md`
@@ -28,6 +30,7 @@ Your responsibility:
 - Own implementation and local iteration for `<module>`.
 - Keep implementation detail local unless it affects product direction, interfaces, data contracts, architecture, risks, or verification.
 - Update `docs/modules/<module>/status.md` as local state changes.
+- Propose updates to `docs/current-prd.md`, `docs/current-technical-design.md`, or `docs/current-work.md` when module work changes current product truth, technical truth, or active priorities. Keep `current-work.md` limited to what needs doing; put implementation approach in technical design, ADRs, thread-runs, or module docs.
 - Update `docs/modules/<module>/runbook.md` only with useful current recovery context, active findings, local decisions, pending questions, or continuation points. Do not append routine logs forever; compact or archive stale history.
 - Rewrite `docs/modules/<module>/handoff.md` as a compact current handoff before finishing milestones or requesting main-thread input.
 - For dispatched work, maintain `docs/thread-runs/<task-id>.md` with Model Routing, Model Version Policy, quota-pool notes, checkpoints, actual model/version or mode, and resume notes.

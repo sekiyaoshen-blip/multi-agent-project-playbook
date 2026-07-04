@@ -1,10 +1,10 @@
 interface:
   display_name: "Project Agent Operating Model"
-  short_description: "Bootstrap, audit, repair, compact, or upgrade durable project-local operating rules for long-running agent-assisted projects."
+  short_description: "Bootstrap, audit, repair, compact, or upgrade durable project-local operating rules, current PRD/technical/work snapshots, and context governance for long-running agent-assisted projects."
   brand_color: "#3B82F6"
   default_prompt: |
     Use $project-agent-operating-model to initialize, audit, repair, compact,
-    or upgrade a durable project-agent operating model with LV2 docs-only compaction and lock-safe context governance.
+    or upgrade a durable project-agent operating model with current PRD/technical/work snapshots, LV2 docs-only compaction, and lock-safe context governance.
 
     Use the explicit user/project language or system language for human-facing
     generated content. Keep code identifiers, paths, commands, APIs, schema

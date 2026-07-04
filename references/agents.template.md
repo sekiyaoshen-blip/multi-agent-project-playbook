@@ -22,6 +22,7 @@ This project uses the `project-agent-operating-model` operating model.
 - Long tasks must maintain Checkpoints and a Resume Prompt.
 - Never write secrets, tokens, credentials, private customer data, signed URLs, or access-granting links into committed docs.
 - Active project-state docs are current snapshots, not append-only logs.
+- Keep `docs/current-prd.md`, `docs/current-technical-design.md`, and `docs/current-work.md` as the top-level current snapshot layer for onboarding and handoff.
 - Each fact should have one primary home; link to the primary home instead of duplicating full content.
 - Keep active docs compact. Move stale, historical, or processed material to `docs/archive/` or `docs/thread-runs/archive/`.
 - Do not read archives, all module runbooks, or all thread-runs by default.
@@ -34,6 +35,9 @@ This project uses the `project-agent-operating-model` operating model.
 
 - Detailed thread operating rules: `docs/thread-operating-model.md`
 - Thread registry, task queue, and Return Inbox: `docs/thread-registry.md`
+- Current PRD: `docs/current-prd.md`
+- Current technical design: `docs/current-technical-design.md`
+- Current workboard: `docs/current-work.md` — what to do only; no implementation plans.
 - Current roadmap: `docs/roadmap.md`
 - Current global status: `docs/status.md`
 - Module status: `docs/modules/<module>/status.md`
@@ -54,9 +58,15 @@ This project uses the `project-agent-operating-model` operating model.
 - The main thread consumes queued results instead of being interrupted by child-thread callbacks.
 - Use compaction locks so Codex, Claude Code, other agents, automations, and humans do not rewrite shared active docs at the same time.
 
+## Current Workboard Boundary
+
+`docs/current-work.md` is a what-to-do board, not a how-to-do plan.
+
+Use it for objectives, WIP, next work, priorities, owners, success signals, risks, and open decisions. Do not put implementation steps, architecture, algorithms, debug paths, tool commands, or a single preferred solution there unless that solution has already been accepted in `docs/current-technical-design.md`, an ADR, or a reviewed task record.
+
 ## Context Hygiene
 
-- Treat `status.md`, `handoff.md`, `roadmap.md`, and `thread-registry.md` as current snapshots.
+- Treat `current-prd.md`, `current-technical-design.md`, `current-work.md`, `status.md`, `handoff.md`, `roadmap.md`, and `thread-registry.md` as current snapshots.
 - Do not append routine task logs to active docs.
 - Keep `handoff.md` compact and main-thread relevant; move local details to runbook or archive.
 - Keep `runbook.md` focused on current recovery context and active findings; archive old dated history.
@@ -71,6 +81,9 @@ Update project-state docs only when there is a substantive state change.
 - Update `status.md`: current state, scope, risks, tasks, or verification changed.
 - Update `handoff.md`: main-thread-relevant behavior, contracts, risks, decisions, verification, or milestone progress changed.
 - Update `runbook.md`: useful implementation attempts, debugging findings, local decisions, recovery points, or continuation context changed.
+- Update `current-prd.md`: product behavior, requirements, workflows, capabilities, personas, or product scope changed.
+- Update `current-technical-design.md`: architecture, modules, APIs, schemas, data flows, deployment, or implementation strategy changed.
+- Update `current-work.md`: active objectives, WIP, next work, deferred follow-ups, risks, decisions, or priorities changed. Keep it solution-neutral: what to do, not how to do it.
 - Update `roadmap.md`: scope, priority, dependencies, milestones, or ownership changed.
 - Create/update ADRs: cross-module, shared contract, architecture, deployment, security, cost, or product-scope decisions changed.
 - Do not force doc updates for purely informational chats, clarifications with no state change, or no-op investigations.

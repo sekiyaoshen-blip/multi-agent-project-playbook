@@ -4,7 +4,7 @@
 
 它的目标不是让每次任务都反复加载一个很重的 skill，而是在项目初始化、重构、修复、压缩或升级时，把稳定的协作规则安装到项目自己的文档里。之后，日常开发线程主要读取项目内的 `AGENTS.md`、`docs/thread-operating-model.md` 和相关状态文档即可。
 
-当前版本新增 LV2 受控自主压缩、跨工具/跨线程 Compaction Lock，以及 Claude Code 兼容入口，减少长期项目中的文档膨胀、并发整理冲突和多 Agent 规则漂移。
+当前版本新增 current snapshot 层、LV2 受控自主压缩、跨工具/跨线程 Compaction Lock，以及 Claude Code 兼容入口，减少长期项目中的文档膨胀、并发整理冲突和多 Agent 规则漂移。
 
 ## 核心原则
 
@@ -46,6 +46,16 @@ project-agent-operating-model/
 4. 日常开发、派单、回传、交接和状态维护，应依赖项目本地文档，而不是反复调用 skill。
 5. 进行跨线程派单时，先按任务难度选择模型层级，再选择具体模型版本，并记录请求模型、实际模型、配额池、降级原因和选择理由。
 6. 对文档膨胀、过期队列、已处理 Return Packet 和关闭任务行，使用 LV2 docs-only 压缩，并在需要重写活跃文档前获取 `docs/.locks/context-compaction.lock`。
+
+## 当前快照层
+
+新版增加了三个更适合新线程接手项目的当前快照文档：
+
+- `docs/current-prd.md`：当前产品需求和行为事实。
+- `docs/current-technical-design.md`：当前技术实现和架构事实。
+- `docs/current-work.md`：当前目标、进行中事项、下一步、风险和待决策问题。
+
+其中 `current-work.md` 只记录“要做什么”，不写“怎么做”。实现方案应该放到技术设计、ADR、thread-run、派单任务或模块文档里。
 
 ## 上下文治理
 

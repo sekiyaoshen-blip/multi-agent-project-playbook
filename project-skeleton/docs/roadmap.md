@@ -4,6 +4,13 @@ Last updated: YYYY-MM-DD
 
 This file describes the current planning state. Move completed phases and stale planning history to `docs/archive/roadmap/`.
 
+## Snapshot Links
+
+- Current PRD: `docs/current-prd.md`
+- Current technical design: `docs/current-technical-design.md`
+- Current workboard: `docs/current-work.md`
+
+
 ## Goal
 
 Describe the product direction in one or two paragraphs.

@@ -40,3 +40,7 @@ Describe the product/system goal in one or two paragraphs.
 1. <Principle>
 2. <Principle>
 3. <Principle>
+
+## Relationship To Current Snapshots
+
+This brief is stable framing. Current product truth lives in `docs/current-prd.md`; current technical truth lives in `docs/current-technical-design.md`; active work lives in `docs/current-work.md`.
