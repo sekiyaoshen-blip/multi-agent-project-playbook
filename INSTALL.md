@@ -48,7 +48,7 @@ Requirements:
 - Discover and reuse existing visible module tasks. Before creating any missing visible task, follow the current product's user-authorization requirement.
 - Keep docs minimal: stable facts in project docs; transient execution in native task history.
 - Do not enable thread-runs, Return Packets, locks, or archives unless a concrete recovery, audit, asynchronous, high-risk, or cross-tool need exists.
-- Inherit the current client/task model by default; do not add routine model or quota telemetry.
+- Before every existing-task call or authorized new-task creation, classify the concrete task, inspect supported values, and pass both `model` and `thinking` explicitly. Do not rely on inherited defaults or add routine routing telemetry to project docs.
 - Report the selected mode, files created or mapped, module-to-task routing map, optional controls omitted/enabled, and unresolved assumptions.
 ```
 
@@ -64,7 +64,7 @@ Requirements:
 - 自动发现并复用已有模块任务。创建缺失的显性任务前，遵守当前产品要求的用户授权规则。
 - 保持文档精简：稳定事实落项目文档，临时执行过程留在原生任务历史。
 - 除非存在明确的恢复、审计、异步、高风险或跨工具需求，否则不要启用 thread-run、Return Packet、锁或 archive。
-- 默认继承当前客户端/任务模型，不要添加日常模型版本或配额记录。
+- 每次调用已有任务或在获得授权后新建任务前，都先判断具体任务并检查当前工具支持值，然后同时显式传入 `model` 和 `thinking`。不要依赖继承默认值，也不要把日常路由流水写入项目文档。
 - 最后报告所选模式、新建或映射的文件、模块到长期任务的路由表、启用或省略的可选控制，以及尚未确认的假设。
 ```
 
@@ -86,12 +86,14 @@ or operating-model upgrades, not routine implementation.
 The project skeleton represents Native Mode. Optional templates remain in
 `references/`; do not copy all of them by default.
 
-## Model Policy
+## Dispatch-Time Model Routing
 
-Inherit the current task/client model by default. When GPT-5.6 is available,
-Sol/Terra/Luna and parallel/Ultra-style execution can express deep, balanced,
-fast, and parallel capability intent. Do not hard-code these names into durable
-project contracts or log model/quota data for routine work.
+Every native existing/new task invocation classifies type, complexity, risk,
+context, reversibility, and parallelism, then passes explicit supported
+`model`/`thinking` values. Use fast + low/medium, balanced + medium/high, strong
++ high/xhigh for deep work, and strongest + max for critical work. GPT-5.6
+Luna/Terra/Sol are current examples discovered from the active tool schema, not
+durable project contracts. Never silently downgrade unsafe work.
 
 ## Codex Metadata
 

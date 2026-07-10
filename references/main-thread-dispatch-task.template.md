@@ -43,9 +43,21 @@
 - Portable Controls enabled: no | thread-run | Return Packet | both
 - If enabled, path/reason:
 
-## Model Override (Optional)
+## Dispatch-Time Model Routing (Required)
 
-- Default: inherit current task/client model.
-- Capability intent, if an override is justified: deep | balanced | fast | parallel
-- Requested model/mode:
-- Reason the override matters:
+- Classification:
+  - Type:
+  - Complexity: deterministic | normal | ambiguous | highly-coupled
+  - Risk: low | moderate | high | critical
+  - Context: short | multi-file/module | long-history
+  - Reversibility: easy | costly | irreversible
+  - Parallelism: single-owner | independent-slices | tightly-coupled
+- Profile: fast | balanced | deep | critical
+- Selected supported model ID:
+- Selected supported Thinking: low | medium | high | xhigh | max | <tool-supported>
+- Active tool schema checked: yes | no
+- Fallback, if any:
+- One-line reason:
+
+Pass both `model` and `thinking` as invocation parameters. Do not rely on the
+target task's existing settings or user defaults.

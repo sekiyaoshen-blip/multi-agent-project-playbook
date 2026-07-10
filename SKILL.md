@@ -4,13 +4,15 @@ description: >
   Bootstrap, audit, slim, repair, or upgrade a native-first operating model for
   long-running agent-assisted projects. Use when a project needs a main planning
   task, durable visible module tasks, automatic module routing, project-local
-  AGENTS.md rules, compact current-state docs, cross-tool compatibility, or
-  lock-safe docs compaction. Prefer ChatGPT Desktop/Codex native task tools for
-  visible long-lived work and temporary subagents only for bounded disposable
-  work. Do not use for routine implementation after the project contract is
+  AGENTS.md rules, dispatch-time model/Thinking selection, compact current-state
+  docs, cross-tool compatibility, or lock-safe docs compaction. Prefer ChatGPT
+  Desktop/Codex native task tools for visible long-lived work and temporary
+  subagents only for bounded disposable work. Do not use for routine
+  implementation after the project contract is
   installed. Trigger terms include agent operating model, long-lived module
   threads, visible module tasks, main thread dispatch, thread routing, project
-  agent OS, context governance, 项目智能体协作, 长期模块线程, 主线程派单, 文档压缩.
+  agent OS, model routing, thinking routing, context governance, 项目智能体协作,
+  长期模块线程, 主线程派单, 模型路由, 推理强度, 文档压缩.
 ---
 
 # Project Agent Operating Model
@@ -98,8 +100,11 @@ Add only when native task state is insufficient:
 8. If a required visible module task does not exist, ask for or rely on explicit
    user authorization before creating it. Generate its startup prompt from
    `references/module-startup-prompt.template.md`.
-9. Add Portable Controls only for a concrete risk or interoperability need.
-10. Report the installed mode, mapped docs, visible task map, assumptions, and
+9. Install dispatch-time model routing so every existing-task message or
+   authorized new-task creation passes an explicit supported `model` and
+   `thinking` selected for the concrete task.
+10. Add Portable Controls only for a concrete risk or interoperability need.
+11. Report the installed mode, mapped docs, visible task map, assumptions, and
     omitted optional controls.
 
 ## Native-First Runtime Contract
@@ -136,18 +141,52 @@ Use this priority:
 
 Do not require both native return and a Return Packet for ordinary work.
 
-### Model Selection
+### Mandatory Dispatch-Time Model Routing
 
-- Inherit the current task/client model by default.
-- Do not write model/version/quota telemetry for routine dispatch.
-- Override or pin a model only for explicit user choice, reproducibility,
-  compatibility, cost/latency constraints, or a clear capability need.
-- When the GPT-5.6 family is available, use Sol for difficult/high-risk work,
-  Terra for balanced everyday work, Luna for fast bounded work, and parallel or
-  Ultra-style execution for genuinely independent complex work.
-- Treat model names as current examples, not durable project contracts.
-- Record the requested/actual model only when an override matters to recovery,
-  audit, or result interpretation.
+Before every native call to an existing visible task or authorized creation of
+a new visible task:
+
+1. Classify task type, complexity, risk, context size, reversibility, and
+   parallelism.
+2. Inspect the active tool/client schema for supported model IDs and Thinking
+   values. Do not invent a model or send an unsupported effort.
+3. Select a capability profile:
+   - `fast`: deterministic, bounded, low-risk work -> fastest capable model;
+     `low` or `medium`
+   - `balanced`: normal implementation/review with clear scope -> balanced
+     model; `medium` or `high`
+   - `deep`: ambiguous, long-context, cross-module, architecture, repeated
+     failure, or read-only security/payment investigation -> strongest model;
+     `high` or `xhigh`
+   - `critical`: executing/authorizing an irreversible migration or production
+     action, responding to active financial/data/security loss, or other
+     highest-failure-cost work -> strongest model; `max`
+4. Pass both `model` and `thinking` explicitly to `send_message_to_thread` or,
+   after required user authorization, `create_thread`. Do not rely on the
+   target task's previous settings or the user's default model.
+5. Include a one-line routing reason in the native dispatch prompt. Do not
+   create routine model/version/quota telemetry in project docs.
+
+Current GPT-5.6 examples are Luna for `fast`, Terra for `balanced`, and Sol for
+`deep`/`critical`. Treat these as discoverable current mappings, not durable
+project contracts. Use `ultra` only when the active invocation schema supports
+it and the task genuinely benefits from that execution mode; otherwise use the
+highest supported effort or route independent work to registered module tasks.
+
+Do not classify by sensitive keywords alone. A reversible read-only
+investigation in a high-risk domain is normally `deep`; use `critical` when the
+task itself performs/authorizes a high-consequence action or an active incident
+creates immediate severe exposure.
+
+Explicit user model/Thinking instructions win. If a preferred option is
+unavailable, choose the closest supported option that still meets the risk
+requirement and state the fallback in the native prompt. Never silently lower a
+`deep` or `critical` task below a safe capability level; ask the user or stop if
+no safe supported option exists.
+
+For a new role-only module task with no concrete work yet, use the current
+`balanced` model mapping with `medium`; classify and override again on every
+future dispatch.
 
 ## Durable State Rules
 
@@ -213,7 +252,10 @@ Read only the resources needed for the selected mode:
 - Is the registry a small identity/ownership map rather than a duplicate queue?
 - Are native task state and `current-work.md` the default active work surfaces?
 - Are thread-runs and Return Packets conditional instead of mandatory?
-- Are model overrides exceptional and free of stale hard-coded quota rules?
+- Does every native existing/new task invocation classify the concrete task and
+  pass explicit supported `model` and `thinking` values?
+- Do high-risk routing fallbacks avoid silent capability downgrades and stale
+  hard-coded quota rules?
 - Are active docs current, compact, non-duplicative, and read selectively?
 - Are compaction locks used only for broad shared-doc rewrites?
 - Can another tool recover durable project truth without reading chat history?

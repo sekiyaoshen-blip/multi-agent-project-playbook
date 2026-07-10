@@ -28,8 +28,11 @@ For each routed task:
 6. Create a thread-run or Return Packet only when the task explicitly enables
    Portable Controls.
 
-Inherit the current task/client model unless the user or task explicitly
-requires an override. Do not maintain routine model or quota telemetry.
+Every routed task should arrive with an explicit supported `model` and
+`thinking` selected for that concrete task. Follow those invocation settings;
+do not silently downgrade them or replace them with this module task's previous
+defaults. Escalate if the selected capability is inadequate for discovered
+risk. Keep routine routing data in native task history, not project docs.
 
 Keep durable docs as current snapshots. Do not append routine logs or duplicate
 the same fact across status, handoff, runbook, current-work, and ADRs.
@@ -54,6 +57,9 @@ archive 或无关 ADR。
 主任务；默认通过原生任务能力返回结果。只有任务明确启用 Portable Controls
 时，才创建 thread-run 或 Return Packet。
 
-默认继承当前客户端/任务模型，不维护日常模型和配额流水。稳定文档保持为
-当前快照，不追加普通日志，不重复记录同一事实。不要把秘密、凭据、私有客户
-数据、签名 URL 或授权链接写入提交的文档。
+每次派单都应针对具体任务选择并显式传入当前工具支持的 `model` 和
+`thinking`。遵守本次调用设置，不要静默降级，也不要换回模块任务之前的默认
+设置；如果执行中发现风险超过所选能力，应立即升级给主任务。日常路由信息
+保留在原生任务历史，不写入项目文档。稳定文档保持为当前快照，不追加普通
+日志，不重复记录同一事实。不要把秘密、凭据、私有客户数据、签名 URL 或
+授权链接写入提交的文档。

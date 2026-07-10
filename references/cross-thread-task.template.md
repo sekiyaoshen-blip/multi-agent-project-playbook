@@ -35,12 +35,16 @@
 - Durable handoff path, only if needed:
 - Portable Controls enabled: no | thread-run | Return Packet | both
 
-## Model Override (Optional)
+## Dispatch-Time Model Routing (Required)
 
-- Default: inherit current task/client model.
-- Capability intent: deep | balanced | fast | parallel
-- Requested model/mode:
-- Reason:
+- Task profile: fast | balanced | deep | critical
+- Selected supported model ID:
+- Selected supported Thinking:
+- Classification reason: <type/complexity/risk/context/reversibility>
+- Fallback, if any:
+
+Pass both values through the native invocation. Do not rely on inherited target
+settings.
 
 ## Priority / Deadline
 

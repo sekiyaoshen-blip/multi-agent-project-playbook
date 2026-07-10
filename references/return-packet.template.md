@@ -13,6 +13,13 @@ Last updated: YYYY-MM-DD HH:MM
 - Related thread-run, if any:
 - Return reason: cross-tool | asynchronous | audit | native-delivery-unavailable | policy
 
+## Invocation Routing
+
+- Profile: fast | balanced | deep | critical
+- Requested/actual model:
+- Requested/actual Thinking:
+- Fallback and reason, if any:
+
 ## Result
 
 - State: completed | partial | blocked | failed | needs-decision | superseded

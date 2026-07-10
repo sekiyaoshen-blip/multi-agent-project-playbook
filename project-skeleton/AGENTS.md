@@ -33,8 +33,18 @@ This project uses a native-first project agent operating model.
   cross-task or cross-tool recovery matters. Use Return Packets only when
   explicitly required by risk, audit, asynchronous work, or unavailable native
   delivery.
-- Inherit the current client/task model by default. Record model details only
-  when an override matters to recovery, audit, cost, or interpretation.
+- Before every existing-task message or authorized new-task creation, classify
+  the concrete task by type, complexity, risk, context, reversibility, and
+  parallelism.
+- Inspect the active tool schema, select a supported capability profile, and
+  pass both `model` and `thinking` explicitly. Do not rely on target-task or
+  user defaults.
+- Use fast/low-medium for deterministic low-risk work, balanced/medium-high for
+  normal work, strongest/high-xhigh for deep work, and strongest/max for
+  critical work. Current GPT-5.6 examples are Luna, Terra, and Sol respectively.
+- Explicit user choices win. Never silently downgrade deep/critical work when
+  no safe supported model/Thinking combination exists.
+- Keep routine routing data in the native dispatch prompt, not project docs.
 - Update docs only for substantive state changes. Active docs are current
   snapshots, not task logs.
 - Keep each fact in one primary home and link instead of copying.

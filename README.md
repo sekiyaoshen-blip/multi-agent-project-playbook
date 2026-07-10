@@ -28,6 +28,8 @@ results stay in native task history.
   decisions.
 - Each stable module can own one registered long-lived visible task.
 - Module work is routed to that existing task through native task messaging.
+- Every existing/new native task invocation classifies the concrete work and
+  passes explicit supported `model` and `thinking` parameters.
 - Temporary subagents are limited to bounded disposable research, review,
   search, test, or verification work.
 - Native delivery is the default result path. Compact handoffs preserve durable
@@ -43,15 +45,24 @@ results stay in native task history.
   locks, or archives only for concrete recovery, audit, asynchronous, high-risk,
   or cross-tool needs.
 
-## GPT-5.6-Aware Model Policy
+## Dispatch-Time Model Routing
 
-Inherit the current client/task model by default. Do not write routine model,
-version, or quota telemetry into project docs.
+Before every call to an existing visible task or authorized creation of a new
+one, classify task type, complexity, risk, context, reversibility, and
+parallelism. Inspect the active tool schema and pass both `model` and `thinking`
+explicitly.
 
-When the GPT-5.6 family is available, Sol is suited to difficult/high-risk work,
-Terra to balanced everyday work, Luna to fast bounded work, and parallel or
-Ultra-style execution to genuinely independent complex work. These are current
-examples, not hard-coded project contracts.
+- `fast`: fastest capable model, `low`/`medium`
+- `balanced`: balanced model, `medium`/`high`
+- `deep`: strongest model, `high`/`xhigh`
+- `critical`: strongest model, `max`
+
+Current GPT-5.6 examples are Luna, Terra, and Sol. They are discoverable current
+mappings, not durable contracts. User choices win, unsupported values are never
+invented, and deep/critical work is not silently downgraded. Routine routing
+reasons stay in native task history rather than project docs. Classification is
+action-based, not keyword-based: read-only sensitive-domain investigation is
+normally `deep`; irreversible action or active severe exposure is `critical`.
 
 ## Project Skeleton
 

@@ -62,10 +62,13 @@ Return Packet.
 - Risks / decisions needed:
 - Durable docs updated:
 
-## Optional Model Override
+## Dispatch-Time Routing
 
-- Requested/actual model or mode:
-- Why the override matters to recovery or interpretation:
+- Profile: fast | balanced | deep | critical
+- Requested/actual model:
+- Requested/actual Thinking:
+- Fallback, if any:
+- Why this routing matters to recovery or interpretation:
 
 ## Closure
 

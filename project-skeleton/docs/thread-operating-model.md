@@ -13,7 +13,7 @@ docs for durable truth. It does not mirror every native task event into files.
 - Dispatch and return flow
 - Temporary subagents
 - Durable project state
-- Model selection
+- Dispatch-time model routing
 - Portable Controls
 - Docs compaction and locks
 - Cross-tool compatibility
@@ -115,10 +115,13 @@ When work is parallelizable or belongs to a module:
    Stabilize the shared contract before fully parallel execution; downstream
    modules may proceed only on slices that do not require inventing it.
 3. Check `docs/thread-registry.md` for the existing visible module task.
-4. Send a compact task payload through the native task messaging tool.
-5. Use the native task state for progress unless Portable Controls are needed.
-6. Review the result through native delivery or by reading the target task.
-7. Update durable docs only when project truth changed.
+4. Classify the concrete task and choose supported `model` and `thinking`
+   parameters using Dispatch-Time Model Routing below.
+5. Send a compact task payload through the native task messaging tool, passing
+   both selected parameters explicitly.
+6. Use the native task state for progress unless Portable Controls are needed.
+7. Review the result through native delivery or by reading the target task.
+8. Update durable docs only when project truth changed.
 
 Use this minimum task payload:
 
@@ -129,6 +132,7 @@ Use this minimum task payload:
 - relevant files/docs
 - expected verification
 - when to escalate to the main task
+- selected model/Thinking profile and one-line reason
 
 Do not dispatch vague ideas, duplicate active work, or tiny questions that the
 current task can resolve immediately.
@@ -207,31 +211,70 @@ Do not create optional docs preemptively. Add a roadmap, global status,
 module-level PRD/design, runbook, thread-run, Return Inbox, lock, or archive
 only when its responsibility is real and not already covered.
 
-## Model Selection
+## Dispatch-Time Model Routing
 
-Inherit the current client/task model by default. Model selection is execution
-configuration, not routine project state.
+Every call to an existing visible task and every authorized creation of a new
+visible task must select and pass explicit `model` and `thinking` parameters.
+Do not inherit the target task's old settings or rely on the user's default.
 
-Override a model only for:
+### Classification Signals
 
-- explicit user choice
-- reproducibility or compatibility
-- clear cost or latency constraints
-- a material capability requirement
-- a known regression or unavailable model
+Assess the concrete task before invocation:
 
-When the GPT-5.6 family is available:
+- **Type:** lookup/docs, verification, implementation, review, debugging,
+  architecture/decision, migration/operations, security/payment
+- **Complexity:** deterministic, normal, ambiguous, or highly coupled
+- **Risk:** low, moderate, high, or critical failure cost
+- **Context:** short/local, multi-file/module, or long-history synthesis
+- **Reversibility:** easy rollback, costly rollback, or irreversible step
+- **Parallelism:** one owner, independent module slices, or tightly coupled work
 
-- **Sol:** difficult, ambiguous, high-risk, cross-module, security, architecture,
-  or long-horizon work
-- **Terra:** balanced everyday implementation and review
-- **Luna:** fast, bounded, low-risk work with quick verification
-- **parallel/Ultra-style execution:** genuinely independent complex work where
-  parallelism justifies additional usage
+### Routing Matrix
 
-These names are current examples, not durable contracts. Prefer capability
-intent over hard-coded model IDs. Record requested/actual model details only
-when an override affects recovery, audit, cost, or result interpretation.
+| Profile | Typical Work | Model Capability | Thinking |
+|---|---|---|---|
+| `fast` | formatting, simple docs, narrow lookup, lint/test check, low-risk deterministic fix | fastest capable | `low`; use `medium` when context is not trivial |
+| `balanced` | normal implementation, clear bug fix, routine review, single-module work | balanced general | `medium`; use `high` for uncertainty or broader verification |
+| `deep` | ambiguous bug, repeated failure, long context, cross-module contract, architecture, read-only auth/security/payment investigation | strongest available | `high` or `xhigh` |
+| `critical` | executing/authorizing irreversible migration or production action, active financial/data/security loss, highest failure cost | strongest available | `max` |
+
+Current GPT-5.6 mappings are typically Luna -> `fast`, Terra -> `balanced`, and
+Sol -> `deep`/`critical`. Discover actual current model IDs from the active tool
+schema. These names are examples, not durable project configuration.
+
+Do not route from keywords alone. Reversible read-only work in a sensitive
+domain is normally `deep`; reserve `critical` for the action/exposure itself.
+
+### Invocation Rules
+
+- Existing visible task: call `send_message_to_thread` with both `model` and
+  `thinking` on every dispatch.
+- New visible task: after required user authorization, call `create_thread`
+  with both parameters selected for its first concrete task.
+- New role-only task with no concrete work: use the current `balanced` mapping
+  with `medium`; classify again on every later dispatch.
+- Temporary subagent, when permitted: apply the same classification and pass
+  explicit model/reasoning parameters supported by that tool.
+- Include `Routing: <profile>; model=<id>; thinking=<effort>; reason=<short>` in
+  the native prompt for observability. Do not duplicate routine routing data in
+  project docs.
+- Explicit user model/Thinking instructions take precedence.
+- Use `ultra` only when the active invocation schema accepts it and the work
+  genuinely benefits from that mode. If visible-task tools expose only up to
+  `max`, do not send `ultra` to them.
+
+### Fallback Safety
+
+If a preferred model or effort is unavailable:
+
+1. Re-read the active tool's supported model/Thinking values.
+2. Choose the closest supported option that still satisfies the risk profile.
+3. State the fallback in the native dispatch prompt.
+4. Never silently downgrade `deep` or `critical` work below a safe level. Stop
+   and ask the user if no supported option is adequate.
+
+Only Portable Controls or audit-sensitive tasks should persist requested/actual
+model details outside native task history.
 
 ## Portable Controls
 

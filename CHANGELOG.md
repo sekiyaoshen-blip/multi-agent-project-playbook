@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Added mandatory dispatch-time task classification for every existing-task
+  message and authorized new-task creation.
+- Added explicit `model` and `thinking` parameters for every native task
+  invocation instead of inheriting target-task or user defaults.
+- Added fast/balanced/deep/critical routing profiles, active-tool capability
+  discovery, explicit fallback reasons, and no-silent-downgrade rules for
+  high-risk work.
+- Made sensitive-domain routing action-based so read-only investigation does
+  not become `critical` merely because it mentions security or payments.
 - Reworked the skill for GPT-5.6 and the unified ChatGPT Desktop/Codex task
   experience.
 - Made Native Mode the default: the main task routes module-owned work to
