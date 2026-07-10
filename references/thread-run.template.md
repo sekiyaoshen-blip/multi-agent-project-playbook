@@ -1,105 +1,74 @@
-# Thread Run: <task-id>
+# Portable Thread Run: <task-id>
+
+Use this file only for long, risky, resumable, audited, cross-tool, or
+native-state-limited work. Do not mirror every native task event.
 
 Last updated: YYYY-MM-DD HH:MM
 
 ## Routing
 
-- Task ID: <task-id>
-- Source thread:
-- Target thread / module:
-- Native thread link:
-- Session ID / Callable Ref:
-- State: pending | dispatched | accepted | running | checkpointed | paused-quota | paused-approval | paused-runtime | stalled | returned | in-review | accepted-result | needs-followup | superseded | closed
-- Priority: P0 | P1 | P2 | P3
-- Model tier: fast | standard | high-reasoning | specialized
-- Model version policy: latest-available | pinned | quota-optimized | fallback
-- Requested model / mode:
-- Requested model version:
-- Actual model / mode:
-- Actual model version:
-- Fallback model / mode:
-- Quota pool: gpt-5.5 | gpt-5.3-codex-spark | shared | unknown | <project-defined>
-- Spark preference used: yes | no | not-applicable
-- Model selection reason:
-- Escalation / downgrade notes:
-- Lease until: YYYY-MM-DD HH:MM
+- Task ID:
+- Source task/module:
+- Target task/module:
+- Native task ID/link:
+- State: pending | running | checkpointed | blocked | returned | closed
+- Portable-control reason:
 
-## Task Brief
+## Brief
 
-- Type: implement | investigate | verify | review | unblock | document | decide
-- Background:
 - Desired outcome:
 - Acceptance criteria:
   - [ ] Criterion 1
   - [ ] Criterion 2
-- Relevant files / docs:
-  - `docs/thread-registry.md`
-  - `docs/modules/<module>/status.md`
-  - `docs/modules/<module>/handoff.md`
-- Dependencies:
+- Relevant files/docs:
 - Constraints:
 
-## Checkpoint
+## Latest Checkpoint
 
-- Last checkpoint:
-- Completed work:
-- Files changed:
-- Commands/checks run:
-- Remaining work:
-- Blockers:
-- Safe to resume: yes / no
-- Safe to re-run: yes / no
+- Completed:
+- Verification completed:
+- Remaining:
+- Blocker / input needed:
+- Files with active edits:
+- Safe to resume: yes | no
 - Do not repeat:
+- Next action:
 
 ## Resume Prompt
 
-You are resuming `<task-id>`.
+You are resuming `<task-id>` for `<module>`.
 
-Read first:
+Read `AGENTS.md`, this run record, the target module status/handoff, and only the
+relevant current project docs. Inspect the current workspace before continuing.
+Confirm whether acceptance criteria are already satisfied. Continue from the
+latest checkpoint and do not repeat completed destructive steps.
 
-- `docs/thread-registry.md`
-- `docs/thread-runs/<task-id>.md`
-- `docs/modules/<module>/status.md`
-- `docs/modules/<module>/handoff.md`
-- `docs/modules/<module>/runbook.md`
+Return through native task delivery unless this record explicitly requires a
+Return Packet.
 
-Current task state:
+中文恢复提示词：
 
-- State:
-- Last checkpoint:
-- Last verified result:
-- Remaining work:
-- Model tier / version policy / actual model:
+你正在恢复 `<module>` 的 `<task-id>`。先读取 `AGENTS.md`、本运行记录、
+目标模块的 status/handoff，以及与任务直接相关的当前项目文档。继续前先
+检查当前工作区，并确认验收条件是否已经满足。从最新检查点继续，不要重复
+已经完成的破坏性步骤。除非本记录明确要求 Return Packet，否则通过原生任务
+能力返回结果。
 
-Continue from the last checkpoint.
-Do not repeat completed destructive steps.
-Before making changes, check whether the acceptance criteria are already satisfied.
+## Result
 
-When done, write a return packet to:
+- Result state: pending | completed | partial | blocked | failed
+- Summary:
+- Verification:
+- Risks / decisions needed:
+- Durable docs updated:
 
-- `docs/thread-runs/inbox/main/RET-<task-id>-<module>-YYYYMMDD-HHMM.md`
+## Optional Model Override
 
-## Event / Progress Timeline
+- Requested/actual model or mode:
+- Why the override matters to recovery or interpretation:
 
-- YYYY-MM-DD HH:MM — <event>
+## Closure
 
-## Result Summary
-
-Pending.
-
-## Sync Back
-
-- [ ] Updated target module `status.md`
-- [ ] Updated target module `handoff.md`
-- [ ] Updated target module `runbook.md` if useful local context was created
-- [ ] Created Return Packet if completed, blocked, failed, or needs decision
-
-## Closure / Archive Notes
-
-A task is not finished until the main thread reviews its Return Packet and updates the Active Dispatch Queue.
-
-- Final queue state: closed | needs-followup | superseded | failed | TBD
-- Return Packet reviewed: yes | no
-- Useful outputs promoted to status/handoff/roadmap/ADR: yes | no | not-applicable
-- Archived to: `docs/thread-runs/archive/<accepted|needs-followup|failed|superseded>/` or `docs/archive/thread-runs/`
-- Stale details removed from active docs: yes | no
+- Main task reviewed: yes | no
+- Follow-up:
+- Archive/delete policy:

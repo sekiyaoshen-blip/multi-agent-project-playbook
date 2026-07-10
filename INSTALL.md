@@ -1,10 +1,8 @@
 # Installation Notes
 
-中文安装说明：[`INSTALL.zh-CN.md`](INSTALL.zh-CN.md)
+Chinese installation notes: [`INSTALL.zh-CN.md`](INSTALL.zh-CN.md)
 
 ## One-Prompt Installation
-
-You can install this package through Codex, Claude Code, or another capable local agent by pasting one prompt.
 
 English prompt:
 
@@ -12,12 +10,12 @@ English prompt:
 Install the Project Agent Operating Model skill from https://github.com/sekiyaoshen-blip/project-agent-operating-model into this machine's local agent skill directory.
 
 Requirements:
-- Detect the appropriate local skill root. Prefer $CODEX_HOME/skills when CODEX_HOME is set, otherwise use ~/.codex/skills for Codex. If the current agent uses another skill/plugin directory, explain the detected path before writing.
+- Detect the local skill root. Prefer $CODEX_HOME/skills when set, otherwise ~/.codex/skills for Codex. For another agent, explain its detected skill/plugin path before writing.
 - Clone or update the repository into a directory named project-agent-operating-model.
 - Preserve SKILL.md, agents/openai.yaml, references/, project-skeleton/, README files, LICENSE, and MANIFEST.md.
-- Validate that SKILL.md has valid frontmatter with name: project-agent-operating-model and that agents/openai.yaml parses as YAML.
-- Do not initialize or modify the current project unless I explicitly ask for project initialization after the skill is installed.
-- After installation, report the installed path, the latest commit, and the exact command or invocation I should use to run the skill.
+- Validate SKILL.md frontmatter and parse agents/openai.yaml as YAML.
+- Do not initialize or modify the current project unless I explicitly ask after installation.
+- Report the installed path, latest commit, and exact invocation for the skill.
 ```
 
 中文 prompt：
@@ -26,110 +24,77 @@ Requirements:
 请从 https://github.com/sekiyaoshen-blip/project-agent-operating-model 安装 Project Agent Operating Model skill 到这台机器的本地 Agent skill 目录。
 
 要求：
-- 自动检测合适的本地 skill 根目录。Codex 优先使用 $CODEX_HOME/skills；如果没有设置 CODEX_HOME，则使用 ~/.codex/skills。如果当前 Agent 使用其他 skill/plugin 目录，写入前先说明检测到的路径。
+- 自动检测本地 skill 根目录。Codex 优先使用 $CODEX_HOME/skills；如果没有设置，则使用 ~/.codex/skills。其他 Agent 应在写入前说明检测到的 skill/plugin 路径。
 - 将仓库 clone 或更新到名为 project-agent-operating-model 的目录。
 - 保留 SKILL.md、agents/openai.yaml、references/、project-skeleton/、README 文件、LICENSE 和 MANIFEST.md。
-- 校验 SKILL.md frontmatter 有效，并且包含 name: project-agent-operating-model；校验 agents/openai.yaml 可以被 YAML 解析。
-- 除非我在安装完成后明确要求初始化项目，否则不要修改当前项目文件。
-- 安装完成后，报告安装路径、最新 commit，以及我应该用什么命令或调用方式运行这个 skill。
+- 校验 SKILL.md frontmatter，并确认 agents/openai.yaml 可以作为 YAML 解析。
+- 除非我在安装完成后明确要求，否则不要初始化或修改当前项目。
+- 安装完成后报告安装路径、最新 commit 和准确的 skill 调用方式。
 ```
 
-## Use As A Skill Package
+## One-Prompt Project Initialization
 
-Place this directory wherever your Codex skill loader expects skills, preserving this structure:
+Use this after the skill is installed.
+
+English prompt:
 
 ```text
-project-agent-operating-model/
-  SKILL.md
-  agents/
-    openai.yaml
-  references/
+Use $project-agent-operating-model to initialize this project in Native Mode for the latest ChatGPT Desktop/Codex workflow.
+
+Requirements:
+- Reuse existing PRDs, technical docs, issue trackers, roadmaps, and status docs instead of duplicating them.
+- Define the main task and stable module ownership boundaries.
+- Prefer long-lived visible native module tasks for module implementation. Use temporary subagents only for bounded disposable research, review, search, test, or verification work.
+- Discover and reuse existing visible module tasks. Before creating any missing visible task, follow the current product's user-authorization requirement.
+- Keep docs minimal: stable facts in project docs; transient execution in native task history.
+- Do not enable thread-runs, Return Packets, locks, or archives unless a concrete recovery, audit, asynchronous, high-risk, or cross-tool need exists.
+- Inherit the current client/task model by default; do not add routine model or quota telemetry.
+- Report the selected mode, files created or mapped, module-to-task routing map, optional controls omitted/enabled, and unresolved assumptions.
 ```
 
-Then invoke the skill only for initialization, restructuring, repair, or upgrade tasks.
+中文 prompt：
 
-## Use Project Skeleton
+```text
+执行会话统筹 init/初始化。使用 $project-agent-operating-model，按照最新版 ChatGPT Desktop/Codex 的 Native Mode 初始化当前项目。
 
-To bootstrap a project manually, copy the contents of `project-skeleton/` into your project root.
-
-Then customize:
-
-- `AGENTS.md`
-- `CLAUDE.md` if using Claude Code or another compatible agent
-- `docs/thread-operating-model.md`
-- `docs/project-brief.md`
-- `docs/current-prd.md`
-- `docs/current-technical-design.md`
-- `docs/current-work.md`
-- `docs/roadmap.md`
-- `docs/status.md`
-- `docs/thread-registry.md`
-- `docs/modules/example-module/*`
-
-Rename `example-module` to your actual module name.
-
-Customize Model Routing in `docs/thread-operating-model.md` and `docs/thread-registry.md` so `fast`, `standard`, `high-reasoning`, and `specialized` map to the model choices available in your Codex Desktop / CLI / IDE environment. By default, each tier should use the latest available compatible model version. If `gpt-5.3-codex-spark` / GPT-5.3-SPARK is available with an independent quota pool, map suitable fast or low-risk standard work to Spark before spending `gpt-5.5` quota.
-
-
-
-## Current Snapshot Layer
-
-The installed operating model includes three onboarding-friendly current snapshot docs:
-
-- `docs/current-prd.md`: current product requirements and behavior truth.
-- `docs/current-technical-design.md`: current implementation and architecture truth.
-- `docs/current-work.md`: current goals, WIP, next work, deferred follow-ups, risks, and decisions needed. It is solution-neutral and records what to do, not how to do it.
-
-Update these as current snapshots after meaningful iterations; do not turn them into changelogs. Keep `current-work.md` solution-neutral: record objectives, problems, priorities, risks, and decisions needed, but place implementation strategy in technical design, ADRs, thread-runs, dispatch tasks, or module docs. Large projects can split PRD and technical design into global overview plus module docs.
-
-## Context Governance
-
-The installed operating model includes context-budget, archive, and compaction rules.
-
-After copying the project skeleton, keep active docs as current snapshots:
-
-- `status.md`, `handoff.md`, `roadmap.md`, and `thread-registry.md` should not become append-only logs.
-- Archive completed phases, stale runbook history, closed dispatch tasks, and processed Return Packets.
-- Use `docs/archive/compactions/YYYY-MM-DD-context-compaction.md` to record context cleanup sweeps.
-- Use LV2 controlled autonomous compaction for docs-only cleanup when preconditions are met.
-- Acquire `docs/.locks/context-compaction.lock` before broad active-doc rewrites; the lock applies across tools and across different sessions/threads inside the same tool.
-- Create a compaction request instead of executing when scope, ownership, active tasks, or safety is unclear.
-- Do not make future threads read archives unless the task requires historical investigation or compaction.
-
-## Localization
-
-The installed operating model is language-neutral.
-
-- Set `Project language` in `AGENTS.md` when a project has a preferred language.
-- If no project language is configured, generated human-facing content should follow the user/system language or existing repository convention.
-- Keep code identifiers, paths, commands, APIs, schemas, model names, quota-pool names, and stable template fields in English or original form.
-- For open-source or public developer-facing artifacts, use English by default unless the project explicitly targets another language or maintains localized variants.
-
-## Multi-Agent Entry Points
-
-Codex reads `AGENTS.md`.
-
-When using Claude Code, keep root `CLAUDE.md` short and import `AGENTS.md` instead of duplicating the full operating model. The project skeleton includes a ready-to-copy `CLAUDE.md`:
-
-```md
-@AGENTS.md
+要求：
+- 优先复用项目已有的 PRD、技术文档、issue tracker、roadmap 和状态文档，不要重复创建。
+- 明确主任务职责和稳定的模块归属边界。
+- 模块实现优先交给长期显性的原生模块任务；临时子智能体只用于一次性的调研、评审、搜索、测试或验证。
+- 自动发现并复用已有模块任务。创建缺失的显性任务前，遵守当前产品要求的用户授权规则。
+- 保持文档精简：稳定事实落项目文档，临时执行过程留在原生任务历史。
+- 除非存在明确的恢复、审计、异步、高风险或跨工具需求，否则不要启用 thread-run、Return Packet、锁或 archive。
+- 默认继承当前客户端/任务模型，不要添加日常模型版本或配额记录。
+- 最后报告所选模式、新建或映射的文件、模块到长期任务的路由表、启用或省略的可选控制，以及尚未确认的假设。
 ```
 
-Other agents should also treat `AGENTS.md`, `docs/thread-operating-model.md`, and `docs/thread-registry.md` as the shared source of truth.
+## Manual Installation
+
+Place the repository in the local skill root under
+`project-agent-operating-model/`, preserving `SKILL.md`, `agents/`, and
+`references/`. Invoke the skill for initialization, audit, repair, compaction,
+or operating-model upgrades, not routine implementation.
+
+## Modes
+
+- Minimal: `AGENTS.md` plus one current work surface.
+- Native: default for current ChatGPT Desktop/Codex; adds long-lived visible
+  task routing and compact durable state.
+- Portable Controls: opt-in thread-runs, Return Packets, locks, and archives for
+  concrete cross-tool, audit, recovery, asynchronous, or high-risk needs.
+
+The project skeleton represents Native Mode. Optional templates remain in
+`references/`; do not copy all of them by default.
+
+## Model Policy
+
+Inherit the current task/client model by default. When GPT-5.6 is available,
+Sol/Terra/Luna and parallel/Ultra-style execution can express deep, balanced,
+fast, and parallel capability intent. Do not hard-code these names into durable
+project contracts or log model/quota data for routine work.
 
 ## Codex Metadata
 
-This package includes `agents/openai.yaml` for Codex App UI metadata and invocation policy.
-
-The file intentionally sets:
-
-```yaml
-policy:
-  allow_implicit_invocation: false
-```
-
-This keeps the skill explicit-use by default so routine module implementation, dispatch queue updates, checkpoints, and handoff maintenance rely on project docs instead of repeatedly loading the full skill.
-
-## Runtime Reminder
-
-Do not keep invoking the skill for every module implementation or dispatch event. After the project contract is installed, use the project docs as the operating system.
+`agents/openai.yaml` keeps implicit invocation disabled so the skill loads only
+for operating-model work. After installation, project `AGENTS.md`, native tasks,
+and current docs drive routine collaboration.

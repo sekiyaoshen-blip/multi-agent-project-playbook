@@ -2,20 +2,18 @@
 
 ## 一键安装
 
-你可以在 Codex、Claude Code 或其他具备本地文件操作能力的 Agent 中，直接粘贴一条 prompt 完成安装。
-
 中文 prompt：
 
 ```text
 请从 https://github.com/sekiyaoshen-blip/project-agent-operating-model 安装 Project Agent Operating Model skill 到这台机器的本地 Agent skill 目录。
 
 要求：
-- 自动检测合适的本地 skill 根目录。Codex 优先使用 $CODEX_HOME/skills；如果没有设置 CODEX_HOME，则使用 ~/.codex/skills。如果当前 Agent 使用其他 skill/plugin 目录，写入前先说明检测到的路径。
+- 自动检测本地 skill 根目录。Codex 优先使用 $CODEX_HOME/skills；如果没有设置，则使用 ~/.codex/skills。其他 Agent 应在写入前说明检测到的 skill/plugin 路径。
 - 将仓库 clone 或更新到名为 project-agent-operating-model 的目录。
 - 保留 SKILL.md、agents/openai.yaml、references/、project-skeleton/、README 文件、LICENSE 和 MANIFEST.md。
-- 校验 SKILL.md frontmatter 有效，并且包含 name: project-agent-operating-model；校验 agents/openai.yaml 可以被 YAML 解析。
-- 除非我在安装完成后明确要求初始化项目，否则不要修改当前项目文件。
-- 安装完成后，报告安装路径、最新 commit，以及我应该用什么命令或调用方式运行这个 skill。
+- 校验 SKILL.md frontmatter，并确认 agents/openai.yaml 可以作为 YAML 解析。
+- 除非我在安装完成后明确要求，否则不要初始化或修改当前项目。
+- 安装完成后报告安装路径、最新 commit 和准确的 skill 调用方式。
 ```
 
 English prompt:
@@ -24,149 +22,62 @@ English prompt:
 Install the Project Agent Operating Model skill from https://github.com/sekiyaoshen-blip/project-agent-operating-model into this machine's local agent skill directory.
 
 Requirements:
-- Detect the appropriate local skill root. Prefer $CODEX_HOME/skills when CODEX_HOME is set, otherwise use ~/.codex/skills for Codex. If the current agent uses another skill/plugin directory, explain the detected path before writing.
+- Detect the local skill root. Prefer $CODEX_HOME/skills when set, otherwise ~/.codex/skills for Codex. For another agent, explain its detected skill/plugin path before writing.
 - Clone or update the repository into a directory named project-agent-operating-model.
 - Preserve SKILL.md, agents/openai.yaml, references/, project-skeleton/, README files, LICENSE, and MANIFEST.md.
-- Validate that SKILL.md has valid frontmatter with name: project-agent-operating-model and that agents/openai.yaml parses as YAML.
-- Do not initialize or modify the current project unless I explicitly ask for project initialization after the skill is installed.
-- After installation, report the installed path, the latest commit, and the exact command or invocation I should use to run the skill.
+- Validate SKILL.md frontmatter and parse agents/openai.yaml as YAML.
+- Do not initialize or modify the current project unless I explicitly ask after installation.
+- Report the installed path, latest commit, and exact invocation for the skill.
 ```
 
-## 作为 Codex Skill 包使用
+## 一键初始化项目
 
-将整个目录放到 Codex skill loader 能识别的位置，并保持目录结构不变：
+安装 skill 后，在目标项目中使用下面的 prompt。
+
+中文 prompt：
 
 ```text
-project-agent-operating-model/
-  SKILL.md
-  agents/
-    openai.yaml
-  references/
+执行会话统筹 init/初始化。使用 $project-agent-operating-model，按照最新版 ChatGPT Desktop/Codex 的 Native Mode 初始化当前项目。
+
+要求：
+- 优先复用项目已有的 PRD、技术文档、issue tracker、roadmap 和状态文档，不要重复创建。
+- 明确主任务职责和稳定的模块归属边界。
+- 模块实现优先交给长期显性的原生模块任务；临时子智能体只用于一次性的调研、评审、搜索、测试或验证。
+- 自动发现并复用已有模块任务。创建缺失的显性任务前，遵守当前产品要求的用户授权规则。
+- 保持文档精简：稳定事实落项目文档，临时执行过程留在原生任务历史。
+- 除非存在明确的恢复、审计、异步、高风险或跨工具需求，否则不要启用 thread-run、Return Packet、锁或 archive。
+- 默认继承当前客户端/任务模型，不要添加日常模型版本或配额记录。
+- 最后报告所选模式、新建或映射的文件、模块到长期任务的路由表、启用或省略的可选控制，以及尚未确认的假设。
 ```
 
-然后只在以下场景调用这个 skill：
+English prompt:
 
-- 初始化项目运行模型。
-- 重构已有项目的多线程协作方式。
-- 修复已经混乱或失效的项目协作文档。
-- 压缩膨胀的上下文和历史记录。
-- 升级旧版本的项目运行模型。
-- 修复 LV2 文档压缩、Compaction Lock 或多 Agent 入口相关问题。
+```text
+Use $project-agent-operating-model to initialize this project in Native Mode for the latest ChatGPT Desktop/Codex workflow.
 
-不建议在每个普通开发任务、模块实现任务或派单任务中反复调用该 skill。
-
-## 手动安装项目骨架
-
-如果你想手动初始化一个项目，可以将 `project-skeleton/` 下的内容复制到目标项目根目录。
-
-复制后，重点修改这些文件：
-
-- `AGENTS.md`
-- `CLAUDE.md`，如果使用 Claude Code 或其他兼容 Agent
-- `docs/thread-operating-model.md`
-- `docs/project-brief.md`
-- `docs/current-prd.md`
-- `docs/current-technical-design.md`
-- `docs/current-work.md`
-- `docs/roadmap.md`
-- `docs/status.md`
-- `docs/thread-registry.md`
-- `docs/modules/example-module/*`
-
-其中 `example-module` 应改成你项目里的真实模块名称。
-
-## 配置模型路由
-
-在 `docs/thread-operating-model.md` 和 `docs/thread-registry.md` 中，根据你的 Codex Desktop、CLI 或 IDE 环境配置模型路由。
-
-默认建议维护这些层级：
-
-- `fast`
-- `standard`
-- `high-reasoning`
-- `specialized`
-
-选择模型时，应先选择任务难度对应的模型层级，再选择具体模型版本。默认使用该层级中可用的最新兼容版本。
-
-如果你的环境里有独立配额池的 `gpt-5.3-codex-spark` / GPT-5.3-SPARK，可以优先把适合的快速任务或低风险标准任务路由到 Spark，避免过早消耗 `gpt-5.5` 配额。
-
-## 当前快照层
-
-安装后的项目运行模型包含三个面向新线程接手的当前快照文档：
-
-- `docs/current-prd.md`：当前产品需求和行为事实。
-- `docs/current-technical-design.md`：当前技术实现和架构事实。
-- `docs/current-work.md`：当前目标、进行中事项、下一步、延后事项、风险和待决策问题。
-
-这些文档应该在重要迭代后被重写成当前快照，不要变成 changelog。`current-work.md` 要保持方案中立，只记录“做什么”，不要写“怎么做”。实现策略应放到技术设计、ADR、thread-run、派单任务或模块文档中。
-
-## 上下文治理
-
-安装后的项目运行模型包含上下文预算、归档和压缩规则。
-
-复制项目骨架后，应保持活跃文档为当前快照：
-
-- `status.md`、`handoff.md`、`roadmap.md` 和 `thread-registry.md` 不应变成追加式流水账。
-- 已完成阶段、过期 runbook 历史、关闭的派单任务和已处理的 Return Packet 应归档。
-- 使用 `docs/archive/compactions/YYYY-MM-DD-context-compaction.md` 记录上下文清理。
-- 当安全前提满足时，允许 Agent 执行 LV2 受控自主 docs-only 压缩。
-- 执行大范围活跃文档重写前，应获取 `docs/.locks/context-compaction.lock`。该锁在不同工具之间共享，也区分同一工具里的不同线程或会话。
-- 如果存在 active lock、stale lock、范围不清、任务仍活跃或涉及禁止范围，应创建 compaction request / Return Packet，让主线程或用户决定。
-- 除非任务需要历史调查、审计、回归分析或压缩，否则不要让未来线程默认读取 archive。
-
-LV2 可以整理：
-
-- 活跃文档的快照化重写。
-- 过期或历史内容归档。
-- 已处理 Return Packet 移出 inbox。
-- 已关闭或被替代的任务行归档。
-- compaction note。
-- registry 中的 queue、lock 和 active context hygiene 字段。
-
-LV2 禁止整理：
-
-- 源码、测试、生产配置。
-- schema、migration。
-- ADR 决策内容。
-- 产品方向、模块归属、roadmap 优先级。
-- public contract。
-
-## 多 Agent 入口
-
-Codex 读取 `AGENTS.md`。
-
-Claude Code 可通过根目录 `CLAUDE.md` 共享同一套规则。项目骨架中的 `CLAUDE.md` 默认内容为：
-
-```md
-@AGENTS.md
+Requirements:
+- Reuse existing PRDs, technical docs, issue trackers, roadmaps, and status docs instead of duplicating them.
+- Define the main task and stable module ownership boundaries.
+- Prefer long-lived visible native module tasks for module implementation. Use temporary subagents only for bounded disposable research, review, search, test, or verification work.
+- Discover and reuse existing visible module tasks. Before creating any missing visible task, follow the current product's user-authorization requirement.
+- Keep docs minimal: stable facts in project docs; transient execution in native task history.
+- Do not enable thread-runs, Return Packets, locks, or archives unless a concrete recovery, audit, asynchronous, high-risk, or cross-tool need exists.
+- Inherit the current client/task model by default; do not add routine model or quota telemetry.
+- Report the selected mode, files created or mapped, module-to-task routing map, optional controls omitted/enabled, and unresolved assumptions.
 ```
 
-这样 Codex 和 Claude Code 都以 `AGENTS.md`、`docs/thread-operating-model.md` 和 `docs/thread-registry.md` 为共同事实源，避免规则漂移。
+## 运行模式
 
-## 本地化
+- **Minimal：** `AGENTS.md` 加一个当前工作面。
+- **Native：** 新版 ChatGPT Desktop/Codex 的默认模式，增加长期显性模块任务路由和精简的稳定状态文档。
+- **Portable Controls：** 只有存在跨工具、异步、审计、恢复或高风险需求时，才增加 thread-run、Return Packet、锁和 archive。
 
-安装后的运行模型是语言中立的。
+`project-skeleton/` 代表 Native Mode。其他模板保留在 `references/` 中，不要默认全部复制。
 
-- 如果项目有固定语言，在 `AGENTS.md` 中设置 `Project language`。
-- 如果没有配置项目语言，面向人的生成内容应遵循用户语言、系统语言或仓库现有语言。
-- 代码标识符、路径、命令、API、schema、模型名、配额池名和稳定模板字段应保留英文或原始形式。
-- 开源或公共开发者文档默认使用英文，除非项目明确维护本地化版本。
+## 模型策略
 
-## Codex 元数据
+默认继承当前客户端/任务模型。GPT-5.6 可用时，可以用 Sol、Terra、Luna 和 parallel/Ultra 风格执行表达深度、平衡、快速和并行能力，但不要把这些当前名称硬编码成长期项目契约，也不要为普通任务记录模型和配额流水。
 
-本包包含 `agents/openai.yaml`，用于 Codex App 的 UI 元数据和调用策略。
+## 日常使用
 
-该文件有意设置：
-
-```yaml
-policy:
-  allow_implicit_invocation: false
-```
-
-这表示 skill 默认需要显式调用。项目契约安装完成后，日常模块实现、派单队列更新、检查点恢复和交接维护，应依赖项目文档，而不是反复加载完整 skill。
-
-## 运行时提醒
-
-不要把这个 skill 当作每个任务都要调用的常驻运行时。
-
-安装项目契约后，项目自己的 `AGENTS.md` 和 `docs/thread-operating-model.md` 才是后续线程协作的主要依据。
+skill 只用于初始化、审查、修复、压缩或升级项目运行模型。初始化后，日常协作由项目 `AGENTS.md`、原生任务和当前文档驱动。

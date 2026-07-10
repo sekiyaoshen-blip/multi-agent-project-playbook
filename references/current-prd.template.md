@@ -2,99 +2,64 @@
 
 Last updated: YYYY-MM-DD
 
-This document is the current product-requirements snapshot. It is the fastest onboarding document for understanding what the product is, what it currently does, and what product behavior is expected now.
-
-Keep this file current after meaningful product iterations. Do not use it as a changelog or todo list.
-
-## Snapshot Metadata
-
-- Product / project:
-- Owner:
-- Current phase:
-- Related roadmap:
-  - `docs/roadmap.md`
-- Related current workboard:
-  - `docs/current-work.md`
-- Related technical design:
-  - `docs/current-technical-design.md`
-- Related ADRs:
-  - `docs/decisions/ADR-XXXX-title.md`
+Current product behavior and accepted requirements only. Reuse an existing PRD
+instead when it already owns this responsibility. Do not use this file as a
+changelog, task list, or implementation plan.
 
 ## Product Summary
 
-Describe the current product in one or two paragraphs.
+- Product / project:
+- Target outcome:
+- Current phase:
 
-## Target Users / Personas
+## Users And Needs
 
-| User / Persona | Need / Pain | Current Support | Notes |
+| User / Persona | Need / Pain | Current Support |
+|---|---|---|
+| <persona> | <need> | working / partial / planned |
+
+## Current Surfaces And Capabilities
+
+| Surface / Capability | User Outcome | Current State | Entry Point |
 |---|---|---|---|
-| <persona> | <need> | supported / partial / planned | <notes> |
+| <surface or capability> | <outcome> | working / partial / planned / deprecated | <UI/API/CLI> |
 
-## Current Product Surfaces
+## Current Workflows
 
-- Admin:
-- User portal:
-- API / integration surface:
-- CLI / automation surface:
-- Other:
+### <Workflow>
 
-## Current Capabilities
-
-| Capability | User Outcome | Current State | Entry Points | Notes |
-|---|---|---|---|---|
-| <capability> | <outcome> | working / partial / planned / deprecated | <route/API/UI> | <notes> |
-
-## Current User Workflows
-
-### Workflow: <Name>
-
-- Actor:
-- Trigger:
+- Actor / trigger:
 - Main path:
 - Success state:
-- Failure / edge cases:
-- Related modules:
+- Important failure/edge cases:
+- Owner module:
 
-## Product Requirements
+## Accepted Requirements
 
-| Requirement ID | Requirement | Priority | State | Owner Module | Source / Link |
+| ID | Requirement | Priority | State | Owner Module | Source |
 |---|---|---|---|---|---|
 | PRD-001 | <requirement> | P0/P1/P2/P3 | active / partial / planned / deferred | `<module>` | <link> |
 
-## Current Non-Goals / Out Of Scope
+## Non-Goals And Constraints
 
-- <non-goal>
-- <non-goal>
-
-## Product Constraints
-
-- Compliance / legal:
-- Platform:
-- Performance:
-- Cost:
-- Timeline:
-- Localization / accessibility:
+- Non-goal:
+- Product/platform constraint:
+- Compliance/accessibility/localization constraint:
+- Cost/performance/timeline constraint:
 
 ## Open Product Questions
 
-| Question | Owner | Blocks | Needed By | Current Bias |
-|---|---|---|---|---|
-| <question> | <owner> | <work> | YYYY-MM-DD | <current answer if any> |
+| Question | Decision Owner | Blocks | Needed By |
+|---|---|---|---|
+| <question> | <owner> | <work> | YYYY-MM-DD |
 
-## Module PRD Index
+## Links
 
-For large projects, keep this global PRD short and split product requirements into module PRDs:
+- Current technical truth: `docs/current-technical-design.md`
+- Current outcomes/WIP: `docs/current-work.md`
+- Durable decisions: `docs/decisions/`
+- Optional roadmap: `docs/roadmap.md`
 
-- `docs/modules/<module>/current-prd.md`
-
-## Update Rules
-
-Update this document when:
-
-- user-visible behavior changes,
-- product scope changes,
-- requirements are added, removed, accepted, deferred, or deprecated,
-- workflows, personas, or product surfaces change,
-- a release, milestone, or optimization changes current product truth.
-
-Do not put implementation details, debug notes, task logs, or long historical records here. Link to `docs/current-technical-design.md`, `docs/current-work.md`, ADRs, or archives instead.
+Update when current product behavior, requirements, users, workflows, scope, or
+constraints change. Remove superseded truth; preserve history only when useful
+in release notes, ADRs, or archives.

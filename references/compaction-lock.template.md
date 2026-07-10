@@ -1,34 +1,26 @@
 # Compaction Lock
 
+Use only for broad shared active-doc rewrites when concurrent tools/tasks may
+edit the same files. Ordinary targeted doc updates do not need this lock.
+
 - Lock ID: LOCK-YYYYMMDD-HHMM-<short-id>
-- Lock type: context-compaction
 - Safety mode: LV2-docs-only
 - Status: active | stale | released
 
 ## Owner
 
-- Owner tool: codex | claude-code | other-agent | automation | human
-- Owner thread / session / conversation ID:
-- Owner task / run ID:
-- Owner display name, if useful:
+- Tool: codex | claude-code | other-agent | automation | human
+- Native task / thread / session ID:
+- Task / run ID, if any:
 
 ## Scope
 
 - Project / module:
 - Files locked:
-  - `docs/thread-registry.md`
-  - `docs/roadmap.md`
-  - `docs/status.md`
-  - `docs/modules/<module>/status.md`
-  - `docs/modules/<module>/handoff.md`
-  - `docs/modules/<module>/runbook.md`
-  - `docs/thread-runs/...`
-- Out of scope:
-  - source code
-  - tests
-  - production config
-  - schemas / migrations
-  - ADR decision changes
+  - `docs/<active-doc>.md`
+- Explicitly out of scope:
+  - source, tests, production config, schemas, migrations, credentials
+  - ADR decisions, product direction, module ownership, priority, public contracts
 
 ## Timing
 
@@ -39,23 +31,24 @@
 
 ## Trigger
 
-- Trigger type:
-  - doc-budget-exceeded | stale-contradiction | processed-return-inbox | closed-dispatch-tasks | replacement-thread-startup | roadmap-phase-complete | scheduled-maintenance | user-reported-confusion
-- Trigger details:
+- oversize | stale | duplicated | contradictory | milestone-closed | task-replaced | user-reported-confusion
+- Details:
 
 ## Safety Checks
 
-- [ ] Workspace status checked
-- [ ] No active conflicting lock found
-- [ ] Affected docs are not owned by another running task
+- [ ] Workspace state checked
+- [ ] No active conflicting owner found
 - [ ] Cleanup is docs-only
-- [ ] Historical material will be archived before shortening active docs
-- [ ] Final diff will be reviewable
+- [ ] Affected docs are not owned by another active task
+- [ ] Useful history will be summarized or archived when needed
+- [ ] Final diff will be small enough to review
 
-## Handoff / Notes
+## Progress / Release
 
-- Current phase:
-- Files already archived:
-- Files already rewritten:
-- Remaining work:
-- Release notes:
+- Completed:
+- Remaining:
+- Compaction note:
+- Released at:
+
+Do not silently overwrite a stale lock. Report it and let the main task or user
+decide takeover.

@@ -3,7 +3,7 @@ set -euo pipefail
 
 REPO_NAME="${1:-project-agent-operating-model}"
 OWNER="${GITHUB_OWNER:-sekiyaoshen-blip}"
-DESCRIPTION="Bootstrap, audit, repair, compact, and upgrade project-local operating rules for long-running agent-assisted projects."
+DESCRIPTION="Native-first routing for long-lived visible module tasks and durable project context."
 
 if ! command -v gh >/dev/null 2>&1; then
   echo "GitHub CLI (gh) is required. Install it and authenticate with: gh auth login" >&2

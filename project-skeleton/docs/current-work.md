@@ -19,7 +19,8 @@ Put implementation details elsewhere:
 - Product behavior and requirements: `docs/current-prd.md`
 - Technical architecture and accepted implementation approach: `docs/current-technical-design.md`
 - Durable decisions and tradeoffs: `docs/decisions/`
-- Dispatch-specific execution instructions: `docs/thread-runs/<task-id>.md`
+- Dispatch-specific execution instructions: the native task; use
+  `docs/thread-runs/<task-id>.md` only when Portable Controls are enabled
 - Module-local debugging and recovery context: module `runbook.md`
 - Main-thread relevant module updates: module `handoff.md`
 
@@ -31,9 +32,9 @@ Put implementation details elsewhere:
 
 ## In Progress Now
 
-| Work ID | Work Item / Problem To Resolve | Owner Thread / Module | State | Related Task / Run | Next Needed Outcome |
+| Work ID | Work Item / Problem To Resolve | Owner Task / Module | State | Native Task / Optional Run | Next Needed Outcome |
 |---|---|---|---|---|---|
-| WORK-001 | <what problem or outcome is being worked on> | `<module>` | running / blocked / review | `docs/thread-runs/<task-id>.md` | <what should be true next> |
+| WORK-001 | <what problem or outcome is being worked on> | `<module>` | running / blocked / review | <native task link or optional run record> | <what should be true next> |
 
 ## Next Up
 
@@ -75,9 +76,9 @@ Keep only recent items that still matter for planning. Archive old closed work.
 
 - Current PRD: `docs/current-prd.md`
 - Current technical design: `docs/current-technical-design.md`
-- Roadmap: `docs/roadmap.md`
-- Thread registry / active dispatch queue: `docs/thread-registry.md`
-- Active task records: `docs/thread-runs/`
+- Optional roadmap, if the project uses one: `docs/roadmap.md`
+- Long-lived visible task map: `docs/thread-registry.md`
+- Portable task records, only when enabled: `docs/thread-runs/`
 
 ## Update Rules
 
@@ -90,4 +91,7 @@ Update this document when:
 - a risk or open decision becomes important for near-term planning,
 - a milestone closes or new planning cycle starts.
 
-Do not duplicate full dispatch queue rows, Return Packets, historical task detail, implementation plans, step-by-step approaches, prompt drafts, or technical solution details here. Link to `docs/thread-registry.md`, `docs/thread-runs/<task-id>.md`, `docs/current-technical-design.md`, ADRs, module docs, or archives.
+Do not duplicate native task history, Return Packets, historical task detail,
+implementation plans, step-by-step approaches, prompt drafts, or technical
+solution details here. Link to the native task, optional Portable Controls,
+technical design, ADRs, module docs, or archives.

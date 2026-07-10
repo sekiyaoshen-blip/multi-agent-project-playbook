@@ -8,8 +8,14 @@ Use this file only as the Claude-specific entry point. Do not duplicate the full
 
 Before changing project-state docs:
 
-- Read `docs/thread-operating-model.md` when the task involves dispatch, Return Inbox, checkpoint recovery, context compaction, archive cleanup, or multi-agent coordination.
-- Check `docs/.locks/` for active locks.
-- For broad active-doc cleanup, use LV2 docs-only compaction and acquire `docs/.locks/context-compaction.lock` first.
-- Write Return Packets to `docs/thread-runs/inbox/main/` instead of interrupting the main thread as the stable return path.
+- Read `docs/thread-operating-model.md` when the task involves long-lived module
+  routing, cross-tool handoff, recovery, or docs compaction.
+- Treat Codex native task identities as routing handles and project docs as the
+  shared durable source of truth.
+- Use compact module handoffs for cross-tool return. Use Return Packets only
+  when native delivery is unavailable/insufficient or project policy requires
+  an audit packet.
+- For broad shared active-doc cleanup, check `docs/.locks/` and acquire
+  `docs/.locks/context-compaction.lock` when concurrent tools/tasks may edit the
+  same docs.
 - Keep active docs as current snapshots, not append-only logs.

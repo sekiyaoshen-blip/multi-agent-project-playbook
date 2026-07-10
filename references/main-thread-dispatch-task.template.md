@@ -1,107 +1,51 @@
-# Main Thread Dispatch Task
+# Main Task Dispatch
 
-- Dispatching thread:
-  - Main Thread
-
-- Target thread / module:
-  - `<module>`
-
-- Task type:
-  - implement | investigate | verify | review | unblock | document | decide
-
-- Priority:
-  - P0 | P1 | P2 | P3
-
-
-## Model Routing
-
-- Model tier:
-  - fast | standard | high-reasoning | specialized
-- Model version policy:
-  - latest-available | pinned | quota-optimized | fallback
-- Requested model / mode:
-  - <project-configured model id or native UI selection>
-- Requested model version:
-  - <latest available by default, or explicit version>
-- Preferred quota pool:
-  - gpt-5.5 | gpt-5.3-codex-spark | shared | unknown | <project-defined>
-- Spark preference:
-  - use `gpt-5.3-codex-spark` when suitable for fast/low-risk work and independent quota helps; otherwise not applicable
-- Fallback model / mode:
-  - <fallback if requested model is unavailable>
-- Model selection reason:
-  - <why this tier/version/quota pool is appropriate>
-- Escalation trigger:
-  - <when to switch to a stronger model or newer version>
-
-## Background
-
-- Why this task exists.
-- What triggered it.
-
-## Ownership Reason
-
-- Why this belongs to the target module.
+- Target long-lived module task: `<module>`
+- Native task ID/link: <from `docs/thread-registry.md`>
+- Type: implement | investigate | review | verify | unblock | decide
+- Priority: P0 | P1 | P2 | P3
 
 ## Desired Outcome
 
-- What should be true when this task is done.
+- What should be true when this task is done:
+
+## Ownership Reason
+
+- Why this belongs to the target module:
 
 ## Acceptance Criteria
 
 - [ ] Criterion 1
 - [ ] Criterion 2
-- [ ] Criterion 3
 
-## Relevant Files / Docs
+## Context
 
-- `docs/current-prd.md`
-- `docs/current-technical-design.md`
-- `docs/current-work.md`
-- `docs/roadmap.md`
-- `docs/thread-registry.md`
-- `docs/thread-runs/<task-id>.md`
-- `docs/modules/<module>/status.md`
-- `docs/modules/<module>/handoff.md`
-- `path/to/file`
+- Relevant files/docs:
+- Lead module and shared contract, for cross-module work:
+- Dependencies:
+- Constraints / do not change:
+- Known risks:
 
-## Dependencies
+## Verification
 
-- Depends on:
-- Blocks:
+- Required checks:
+- Manual review, if any:
 
-## Constraints
+## Escalate When
 
-- Do not change:
-- Must preserve:
-- Security / privacy constraints:
+- Product direction, architecture, security, priority, public contract, or
+  another module's ownership must change.
 
-## Expected Verification
+## Return
 
-- Command/check:
-- Manual check:
-- Not required because:
+- Default: return through native task delivery so the main task can review it.
+- Update module `handoff.md` only if durable project context changed.
+- Portable Controls enabled: no | thread-run | Return Packet | both
+- If enabled, path/reason:
 
-## Checkpoint / Recovery
+## Model Override (Optional)
 
-- Create or update `docs/thread-runs/<task-id>.md`.
-- Checkpoint before risky or long steps.
-- Include resume notes.
-
-## Return Packet
-
-When completed, blocked, failed, or needing a decision, write:
-
-- `docs/thread-runs/inbox/main/RET-<task-id>-<module>-YYYYMMDD-HHMM.md`
-
-## Sync Back
-
-- Update `docs/current-prd.md`, `docs/current-technical-design.md`, or `docs/current-work.md` if current product, technical, or active-work truth changed; keep `current-work.md` solution-neutral and move implementation approach into this task, technical design, ADRs, or module docs
-- Update `docs/modules/<module>/status.md`
-- Update `docs/modules/<module>/handoff.md`
-- Update `docs/modules/<module>/runbook.md` if meaningful local context was created
-- Notify main thread with decision-level summary
-
-## Escalation Trigger
-
-Create or request ADR if this changes architecture, shared contracts, deployment, security, cost, or product scope.
+- Default: inherit current task/client model.
+- Capability intent, if an override is justified: deep | balanced | fast | parallel
+- Requested model/mode:
+- Reason the override matters:

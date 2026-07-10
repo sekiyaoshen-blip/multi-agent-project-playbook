@@ -1,99 +1,58 @@
-# Return Packet: RET-<task-id>-<module>-<timestamp>
+# Portable Return Packet: RET-<task-id>-<module>-<timestamp>
+
+Use only when native result delivery is unavailable/insufficient, work crosses
+tools or asynchronous queues, or project policy requires a durable audit packet.
 
 Last updated: YYYY-MM-DD HH:MM
 
 ## Routing
 
 - Task ID:
-- Source thread / module:
-- Target reviewer:
-  - Main Thread
-- Related run record:
-  - `docs/thread-runs/<task-id>.md`
-- Related dispatch queue row:
-  - `docs/thread-registry.md#active-dispatch-queue`
-- Executed model tier:
-- Model version policy:
-- Requested model / mode:
-- Requested model version:
-- Actual model / mode:
-- Actual model version:
-- Quota pool:
-- Spark preference used:
-- Model selection notes:
-- Model mismatch notes, if any:
+- Source task/module:
+- Target reviewer: Main Task
+- Related thread-run, if any:
+- Return reason: cross-tool | asynchronous | audit | native-delivery-unavailable | policy
 
-## Result State
+## Result
 
-completed | partially-completed | blocked | failed | needs-decision | superseded
-
-## Summary
-
-- What was done:
-- What changed:
+- State: completed | partial | blocked | failed | needs-decision | superseded
+- Summary:
 - What remains:
 
-## Acceptance Criteria Status
+## Acceptance Criteria
 
-- [ ] Criterion 1:
-  - Result:
-- [ ] Criterion 2:
-  - Result:
-
-## Files Changed
-
-- `path/to/file`
-  - Purpose:
+- [ ] Criterion 1: <result>
+- [ ] Criterion 2: <result>
 
 ## Verification
 
-- Checks run:
-  - `<command>`: `<result>`
-- Checks not run:
-  - `<check>`: `<reason>`
+- Checks run and results:
+- Checks not run and reasons:
 
-## Decisions Or Main-Thread Input Needed
+## Risks Or Decisions Needed
 
-- Decision:
-  - Why main thread must decide:
-  - Options:
+- Risk/decision:
+- Impact:
+- Recommended next action:
 
-## Risks / Caveats
+## Durable Changes
 
-- Risk:
-  - Impact:
-  - Suggested next action:
+- Product/technical/ownership truth changed: yes | no
+- Docs updated or proposed:
+- ADR needed: yes | no
 
-## Follow-Up Tasks Suggested
+## Recovery
 
-- Target module:
-  - Task:
-  - Reason:
-  - Acceptance criteria:
-
-## Sync Completed
-
-- [ ] Updated target module `status.md`
-- [ ] Updated target module `handoff.md`
-- [ ] Updated target module `runbook.md` if useful local context was created
-- [ ] Updated ADR or requested ADR if needed
-
-## Idempotency / Re-Run Notes
-
-- Safe to resume:
-  - yes / no
-- Safe to re-run:
-  - yes / no
+- Safe to resume: yes | no
+- Safe to re-run: yes | no
 - Do not repeat:
-  - destructive or already completed steps
 
-## Main Thread Review / Archive
+## Main Task Review
 
 - Review state: pending | accepted | needs-followup | failed | superseded
-- Reviewed by:
 - Reviewed at:
-- Dispatch queue updated: yes | no
-- Promoted summaries to active docs: yes | no | not-applicable
-- Archive destination: `docs/thread-runs/archive/<accepted|needs-followup|failed|superseded>/`
+- Follow-up:
+- Archive/delete destination:
 
-After review, remove this packet from `docs/thread-runs/inbox/main/`. The inbox is only for unprocessed packets.
+After review, remove this packet from the active inbox. The inbox contains only
+unprocessed packets.

@@ -1,270 +1,225 @@
 ---
 name: project-agent-operating-model
 description: >
-  Bootstrap, audit, repair, compact, or upgrade a durable project-agent
-  operating model for long-running agent-assisted projects. Installs
-  project-local rules for main planning threads, module/support/operations/
-  research threads, AGENTS.md, project-state docs, current PRD, current technical design, current workboard, thread registry, handoffs,
-  runbooks, ADRs, cross-thread dispatch, checkpoints, return inboxes, model
-  tier/version routing, localization, context budgets, LV2 compaction, compaction locks, archives, and compaction.
-  Use for project setup, restructuring, migration, collaboration-model repair,
-  context-governance cleanup, or lock-safe compaction repair. Do not use for routine implementation after
-  AGENTS.md and docs/thread-operating-model.md are installed. Trigger terms:
-  agent operating model, project agent OS, main thread, module threads,
-  context compaction, LV2 compaction, compaction lock, return inbox, dispatch queue, 主线程规划, 子线程实现,
-  项目智能体协作, 上下文治理, 文档压缩, 归档策略.
+  Bootstrap, audit, slim, repair, or upgrade a native-first operating model for
+  long-running agent-assisted projects. Use when a project needs a main planning
+  task, durable visible module tasks, automatic module routing, project-local
+  AGENTS.md rules, compact current-state docs, cross-tool compatibility, or
+  lock-safe docs compaction. Prefer ChatGPT Desktop/Codex native task tools for
+  visible long-lived work and temporary subagents only for bounded disposable
+  work. Do not use for routine implementation after the project contract is
+  installed. Trigger terms include agent operating model, long-lived module
+  threads, visible module tasks, main thread dispatch, thread routing, project
+  agent OS, context governance, 项目智能体协作, 长期模块线程, 主线程派单, 文档压缩.
 ---
 
 # Project Agent Operating Model
 
-## Skill Role
+## Purpose
 
-This skill is a bootstrap, audit, and repair tool for a durable project-agent operating model.
-It installs runtime rules into project files so future threads can follow the system without repeatedly loading this skill.
+Install a small project-local contract that lets a main task route work to
+long-lived visible module tasks without turning chat history or task telemetry
+into a second project database.
 
-Use this skill to:
+Use this skill for initialization, migration, audit, repair, or docs
+compaction. After installation, `AGENTS.md` and project docs govern routine
+work; this skill is not the runtime.
 
-- initialize a new project operating model
-- reorganize an existing project
-- install or update `AGENTS.md`
-- create or repair project-state documents
-- add or restructure long-lived module, support, operations, research, or customer-service threads
-- generate thread startup prompts
-- migrate runtime rules into project docs
-- install or update model-tier and model-version routing rules for cross-thread dispatch
-- install or repair context-budget, archive, compaction, and anti-bloat rules
-- audit drift between docs, code, thread registry, handoffs, runbooks, and ADRs
+Core rule:
 
-Do not use this skill for:
+> Keep durable project truth in project docs. Keep transient execution state in
+> native tasks. Add file-based task records only when native state is not durable
+> enough for the risk or collaboration boundary.
 
-- routine module implementation
-- every cross-thread dispatch
-- every checkpoint update
-- every return packet
-- ordinary status/handoff maintenance after the project contract is installed
-- small one-off edits where `docs/status.md` or a short note is enough
+## Fit Check
 
-After installation, runtime behavior should be governed by:
+Choose the smallest mode that solves the real coordination problem.
 
-- `AGENTS.md`
-- `docs/thread-operating-model.md`
-- `docs/thread-registry.md`
-- `docs/roadmap.md`
-- `docs/status.md`
-- `docs/modules/*/status.md`
-- `docs/modules/*/handoff.md`
-- `docs/modules/*/runbook.md`
-- `docs/thread-runs/*`
-- `docs/archive/*`
-- `docs/.locks/*`
-- `docs/decisions/*`
-
-**Core principle:** Skill installs the system. `AGENTS.md` activates the system. Project docs run the system. The skill should not be the runtime.
-
-## First Pass Audit
-
-Before applying the structure, check whether this operating model is actually the right fit.
-
-- If the work is small, use Minimal Mode: one thread plus `docs/status.md`.
-- If module boundaries are unclear, first map domains, user workflows, data ownership, and integration points.
-- If the user asks for sub-agents but wants long-lived visible conversations, recommend separate visible Codex threads instead of temporary sub-agents.
-- If the user wants every detail synced to the main thread, push back and define what is main-thread relevant.
-- If the user wants long-lived module threads, install module runbooks so threads can recover after long histories or conversation compaction.
-- If the repo already has project docs, adapt to the existing structure instead of forcing new file names.
-- If existing PRDs, architecture docs, or todo boards already exist, map them to `current-prd.md`, `current-technical-design.md`, and `current-work.md` instead of duplicating them.
+- Use **Minimal Mode** for one active task or an early project with unclear
+  module boundaries.
+- Use **Native Mode** by default when Codex/ChatGPT Desktop can create, list,
+  read, continue, fork, or hand off visible tasks.
+- Add **Portable Controls** only for cross-tool, compliance, high-risk,
+  asynchronous, or unreliable-runtime work.
+- Reuse existing PRDs, architecture docs, issue trackers, and status docs.
+  Map responsibilities instead of duplicating them.
+- If project docs are already bloated, compact or consolidate them before
+  installing more files.
 
 ## Operating Modes
 
-Choose the smallest operating mode that preserves useful project memory.
-
 ### Minimal Mode
 
-Use for small, early, or exploratory projects.
-
-Create only:
+Install only:
 
 - `AGENTS.md`
-- `docs/status.md`
+- one current work surface, normally `docs/current-work.md` or the existing
+  issue tracker
 
-Use when:
+### Native Mode (Default)
 
-- there is one active thread
-- module boundaries are unclear or unstable
-- the project mainly needs continuity, not multi-thread orchestration
-
-### Standard Mode
-
-Use for medium projects with clear module boundaries and limited coordination overhead.
-
-Create:
+Install or map:
 
 - `AGENTS.md`
 - `docs/thread-operating-model.md`
-- `docs/project-brief.md`
-- `docs/current-prd.md`
-- `docs/current-technical-design.md`
 - `docs/current-work.md`
-- `docs/roadmap.md`
-- `docs/status.md`
-- `docs/thread-registry.md`
-- `docs/modules/<module>/status.md`
-- `docs/modules/<module>/handoff.md`
+- `docs/thread-registry.md` for durable visible task identities and module
+  ownership only
+- existing PRD and technical-design docs, or the included current snapshot
+  templates when the project has no equivalent
+- module `status.md` and `handoff.md`; add `runbook.md` only when a module task
+  needs recovery across long histories
+- ADRs only for durable decisions
 
-Add `runbook.md` only for long-lived module threads.
+### Portable Controls (Opt-In)
 
-### Full Mode
+Add only when native task state is insufficient:
 
-Use for large, long-running, multi-agent, or multi-module projects.
-
-Create the full structure:
-
-```text
-AGENTS.md
-docs/
-  thread-operating-model.md
-  project-brief.md
-  current-prd.md
-  current-technical-design.md
-  current-work.md
-  roadmap.md
-  status.md
-  thread-registry.md
-  decisions/
-    ADR-0001-title.md
-  modules/
-    <module>/
-      status.md
-      handoff.md
-      runbook.md
-      current-prd.md                  # optional for large projects
-      current-technical-design.md     # optional for large projects
-  .locks/
-    context-compaction.lock.example
-  thread-runs/
-    <task-id>.md
-    inbox/
-      main/
-        RET-<task-id>-<module>-<timestamp>.md
-    archive/
-      accepted/
-      needs-followup/
-      failed/
-      superseded/
-  archive/
-    compactions/
-    roadmap/
-    modules/
-      <module>/
-```
+- `docs/thread-runs/<task-id>.md` for long, risky, resumable, or audited work
+- Return Packets for cross-tool/asynchronous return delivery
+- `docs/.locks/context-compaction.lock` for broad shared-doc compaction
+- archives for useful history removed from active context
+- `CLAUDE.md` or another tool-specific entrypoint that imports `AGENTS.md`
 
 ## Installation Workflow
 
-For a new project:
+1. Inventory existing instructions, docs, issue trackers, modules, tests, and
+   visible native tasks.
+2. Clarify main-task responsibility and stable module ownership.
+3. Choose Minimal, Native, or Native plus Portable Controls.
+4. Install `AGENTS.md` from `references/agents.template.md` and keep it concise.
+5. Install `docs/thread-operating-model.md` from
+   `references/thread-operating-model.template.md` only when more than Minimal
+   Mode is needed.
+6. Reuse existing project docs. Add current PRD, technical design, or workboard
+   templates only when the responsibility has no current home.
+7. Discover existing visible module tasks with native task tools. Reuse them
+   and record their durable IDs/links in `docs/thread-registry.md`.
+8. If a required visible module task does not exist, ask for or rely on explicit
+   user authorization before creating it. Generate its startup prompt from
+   `references/module-startup-prompt.template.md`.
+9. Add Portable Controls only for a concrete risk or interoperability need.
+10. Report the installed mode, mapped docs, visible task map, assumptions, and
+    omitted optional controls.
 
-1. Clarify product objective, users, non-goals, constraints, and expected module boundaries.
-2. Choose Minimal, Standard, or Full Mode.
-3. Install `AGENTS.md` from `references/agents.template.md`.
-4. Install `docs/thread-operating-model.md` from `references/thread-operating-model.template.md`.
-5. Create project-state docs from the templates in `references/`, including the current product snapshot (`current-prd.md`), current technical snapshot (`current-technical-design.md`), and current active-work snapshot (`current-work.md`) for Standard and Full Mode.
-6. Create `docs/archive/` folders for compactions, roadmap history, module history, and historical task material.
-7. Create `docs/.locks/` and install `docs/.locks/context-compaction.lock.example` from `references/compaction-lock.template.md`.
-8. Fill `docs/thread-registry.md` with main thread, module threads, visible native thread links, fallback session/callable refs, and current state.
-9. Generate module startup prompts from `references/module-startup-prompt.template.md`.
-10. Explain that routine future work should follow `AGENTS.md` and project docs, not repeatedly invoke this skill.
+## Native-First Runtime Contract
 
-For an existing project:
+### Long-Lived Visible Module Tasks
 
-1. Inventory existing docs, README files, PRDs, architecture notes, technical specs, todo boards, issue trackers, modules, packages, services, tests, and project instructions.
-2. Infer module boundaries from code ownership, routes, packages, data models, APIs, and user workflows.
-3. Preserve existing conventions where possible.
-4. Add only the missing layer: `current-prd.md`, `current-technical-design.md`, `current-work.md`, `thread-operating-model.md`, registry, status, handoff, runbook, ADR, or thread-runs as needed.
-5. Backfill current state from code and current docs. Do not pretend old project history is complete.
-6. Install or update `AGENTS.md` with a lightweight pointer to the detailed operating model.
-7. If the project already has bloated docs, run a context compaction sweep and archive stale material before adding more rules.
-8. Report unresolved assumptions and recommended next fixes.
+- Treat the main task as planner, dispatcher, reviewer, and cross-module
+  decision owner.
+- Treat each registered module task as a durable visible work surface with a
+  stable ownership boundary and recovery context.
+- When the main task decomposes work, route module-owned work to the existing
+  registered module task with native task messaging.
+- For cross-module work, name a lead module and stabilize shared contracts
+  before fully parallel execution. Other modules may proceed only on slices
+  that do not require inventing an unresolved contract.
+- Do not replace a registered long-lived module task with a temporary subagent
+  merely because subagents are available.
+- Use temporary subagents for bounded research, review, test, search, or other
+  disposable work whose result can be consumed by the current task.
+- Use native task reads/messages for progress and result review. Write a compact
+  module handoff when the result changes durable project truth.
+- If native routing is unavailable, use the registry plus a compact task payload
+  as the fallback. Add a thread-run or Return Packet only when needed.
 
-## What To Install
+### Result Return
 
-Use the included reference files:
+Use this priority:
 
-- `references/agents.template.md` -> project `AGENTS.md`
-- `references/thread-operating-model.template.md` -> `docs/thread-operating-model.md`
-- `references/project-brief.template.md` -> `docs/project-brief.md`
-- `references/current-prd.template.md` -> `docs/current-prd.md`
-- `references/current-technical-design.template.md` -> `docs/current-technical-design.md`
-- `references/current-work.template.md` -> `docs/current-work.md`
-- `references/roadmap.template.md` -> `docs/roadmap.md`
-- `references/global-status.template.md` -> `docs/status.md`
-- `references/thread-registry.template.md` -> `docs/thread-registry.md`
-- `references/module-status.template.md` -> `docs/modules/<module>/status.md`
-- `references/module-current-prd.template.md` -> optional `docs/modules/<module>/current-prd.md` for large projects
-- `references/module-current-technical-design.template.md` -> optional `docs/modules/<module>/current-technical-design.md` for large projects
-- `references/handoff.template.md` -> `docs/modules/<module>/handoff.md`
-- `references/runbook.template.md` -> `docs/modules/<module>/runbook.md`
-- `references/adr.template.md` -> `docs/decisions/ADR-0001-title.md`
-- `references/thread-run.template.md` -> `docs/thread-runs/<task-id>.md`
-- `references/return-packet.template.md` -> `docs/thread-runs/inbox/main/RET-<task-id>-<module>-<timestamp>.md`
-- `references/context-compaction-note.template.md` -> `docs/archive/compactions/YYYY-MM-DD-context-compaction.md`
-- `references/compaction-lock.template.md` -> `docs/.locks/context-compaction.lock.example`
-- `references/claude.template.md` -> optional root `CLAUDE.md` when Claude Code or another CLAUDE.md-compatible workflow is used
+1. Native result delivery or main-task inspection of the module task.
+2. Compact update to module `handoff.md` when the result must survive task UI,
+   tool, or account boundaries.
+3. Return Packet only for cross-tool/asynchronous work, high-risk audit trails,
+   unreliable native delivery, or explicit project policy.
 
-## Runtime Contract
+Do not require both native return and a Return Packet for ordinary work.
 
-The installed project contract must preserve these rules:
+### Model Selection
 
-- Treat chat threads as work surfaces, not as the source of truth.
-- Put durable project state in repo/workspace docs.
-- Keep `docs/current-prd.md` as the current product snapshot, `docs/current-technical-design.md` as the current technical implementation snapshot, and `docs/current-work.md` as the solution-neutral active-work snapshot. `current-work.md` records what to do, not how to do it.
-- Main thread owns roadmap, module boundaries, prioritization, cross-module decisions, active dispatch, return review, and recovery sweep.
-- Module threads own implementation, local debugging, verification, status, handoff, and runbook updates for their module.
-- Prefer visible native Codex Desktop thread operations for cross-thread work.
-- Use session-id/app-server invocation only as fallback or automation layer, with a project-level run record.
-- For every cross-thread dispatch, choose a Model Tier by task difficulty, risk, context size, and purpose; then choose Model Version. Default to the latest available compatible version for that tier, prefer `gpt-5.3-codex-spark` / GPT-5.3-SPARK for suitable fast or low-risk standard tasks when its independent quota pool helps, and record requested/actual model/version, quota pool, fallback, and selection reason in the dispatch queue and thread-run record.
-- Every dispatched task has a `docs/thread-runs/<task-id>.md` record.
-- Long tasks checkpoint before risky or long steps.
-- Child/module threads do not directly interrupt the main thread as the stable return path; they write Return Packets into `docs/thread-runs/inbox/main/`.
-- Main thread consumes return packets in queue order and updates the dispatch queue.
-- Human-facing project communication follows the project/user/system language; code identifiers, paths, commands, API/schema/config fields, errors, logs, tests, package names, model names, quota-pool names, and stable template fields stay English or original.
-- Active project-state docs are current snapshots, not append-only logs. The current PRD, current technical design, and current workboard must also be rewritten as current snapshots, not used as changelogs.
-- Each fact should have one primary home; other docs should link instead of duplicating full content.
-- Keep active docs within context budgets; archive stale, historical, closed, or processed material.
-- Archives are not read by default; read them only for historical investigation, regression analysis, audits, or compaction.
-- Run a context compaction sweep when docs become bloated, contradictory, stale, or confusing.
-- Use LV2 controlled autonomous compaction: agents may execute docs-only compaction at safe boundaries when all preconditions are met; otherwise create a compaction request.
-- Use `docs/.locks/context-compaction.lock` for broad compaction; locks apply across different agent tools and across different threads/sessions in the same tool.
-- Run compaction checks at startup/continuation, before large dispatch batches, after Return Packet review, after task closure, after milestone closure, and whenever docs exceed budget or contradict each other.
-- Never write secrets, tokens, credentials, private customer data, signed URLs, or access-granting links into committed project-state docs.
+- Inherit the current task/client model by default.
+- Do not write model/version/quota telemetry for routine dispatch.
+- Override or pin a model only for explicit user choice, reproducibility,
+  compatibility, cost/latency constraints, or a clear capability need.
+- When the GPT-5.6 family is available, use Sol for difficult/high-risk work,
+  Terra for balanced everyday work, Luna for fast bounded work, and parallel or
+  Ultra-style execution for genuinely independent complex work.
+- Treat model names as current examples, not durable project contracts.
+- Record the requested/actual model only when an override matters to recovery,
+  audit, or result interpretation.
 
-## Audit / Repair Checklist
+## Durable State Rules
 
-When auditing an enabled project, check:
+- Chat/task history and memory are useful work surfaces, not the sole source of
+  truth for product behavior, architecture, ownership, or accepted decisions.
+- Keep `current-work.md` solution-neutral: record what outcome is needed, not
+  how to implement it.
+- Keep each fact in one primary home and link instead of copying.
+- Update docs only for substantive state changes.
+- Keep active docs as current snapshots, not append-only logs.
+- Do not create `roadmap.md`, `status.md`, module PRD/design docs, runbooks,
+  thread-runs, Return Inbox, locks, or archives unless the project needs them.
+- Never commit secrets, credentials, private customer data, signed URLs, or
+  access-granting links.
 
-- Is `AGENTS.md` concise and pointing to `docs/thread-operating-model.md`?
-- Does `docs/thread-operating-model.md` contain the current runtime rules, including localization / system-language policy?
-- Does `docs/thread-registry.md` list active threads, native links, fallback refs, dispatch queue, and next sync triggers?
-- Are module boundaries clear and non-overlapping enough?
-- Are stale, duplicate, or superseded thread refs marked?
-- Are running/stalled tasks represented in `docs/thread-runs/`?
-- Do dispatch queue rows and thread-run records include Model Tier, Model Version Policy, requested/actual model/version or mode, quota pool, fallback, and selection reason?
-- Are checkpoint and resume prompts present for long tasks?
-- Are return packets going to `docs/thread-runs/inbox/main/` instead of interrupting the main thread?
-- Are handoffs compact and main-thread relevant?
-- Are runbooks detailed enough for recovery but free of secrets and long raw logs?
-- Are ADRs present for durable cross-module decisions?
-- Are original engineering anchors preserved inside localized documentation?
-- Are active docs current snapshots instead of append-only logs?
-- Are `docs/current-prd.md`, `docs/current-technical-design.md`, and `docs/current-work.md` current snapshots rather than changelogs or implementation scratchpads?
-- Does each fact have a single primary home, with links instead of duplicated full content?
-- Are handoffs compact and rewritten, not endlessly appended?
-- Are runbooks focused on current recovery context, with old dated history archived?
-- Are closed dispatch tasks and processed Return Packets removed from active queues/inboxes?
-- Does `docs/archive/` contain useful historical detail without being read by default?
-- Has a context compaction sweep been recorded when bloat or contradictions were repaired?
-- Does the project use LV2 controlled autonomous compaction rather than unbounded autonomous rewrites?
-- Does `docs/.locks/` exist, with a compaction lock template or active lock protocol?
-- Are compaction check trigger points and LV2 execution trigger points documented?
-- Are stale locks handled by main-thread/user takeover instead of silent overwrite?
+## Docs Compaction
+
+Native conversation compaction and product memory do not compact project docs.
+Use LV2 only for docs-only cleanup when active docs are stale, contradictory,
+duplicated, or materially oversized.
+
+- Ordinary targeted doc updates do not need a compaction lock.
+- Acquire `docs/.locks/context-compaction.lock` before broad shared active-doc
+  rewrites across multiple tools or tasks.
+- A compaction lock is not a source-code, migration, deployment, or production
+  execution lock. Use a worktree/branch ownership boundary or the relevant
+  database/deployment single-flight mechanism for those operations.
+- LV2 may rewrite current snapshots and archive stale history.
+- LV2 must not change source, tests, production config, schemas, migrations,
+  ADR decisions, product direction, module ownership, roadmap priority, or
+  public contracts.
+- Do not silently replace a stale lock. Report it and let the main task or user
+  decide takeover.
+- If ownership, scope, or semantics are unclear, create a compaction request
+  instead of guessing.
+
+## Resource Routing
+
+Read only the resources needed for the selected mode:
+
+- Core project contract: `references/agents.template.md` and
+  `references/thread-operating-model.template.md`
+- Visible module task map: `references/thread-registry.template.md`
+- Module startup: `references/module-startup-prompt.template.md`
+- Current snapshots: `references/current-prd.template.md`,
+  `references/current-technical-design.template.md`, and
+  `references/current-work.template.md`
+- Module recovery: `references/module-status.template.md`,
+  `references/handoff.template.md`, and `references/runbook.template.md`
+- Durable decisions: `references/adr.template.md`
+- Portable Controls only: `references/thread-run.template.md`,
+  `references/return-packet.template.md`,
+  `references/compaction-lock.template.md`, and
+  `references/context-compaction-note.template.md`
+- Cross-tool entrypoint: `references/claude.template.md`
+
+## Audit Checklist
+
+- Is Native Mode used unless there is a concrete need for Portable Controls?
+- Does each stable module map to one long-lived visible task?
+- Does dispatch reuse that task instead of spawning disposable module workers?
+- Are temporary subagents limited to bounded work?
+- Is the registry a small identity/ownership map rather than a duplicate queue?
+- Are native task state and `current-work.md` the default active work surfaces?
+- Are thread-runs and Return Packets conditional instead of mandatory?
+- Are model overrides exceptional and free of stale hard-coded quota rules?
+- Are active docs current, compact, non-duplicative, and read selectively?
+- Are compaction locks used only for broad shared-doc rewrites?
+- Can another tool recover durable project truth without reading chat history?
 
 ## Fallback
 
-If project-local instructions cannot be written, tell the user to explicitly invoke this skill in new threads and point those threads to the project docs. Prefer writing a local operating document such as `docs/thread-operating-model.md` or `docs/project-operating-model.md` when `AGENTS.md` cannot be created.
+If project-local instructions cannot be written, tell the user to invoke this
+skill in new tasks and point those tasks to the existing project docs. Do not
+pretend model memory alone provides a durable project operating contract.

@@ -1,74 +1,102 @@
 # Project Agent Operating Model
 
-中文说明：[`README.zh-CN.md`](README.zh-CN.md)
+Chinese documentation: [`README.zh-CN.md`](README.zh-CN.md)
 
-A Codex skill package for bootstrapping, auditing, repairing, and compacting durable project-local operating rules for long-running agent-assisted projects.
+A native-first Codex skill for projects that need one main planning task and
+long-lived visible module tasks.
 
-It installs a project operating model with main planning threads, long-lived module/support/operations/research threads, project-state docs, current PRD, current technical design, current workboard, handoffs, runbooks, ADRs, cross-thread dispatch, checkpoint recovery, Return Inbox workflows, model routing, localization, and context governance, LV2 docs-only compaction, and cross-tool/thread compaction locks.
+The skill installs a small project-local contract for module ownership,
+automatic routing, durable project truth, cross-tool recovery, and safe docs
+compaction. It relies on ChatGPT Desktop/Codex native task tools for ordinary
+dispatch and progress instead of recreating the product's task system in files.
 
-## Core Principle
-
-```text
-Skill installs the system.
-AGENTS.md activates the system.
-Project docs run the system.
-The skill should not be the runtime.
-```
-
-After installation, routine project work should rely on project-local `AGENTS.md` and `docs/thread-operating-model.md`, not repeatedly invoke this skill.
-
-## Package Structure
+## Core Model
 
 ```text
-project-agent-operating-model/
-  SKILL.md                         # thin skill: bootstrap, audit, repair, compact, upgrade
-  agents/openai.yaml               # Codex App metadata and explicit invocation policy
-  references/                      # templates and detailed operating-model rules
-  project-skeleton/                # copyable project-root skeleton
+GPT-5.6 / current model: decompose and reason
+ChatGPT Desktop / Codex: operate visible long-lived tasks
+Project docs: preserve durable truth and cross-tool state
+Optional Portable Controls: cover recovery, audit, and unreliable boundaries
 ```
 
-## Recommended Workflow
+Stable facts belong in docs. Transient prompts, progress events, and routine
+results stay in native task history.
 
-1. Invoke `$project-agent-operating-model` only when initializing, restructuring, repairing, compacting, or upgrading a project operating model.
-2. Copy `project-skeleton/` into the target project root, or copy specific templates from `references/`.
-3. For routine development, rely on project-local `AGENTS.md`, `docs/thread-operating-model.md`, `docs/current-prd.md`, `docs/current-technical-design.md`, and `docs/current-work.md`.
-4. For cross-thread dispatch, choose a Model Tier by task difficulty first, then choose a Model Version. Default to the latest available compatible version for the selected tier.
-5. Record requested/actual model/version, quota pool, fallback, and selection reason in `docs/thread-registry.md` and `docs/thread-runs/<task-id>.md`.
-6. Use LV2 controlled autonomous compaction for docs-only cleanup, protected by `docs/.locks/context-compaction.lock`.
+## Long-Lived Module Routing
 
-## Current Snapshot Layer
+- The main task owns planning, decomposition, routing, review, and cross-module
+  decisions.
+- Each stable module can own one registered long-lived visible task.
+- Module work is routed to that existing task through native task messaging.
+- Temporary subagents are limited to bounded disposable research, review,
+  search, test, or verification work.
+- Native delivery is the default result path. Compact handoffs preserve durable
+  cross-task or cross-tool context.
+- Thread-runs and Return Packets are optional controls, not routine ceremony.
 
-- `docs/current-prd.md` is the current product-requirements snapshot.
-- `docs/current-technical-design.md` is the current technical implementation snapshot.
-- `docs/current-work.md` is the solution-neutral current objectives / WIP / next work / risks snapshot. It records **what to do**, not **how to do it**.
-- Large projects may split PRD and technical design into global overview plus module docs.
+## Operating Modes
+
+- **Minimal:** `AGENTS.md` plus one current work surface.
+- **Native (default):** adds the compact operating model, visible task registry,
+  module status/handoff, and existing or mapped product/technical docs.
+- **Portable Controls (opt-in):** adds thread-runs, Return Packets, compaction
+  locks, or archives only for concrete recovery, audit, asynchronous, high-risk,
+  or cross-tool needs.
+
+## GPT-5.6-Aware Model Policy
+
+Inherit the current client/task model by default. Do not write routine model,
+version, or quota telemetry into project docs.
+
+When the GPT-5.6 family is available, Sol is suited to difficult/high-risk work,
+Terra to balanced everyday work, Luna to fast bounded work, and parallel or
+Ultra-style execution to genuinely independent complex work. These are current
+examples, not hard-coded project contracts.
+
+## Project Skeleton
+
+The default skeleton is intentionally small:
+
+```text
+AGENTS.md
+CLAUDE.md
+docs/
+  thread-operating-model.md
+  thread-registry.md
+  project-brief.md
+  current-prd.md
+  current-technical-design.md
+  current-work.md
+  decisions/
+  modules/example-module/
+    status.md
+    handoff.md
+```
+
+Add a module runbook from `references/runbook.template.md` only when native task
+history cannot reliably preserve required recovery context.
+
+Do not copy every template automatically. Reuse existing PRDs, design docs,
+issue trackers, roadmaps, and status surfaces whenever they already own the
+same responsibility.
 
 ## Context Governance
 
-- Active docs are current snapshots, not append-only logs.
-- Keep `handoff.md`, `status.md`, `thread-registry.md`, and `roadmap.md` compact.
-- Move stale, historical, processed, closed, or superseded material to `docs/archive/` or `docs/thread-runs/archive/`.
-- Do not read archives by default; use them only for audits, historical investigation, regression analysis, or compaction.
-- Run compaction checks at defined points, then execute LV2 docs-only compaction only when preconditions are met.
-- Use `docs/.locks/context-compaction.lock` so different agents and same-tool threads do not rewrite shared active docs concurrently.
-
-## Localization
-
-- Human-facing generated content follows the explicit user/project language, existing repository language, user interface / system locale, or current conversation language.
-- English is the fallback for open-source or public developer-facing artifacts.
-- Code identifiers, file paths, commands, API/schema/config fields, errors, logs, model names, quota-pool names, and stable template fields stay English or original.
-
-## Multi-Agent Compatibility
-
-The project skeleton includes optional `CLAUDE.md` support that imports `AGENTS.md`, so Claude Code and Codex can share the same project operating model instead of maintaining separate rules.
-
-All agents should check `docs/.locks/` before broad active-doc rewrites or context compaction.
+- Active docs are current snapshots, not task logs.
+- Each durable fact has one primary home.
+- Native conversation compaction does not compact project docs.
+- LV2 docs-only compaction runs only after a real bloat, contradiction, or
+  staleness trigger.
+- Ordinary targeted doc edits need no lock.
+- Broad concurrent shared-doc rewrites use
+  `docs/.locks/context-compaction.lock` when Portable Controls are enabled.
 
 ## Installation
 
-See [`INSTALL.md`](INSTALL.md).
+See [`INSTALL.md`](INSTALL.md) or [`INSTALL.zh-CN.md`](INSTALL.zh-CN.md).
 
-Chinese installation notes: [`INSTALL.zh-CN.md`](INSTALL.zh-CN.md).
+After initialization, routine work follows project `AGENTS.md` and current docs.
+Do not invoke this skill for every implementation or dispatch.
 
 ## License
 

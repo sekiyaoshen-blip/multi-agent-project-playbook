@@ -1,62 +1,26 @@
-# Example Module Status
+# <Module> Status
 
 Last updated: YYYY-MM-DD
 
-This file is a current module snapshot. Do not keep stale completed history here; archive or summarize old detail.
-
-## Current Goal
-
-Describe the current active goal for this thread/module.
-
-## Thread Identity
-
-- Role:
-- Native Thread Link:
-- Session ID / Callable Ref:
-- Started:
-- Last Sync:
-- Replaces:
+Current module truth only. Keep task identity in `docs/thread-registry.md`,
+active work in `docs/current-work.md` or the issue tracker, and temporary detail
+in the native module task.
 
 ## Scope
 
-This thread/module owns:
+Owns:
 
-- <Owned area>
-- <Owned area>
+- <owned area>
 
-This thread/module does not own:
+Does not own:
 
-- <Out-of-scope area>
-- <Out-of-scope area>
+- <out-of-scope area>
 
-## Recently Completed
+## Current Behavior
 
-Keep only recent items that still matter for current planning. Move old completed history to archive.
-
-- <Recently completed item>
-
-## In Progress
-
-- <Active item>
-- <Active item>
-
-## Current State
-
-Behavior-level summary:
-
-- <What works now>
-- <What is deployed / local only>
-- <Important runtime state>
-
-Important files:
-
-- `<path>`
-- `<path>`
-
-Important services/endpoints:
-
-- `<service or endpoint>`
-- `<service or endpoint>`
+- What works now:
+- Important runtime state:
+- Important files/services:
 
 ## Interfaces / Contracts
 
@@ -64,49 +28,28 @@ Important services/endpoints:
 - Outputs:
 - APIs / schemas / events / config:
 
-## Known Assumptions
+## Active Risks / Assumptions
 
-- Assumption:
-  - Confidence:
-  - How to verify:
+- Risk or assumption:
+  - Impact:
+  - How to verify or resolve:
 
-## Known Risks / Caveats
+## Current Focus
 
-- <Risk>
-- <Risk>
-- <Risk>
-
-## Open Questions
-
-- <Question>
-- <Question>
-
-## Next Tasks
-
-1. <Next task>
-2. <Next task>
-3. <Next task>
+- Outcome in progress:
+- Next needed outcome:
+- Blocker or decision needed:
 
 ## Verification
 
-Recently verified:
+- Recently verified:
+- Not verified and why:
 
-- <Command/check>: <result>
-- <Command/check>: <result>
+## Links
 
-Not yet verified:
+- Long-lived task: `docs/thread-registry.md`
+- Main-task handoff: `docs/modules/<module>/handoff.md`
+- Optional recovery notes: `docs/modules/<module>/runbook.md`
 
-- <Missing check and why>
-
-## Handoff Notes
-
-Read first:
-
-- `<doc>`
-- `<doc>`
-
-Do not forget:
-
-- <Operational constraint>
-- <Product constraint>
-- <Cross-module dependency>
+Rewrite this file when current module truth changes. Do not append completed task
+history, raw logs, or native task transcripts.

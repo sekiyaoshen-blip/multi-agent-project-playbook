@@ -1,89 +1,88 @@
 # Project Agent Instructions
 
-This project uses the `project-agent-operating-model` operating model.
+This project uses a native-first project agent operating model.
 
-## Project Language
+## Language
 
 - Project language: auto
-- Use the explicit user/project language when one is set.
-- Otherwise follow the existing repo/docs language, then the user interface / system locale / current conversation language when available.
-- Use English as the fallback for open-source or public developer-facing artifacts.
-- Keep file paths, commands, code identifiers, API/schema/config fields, errors, logs, test names, package/framework/protocol names, model names, quota-pool names, and stable template fields in English or original form.
+- Follow explicit user/project language, then repository convention, then the
+  current user interface or conversation language.
+- Keep identifiers, paths, commands, API/schema/config fields, errors, logs,
+  package names, model names, and stable template fields in English or their
+  original form.
 
-## Always Follow
+## Core Rules
 
-- Treat repo/workspace project-state docs as the source of truth, not chat history.
-- Do not call `$project-agent-operating-model` for routine tasks unless the project needs initialization, restructuring, repair, or an operating-model upgrade.
-- The main thread owns roadmap, module boundaries, priorities, cross-module decisions, active dispatch, Return Packet review, and recovery sweep.
-- Module threads own implementation, debugging, verification, `status.md`, `handoff.md`, and `runbook.md` for their module.
-- When a child/module thread completes, blocks, or needs a decision, write a Return Packet to `docs/thread-runs/inbox/main/`; do not treat direct interruption of the main thread as the stable return path.
-- Every cross-thread dispatch must have a `docs/thread-runs/<task-id>.md` record.
-- For cross-thread dispatch, choose Model Tier by task difficulty, risk, context size, and purpose; then choose Model Version. Default to the latest available compatible model version for the selected tier. For suitable fast or low-risk work, prefer the independent quota pool of `gpt-5.3-codex-spark` / GPT-5.3-SPARK when available. Record requested/actual model/version, quota pool, fallback, and selection reason in the dispatch queue and thread-run record.
-- Long tasks must maintain Checkpoints and a Resume Prompt.
-- Never write secrets, tokens, credentials, private customer data, signed URLs, or access-granting links into committed docs.
-- Active project-state docs are current snapshots, not append-only logs.
-- Keep `docs/current-prd.md`, `docs/current-technical-design.md`, and `docs/current-work.md` as the top-level current snapshot layer for onboarding and handoff.
-- Each fact should have one primary home; link to the primary home instead of duplicating full content.
-- Keep active docs compact. Move stale, historical, or processed material to `docs/archive/` or `docs/thread-runs/archive/`.
-- Do not read archives, all module runbooks, or all thread-runs by default.
-- Trigger a context compaction sweep when docs become stale, contradictory, oversized, or confusing.
-- Use LV2 controlled autonomous compaction: agents may execute docs-only compaction when LV2 preconditions are met, but must create a request instead when scope, ownership, or safety is unclear.
-- Broad context compaction must acquire `docs/.locks/context-compaction.lock` first; locks apply across different agent tools and across different threads/sessions inside the same tool.
-- Check for compaction at thread startup, before large dispatch batches, after Return Packet review, after task closure, after milestone closure, and whenever active docs exceed budget or contradict each other.
+- Treat native tasks as work surfaces and project docs as durable truth.
+- Keep stable product behavior, architecture, ownership, accepted decisions,
+  current risks, and current outcomes in project docs.
+- Keep transient prompts, progress events, temporary plans, and ordinary task
+  results in native task history.
+- The main task owns planning, decomposition, module routing, cross-module
+  decisions, result review, and project-state hygiene.
+- Route module-owned implementation to the existing registered long-lived
+  visible module task.
+- Do not replace a long-lived module task with a temporary subagent. Use
+  temporary subagents only for bounded disposable research, review, search,
+  test, or verification work.
+- Prefer native task tools for discovery, messaging, progress inspection,
+  forking, handoff, and result review.
+- Create a separate visible task only with the authorization required by the
+  current product/runtime, then register its durable identity.
+- Use native result delivery first. Update module `handoff.md` when durable
+  cross-task or cross-tool recovery matters. Use Return Packets only when
+  explicitly required by risk, audit, asynchronous work, or unavailable native
+  delivery.
+- Inherit the current client/task model by default. Record model details only
+  when an override matters to recovery, audit, cost, or interpretation.
+- Update docs only for substantive state changes. Active docs are current
+  snapshots, not task logs.
+- Keep each fact in one primary home and link instead of copying.
+- Never write secrets, credentials, private customer data, signed URLs, or
+  access-granting links into committed docs.
 
 ## Read When Relevant
 
-- Detailed thread operating rules: `docs/thread-operating-model.md`
-- Thread registry, task queue, and Return Inbox: `docs/thread-registry.md`
-- Current PRD: `docs/current-prd.md`
-- Current technical design: `docs/current-technical-design.md`
-- Current workboard: `docs/current-work.md` — what to do only; no implementation plans.
-- Current roadmap: `docs/roadmap.md`
-- Current global status: `docs/status.md`
-- Module status: `docs/modules/<module>/status.md`
-- Module handoff: `docs/modules/<module>/handoff.md`
-- Module recovery notes: `docs/modules/<module>/runbook.md`
-- Architecture / contract decisions: `docs/decisions/`
-- Cross-thread task records: `docs/thread-runs/`
-- Historical archive, only when needed: `docs/archive/`
-- Active locks, before broad rewrites or compaction: `docs/.locks/`
+- Detailed runtime rules: `docs/thread-operating-model.md`
+- Long-lived visible task map and module ownership: `docs/thread-registry.md`
+- Current product truth: `docs/current-prd.md` or the project's existing PRD
+- Current technical truth: `docs/current-technical-design.md` or existing design docs
+- Current outcomes and WIP: `docs/current-work.md` or the issue tracker
+- Module state: `docs/modules/<module>/status.md`
+- Durable module handoff: `docs/modules/<module>/handoff.md`
+- Recovery notes, only when needed: `docs/modules/<module>/runbook.md`
+- Durable decisions: `docs/decisions/`
+- Portable Controls, only when enabled: `docs/thread-runs/`, `docs/.locks/`,
+  and `docs/archive/`
 
-## Runtime Summary
+Do not read all runbooks, historical task records, archives, or unrelated ADRs
+by default.
 
-- Use native Codex Desktop thread tools for visibility.
-- Use project-state task records for reliability.
-- Use Checkpoints for quota-limit or runtime interruption recovery.
-- Use Return Inbox for ordered result handling.
-- Use Model Routing so low-risk tasks can use lighter or independent-quota models while high-risk, cross-module, contract, or deep-reasoning tasks use the latest available strong reasoning model.
-- The main thread consumes queued results instead of being interrupted by child-thread callbacks.
-- Use compaction locks so Codex, Claude Code, other agents, automations, and humans do not rewrite shared active docs at the same time.
+## Documentation Boundary
 
-## Current Workboard Boundary
+- `current-work.md` records what outcome is needed, not how to implement it.
+- Put accepted implementation truth in technical design and durable tradeoffs
+  in ADRs.
+- Keep module handoffs compact and main-task relevant.
+- Keep runbooks focused on current recovery context; do not append routine logs.
+- Do not create optional roadmap, status, module design, runbook, thread-run,
+  Return Inbox, lock, or archive files unless the project needs them.
 
-`docs/current-work.md` is a what-to-do board, not a how-to-do plan.
+## Docs Compaction
 
-Use it for objectives, WIP, next work, priorities, owners, success signals, risks, and open decisions. Do not put implementation steps, architecture, algorithms, debug paths, tool commands, or a single preferred solution there unless that solution has already been accepted in `docs/current-technical-design.md`, an ADR, or a reviewed task record.
+- Native conversation compaction does not compact project docs.
+- Run LV2 docs-only compaction only after a real trigger: oversize, stale or
+  duplicated content, contradictions, milestone closure, or task replacement.
+- Ordinary targeted doc edits do not need a lock.
+- Acquire `docs/.locks/context-compaction.lock` before broad shared-doc rewrites
+  when concurrent tools/tasks may edit the same active docs.
+- Do not use the compaction lock as a source-code, schema migration, deployment,
+  or production execution lock; use the appropriate ownership or single-flight
+  mechanism.
+- LV2 must not change source, tests, production config, schemas, migrations,
+  ADR decisions, product direction, module ownership, priority, or public
+  contracts.
+- Do not silently replace a stale lock; report it to the main task or user.
 
-## Context Hygiene
-
-- Treat `current-prd.md`, `current-technical-design.md`, `current-work.md`, `status.md`, `handoff.md`, `roadmap.md`, and `thread-registry.md` as current snapshots.
-- Do not append routine task logs to active docs.
-- Keep `handoff.md` compact and main-thread relevant; move local details to runbook or archive.
-- Keep `runbook.md` focused on current recovery context and active findings; archive old dated history.
-- Close or archive completed dispatch queue rows and processed Return Packets.
-- Use `docs/archive/compactions/YYYY-MM-DD-context-compaction.md` to record compaction sweeps.
-- Use `docs/.locks/context-compaction.lock` during LV2 compaction and release it after the compaction note and active-doc updates are complete.
-
-## Documentation Updates
-
-Update project-state docs only when there is a substantive state change.
-
-- Update `status.md`: current state, scope, risks, tasks, or verification changed.
-- Update `handoff.md`: main-thread-relevant behavior, contracts, risks, decisions, verification, or milestone progress changed.
-- Update `runbook.md`: useful implementation attempts, debugging findings, local decisions, recovery points, or continuation context changed.
-- Update `current-prd.md`: product behavior, requirements, workflows, capabilities, personas, or product scope changed.
-- Update `current-technical-design.md`: architecture, modules, APIs, schemas, data flows, deployment, or implementation strategy changed.
-- Update `current-work.md`: active objectives, WIP, next work, deferred follow-ups, risks, decisions, or priorities changed. Keep it solution-neutral: what to do, not how to do it.
-- Update `roadmap.md`: scope, priority, dependencies, milestones, or ownership changed.
-- Create/update ADRs: cross-module, shared contract, architecture, deployment, security, cost, or product-scope decisions changed.
-- Do not force doc updates for purely informational chats, clarifications with no state change, or no-op investigations.
+Do not invoke `$project-agent-operating-model` for routine implementation. Use
+it for initialization, audit, repair, compaction, or operating-model upgrades.

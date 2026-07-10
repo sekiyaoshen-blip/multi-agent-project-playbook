@@ -1,97 +1,82 @@
 # Project Agent Operating Model
 
-这是一个面向 Codex 的 skill 包，用来为长期、复杂、多人或多线程协作的项目建立一套项目本地的 Agent 运行规则。
+这是一个面向新版 ChatGPT Desktop / Codex 的 Native-first 项目协作 skill。
 
-它的目标不是让每次任务都反复加载一个很重的 skill，而是在项目初始化、重构、修复、压缩或升级时，把稳定的协作规则安装到项目自己的文档里。之后，日常开发线程主要读取项目内的 `AGENTS.md`、`docs/thread-operating-model.md` 和相关状态文档即可。
+它适合这样的项目：一个主任务负责规划、拆解和验收，多个长期显性的模块任务分别负责前端、后端、数据、运维等稳定模块。
 
-当前版本新增 current snapshot 层、LV2 受控自主压缩、跨工具/跨线程 Compaction Lock，以及 Claude Code 兼容入口，减少长期项目中的文档膨胀、并发整理冲突和多 Agent 规则漂移。
-
-## 核心原则
+## 核心模型
 
 ```text
-Skill 负责安装系统。
-AGENTS.md 负责激活系统。
-项目文档负责运行系统。
-Skill 不应该成为日常运行时。
+GPT-5.6 / 当前模型：负责理解、拆解和推理
+ChatGPT Desktop / Codex：负责操作长期显性任务
+项目文档：保存稳定事实和跨工具状态
+可选 Portable Controls：补足恢复、审计和不可靠边界
 ```
 
-换句话说：这个 skill 是“初始化和治理工具”，不是每个任务都要调用的“常驻运行时”。
+稳定事实落文档；临时 prompt、执行进度、过程计划和普通任务结果留在原生任务记录中。
 
-## 适用场景
+## 长期模块任务路由
 
-- 项目开始时需要建立长期协作规则。
-- 一个项目会拆成主线程、模块线程、支持线程、研究线程或运维线程。
-- 需要跨线程派单、回传结果、维护线程登记表和任务运行记录。
-- 项目文档已经膨胀、重复、冲突，需要做上下文治理和压缩。
-- 需要把模型路由、配额池、降级策略、交接规则写进项目本地文档。
-- 需要让未来新线程自动继承项目协作规范，而不是每次重新解释。
+- 主任务负责规划、拆解、路由、验收和跨模块决策。
+- 每个稳定模块可以绑定一个长期显性的原生任务。
+- 模块工作优先派给已经登记的模块任务，而不是新建临时子智能体。
+- 临时子智能体只用于一次性的调研、搜索、评审、测试或验证。
+- 普通结果优先通过原生任务能力返回。
+- 只有需要跨任务/跨工具长期保留时，才更新精简的 `handoff.md`。
+- thread-run 和 Return Packet 改为可选控制，不再每次派单都生成。
 
-## 包结构
+## 三种模式
+
+- **Minimal：** 只有 `AGENTS.md` 和一个当前工作面。
+- **Native（默认）：** 增加精简运行规则、长期任务注册表、模块状态/交接，以及项目已有的产品和技术文档。
+- **Portable Controls（按需）：** 只有在跨工具、异步、高风险、可恢复或审计场景下，才增加 thread-run、Return Packet、压缩锁和 archive。
+
+## 面向 GPT-5.6 的模型策略
+
+默认继承当前客户端/任务使用的模型，不再为普通派单记录模型版本和配额池。
+
+当 GPT-5.6 系列可用时，可以按能力选择：Sol 处理复杂或高风险工作，Terra 处理日常平衡型工作，Luna 处理快速且范围明确的工作，parallel/Ultra 风格执行用于真正可以独立并行的复杂任务。
+
+这些名称只是当前示例，不写成长期项目契约，避免模型更新后文档再次过时。
+
+## 默认项目骨架
+
+新版默认骨架只保留：
 
 ```text
-project-agent-operating-model/
-  SKILL.md                         # 轻量 skill：初始化、审查、修复、压缩、升级
-  agents/openai.yaml               # Codex App 元数据和显式调用策略
-  references/                      # 模板和详细运行规则
-  project-skeleton/                # 可复制到目标项目根目录的骨架
-    CLAUDE.md                      # Claude Code 兼容入口，默认引用 AGENTS.md
-    docs/.locks/                   # 跨工具共享的文档整理锁控制面
+AGENTS.md
+CLAUDE.md
+docs/
+  thread-operating-model.md
+  thread-registry.md
+  project-brief.md
+  current-prd.md
+  current-technical-design.md
+  current-work.md
+  decisions/
+  modules/example-module/
+    status.md
+    handoff.md
 ```
 
-## 推荐工作流
+只有在原生任务历史无法可靠保留必要恢复上下文时，才从 `references/runbook.template.md` 增加模块 runbook。
 
-1. 只在初始化、重构、修复、压缩或升级项目运行模型时调用 `$project-agent-operating-model`。
-2. 将 `project-skeleton/` 的内容复制到目标项目根目录，或从 `references/` 复制需要的模板。
-3. 根据项目实际情况修改 `AGENTS.md`、`docs/thread-operating-model.md`、`docs/project-brief.md`、`docs/roadmap.md`、`docs/status.md` 和 `docs/thread-registry.md`。
-4. 日常开发、派单、回传、交接和状态维护，应依赖项目本地文档，而不是反复调用 skill。
-5. 进行跨线程派单时，先按任务难度选择模型层级，再选择具体模型版本，并记录请求模型、实际模型、配额池、降级原因和选择理由。
-6. 对文档膨胀、过期队列、已处理 Return Packet 和关闭任务行，使用 LV2 docs-only 压缩，并在需要重写活跃文档前获取 `docs/.locks/context-compaction.lock`。
+如果项目已经有 PRD、技术设计、issue tracker、roadmap 或状态文档，应直接映射现有文档，不重复创建。
 
-## 当前快照层
+## 文档和上下文治理
 
-新版增加了三个更适合新线程接手项目的当前快照文档：
+- 活跃文档是当前快照，不是任务流水账。
+- 每个稳定事实只有一个主要归属位置。
+- ChatGPT 的对话压缩和 Memories 不会自动整理项目文档。
+- LV2 docs-only 压缩只在文档明显膨胀、冲突、重复或过期时运行。
+- 普通定点文档修改不需要锁。
+- 多个工具或任务可能同时重写共享文档时，才使用 `docs/.locks/context-compaction.lock`。
 
-- `docs/current-prd.md`：当前产品需求和行为事实。
-- `docs/current-technical-design.md`：当前技术实现和架构事实。
-- `docs/current-work.md`：当前目标、进行中事项、下一步、风险和待决策问题。
+## 使用方式
 
-其中 `current-work.md` 只记录“要做什么”，不写“怎么做”。实现方案应该放到技术设计、ADR、thread-run、派单任务或模块文档里。
+安装见 [`INSTALL.zh-CN.md`](INSTALL.zh-CN.md)。
 
-## 上下文治理
-
-这个 skill 特别强调控制文档膨胀：
-
-- 活跃文档应该是当前快照，不是追加式日志。
-- `handoff.md`、`status.md`、`thread-registry.md` 和 `roadmap.md` 要保持紧凑。
-- 过期、已处理、已关闭、被替代或仅用于历史追溯的内容，应移动到 `docs/archive/` 或 `docs/thread-runs/archive/`。
-- 新线程默认不读取 archive，除非任务需要审计、历史调查、回归分析或上下文压缩。
-- 当文档出现重复、冲突、过期、难以定位信息时，应先执行压缩检查。
-- 只有在 LV2 安全前提满足时，Agent 才能自主执行 docs-only 整理。
-- LV2 可整理活跃文档快照、历史归档、已处理 Return Packet、关闭或被替代的任务行、compaction note 和 registry 中的队列/锁/上下文卫生字段。
-- LV2 不允许整理源码、测试、生产配置、schema/migration、ADR 决策内容、产品方向、模块归属、roadmap 优先级或 public contract。
-- 如果存在 active lock、stale lock、范围不清、任务仍活跃或安全前提不满足，应创建 compaction request / Return Packet，让主线程或用户决定。
-
-## 多 Agent 兼容
-
-项目骨架包含 `CLAUDE.md`，默认内容为：
-
-```md
-@AGENTS.md
-```
-
-这样 Claude Code 可以共享 Codex 使用的 `AGENTS.md`、`docs/thread-operating-model.md` 和 `docs/thread-registry.md`，避免不同工具各自维护规则而发生漂移。
-
-## 本地化规则
-
-- 面向人的生成内容应遵循用户语言、项目语言、仓库现有语言或当前会话语言。
-- 开源或公共开发者文档默认使用英文，但可以维护中文版本。
-- 代码标识符、文件路径、命令、API 字段、配置字段、错误、日志、模型名、配额池名和稳定模板字段应保留英文或原始形式。
-
-## 安装
-
-见 [`INSTALL.zh-CN.md`](INSTALL.zh-CN.md)。
-
-英文说明见 [`README.md`](README.md)。
+初始化完成后，日常工作由项目自己的 `AGENTS.md`、原生任务和当前文档驱动，不要每次实现或派单都重新调用这个 skill。
 
 ## 许可证
 
