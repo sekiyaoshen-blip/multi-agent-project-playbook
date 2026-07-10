@@ -2,8 +2,8 @@
 
 Chinese documentation: [`README.zh-CN.md`](README.zh-CN.md)
 
-A native-first Codex skill for projects that need one main planning task and
-long-lived visible module tasks.
+A native-first Codex skill for projects that need one main planning task,
+long-lived visible module tasks, and ownership-aware routing from every task.
 
 The skill installs a small project-local contract for module ownership,
 automatic routing, durable project truth, cross-tool recovery, and safe docs
@@ -13,7 +13,7 @@ dispatch and progress instead of recreating the product's task system in files.
 ## Core Model
 
 ```text
-GPT-5.6 / current model: decompose and reason
+GPT-5.6 / current model: detect ownership, decompose, and reason
 ChatGPT Desktop / Codex: operate visible long-lived tasks
 Project docs: preserve durable truth and cross-tool state
 Optional Portable Controls: cover recovery, audit, and unreliable boundaries
@@ -24,10 +24,16 @@ results stay in native task history.
 
 ## Long-Lived Module Routing
 
-- The main task owns planning, decomposition, routing, review, and cross-module
-  decisions.
+- The main task owns project-level planning, unresolved boundaries, review, and
+  cross-module decisions; it is not the only routing entrypoint.
 - Each stable module can own one registered long-lived visible task.
-- Module work is routed to that existing task through native task messaging.
+- Every registered task checks ownership before nontrivial execution. Where the
+  user asked is not proof of which module owns the work.
+- A misrouted request moves directly to the registered owner. Ownership-unclear
+  requests get a minimal read-only impact scan before implementation.
+- Cross-module work has exactly one lead and non-overlapping delegated slices.
+- Native routing traces prevent loops, blind broadcasts, duplicate work, and
+  competing coordinators without creating a file-based task log.
 - Every existing/new native task invocation classifies the concrete work and
   passes explicit supported `model` and `thinking` parameters.
 - Temporary subagents are limited to bounded disposable research, review,
@@ -47,10 +53,10 @@ results stay in native task history.
 
 ## Dispatch-Time Model Routing
 
-Before every call to an existing visible task or authorized creation of a new
-one, classify task type, complexity, risk, context, reversibility, and
-parallelism. Inspect the active tool schema and pass both `model` and `thinking`
-explicitly.
+Before every call to an existing visible task, including module-to-module
+re-routing, or authorized creation of a new one, classify task type,
+complexity, risk, context, reversibility, and parallelism. Inspect the active
+tool schema and pass both `model` and `thinking` explicitly.
 
 - `fast`: fastest capable model, `low`/`medium`
 - `balanced`: balanced model, `medium`/`high`

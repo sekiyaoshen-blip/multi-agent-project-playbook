@@ -3,7 +3,8 @@ name: project-agent-operating-model
 description: >
   Bootstrap, audit, slim, repair, or upgrade a native-first operating model for
   long-running agent-assisted projects. Use when a project needs a main planning
-  task, durable visible module tasks, automatic module routing, project-local
+  task, durable visible module tasks, automatic intake and cross-task module
+  routing, project-local
   AGENTS.md rules, dispatch-time model/Thinking selection, compact current-state
   docs, cross-tool compatibility, or lock-safe docs compaction. Prefer ChatGPT
   Desktop/Codex native task tools for visible long-lived work and temporary
@@ -19,9 +20,9 @@ description: >
 
 ## Purpose
 
-Install a small project-local contract that lets a main task route work to
-long-lived visible module tasks without turning chat history or task telemetry
-into a second project database.
+Install a small project-local contract that lets every registered task detect
+ownership and route work to long-lived visible module tasks without turning
+chat history or task telemetry into a second project database.
 
 Use this skill for initialization, migration, audit, repair, or docs
 compaction. After installation, `AGENTS.md` and project docs govern routine
@@ -87,7 +88,8 @@ Add only when native task state is insufficient:
 
 1. Inventory existing instructions, docs, issue trackers, modules, tests, and
    visible native tasks.
-2. Clarify main-task responsibility and stable module ownership.
+2. Clarify main-task authority, stable module ownership, and the every-task
+   intake/routing rule.
 3. Choose Minimal, Native, or Native plus Portable Controls.
 4. Install `AGENTS.md` from `references/agents.template.md` and keep it concise.
 5. Install `docs/thread-operating-model.md` from
@@ -103,8 +105,10 @@ Add only when native task state is insufficient:
 9. Install dispatch-time model routing so every existing-task message or
    authorized new-task creation passes an explicit supported `model` and
    `thinking` selected for the concrete task.
-10. Add Portable Controls only for a concrete risk or interoperability need.
-11. Report the installed mode, mapped docs, visible task map, assumptions, and
+10. Install loop-safe direct routing so any registered module task can transfer
+    or split misrouted work without routing every request through the main task.
+11. Add Portable Controls only for a concrete risk or interoperability need.
+12. Report the installed mode, mapped docs, visible task map, assumptions, and
     omitted optional controls.
 
 ## Native-First Runtime Contract
@@ -112,11 +116,15 @@ Add only when native task state is insufficient:
 ### Long-Lived Visible Module Tasks
 
 - Treat the main task as planner, dispatcher, reviewer, and cross-module
-  decision owner.
+  decision authority, not the only routing entrypoint.
 - Treat each registered module task as a durable visible work surface with a
-  stable ownership boundary and recovery context.
-- When the main task decomposes work, route module-owned work to the existing
-  registered module task with native task messaging.
+  stable ownership boundary, recovery context, and routing responsibility.
+- Require the main task and every registered module task to check ownership
+  before nontrivial execution. The task where the user asked is an intake
+  surface, not proof that the task owns the work.
+- Route work directly to the registered owner when it clearly belongs to
+  another module. Do not execute it locally merely because the current model
+  can complete it.
 - For cross-module work, name a lead module and stabilize shared contracts
   before fully parallel execution. Other modules may proceed only on slices
   that do not require inventing an unresolved contract.
@@ -124,16 +132,60 @@ Add only when native task state is insufficient:
   merely because subagents are available.
 - Use temporary subagents for bounded research, review, test, search, or other
   disposable work whose result can be consumed by the current task.
+- If a temporary subagent discovers that its slice belongs elsewhere, it must
+  report that to its parent/lead instead of becoming a second routing
+  coordinator.
 - Use native task reads/messages for progress and result review. Write a compact
   module handoff when the result changes durable project truth.
 - If native routing is unavailable, use the registry plus a compact task payload
   as the fallback. Add a thread-run or Return Packet only when needed.
 
+### Every-Task Routing Gate
+
+Before the main task or any registered module task performs nontrivial analysis
+or changes:
+
+1. Classify the request as answer-only, clearly local, owned by another module,
+   cross-module, or ownership-unclear.
+2. Check the registry and the minimum relevant project context. Do not infer
+   ownership from the task in which the user happened to ask.
+3. If another module clearly owns the work, send a compact native request to
+   that registered task. The intake task remains responsible for returning a
+   coherent answer to its user unless the request names a different return
+   owner.
+4. If several modules are involved, select exactly one lead. The lead owns
+   decomposition, shared-contract stabilization, integration, and result
+   return; other tasks own only explicit non-overlapping slices.
+5. If ownership is unclear, perform only the smallest read-only impact scan
+   needed to identify likely owners. Do not begin implementation. Escalate to
+   the main task or user only when the boundary or decision still cannot be
+   resolved.
+6. Allow direct module-to-module routing without mandatory main-task relay.
+   Reserve the main task for unresolved boundaries, product/priority choices,
+   shared contracts, and other project-level decisions.
+
+Every cross-task request must keep a lightweight routing trace in native task
+history: request key, intake/source task, lead, assigned slice, visited tasks,
+and return owner. Do not write routine traces to project docs.
+
+- Never send the same or a broader slice back to a visited task.
+- Never broadcast an unresolved request to all modules. Use a read-only impact
+  scan, then route only to likely owners.
+- Check target task state before dispatch when duplicate work is plausible.
+- A receiving task may re-route work it does not own, but it must preserve the
+  request key, extend the visited list, and keep one lead.
+- If routing would loop, duplicate active work, or require a missing visible
+  task, stop and escalate. Create a missing task only with the authorization
+  required by the current product/runtime.
+
 ### Result Return
 
 Use this priority:
 
-1. Native result delivery or main-task inspection of the module task.
+1. Native result delivery to the named return owner, or active inspection by
+   that intake/lead task. Do not declare the intake request complete until the
+   delegated result has been reviewed, unless the runtime requires an
+   asynchronous return and that limitation is stated.
 2. Compact update to module `handoff.md` when the result must survive task UI,
    tool, or account boundaries.
 3. Return Packet only for cross-tool/asynchronous work, high-risk audit trails,
@@ -143,8 +195,8 @@ Do not require both native return and a Return Packet for ordinary work.
 
 ### Mandatory Dispatch-Time Model Routing
 
-Before every native call to an existing visible task or authorized creation of
-a new visible task:
+Before every native call to an existing visible task, including a re-route from
+one module task to another, or authorized creation of a new visible task:
 
 1. Classify task type, complexity, risk, context size, reversibility, and
    parallelism.
@@ -231,6 +283,9 @@ Read only the resources needed for the selected mode:
   `references/thread-operating-model.template.md`
 - Visible module task map: `references/thread-registry.template.md`
 - Module startup: `references/module-startup-prompt.template.md`
+- Main-task and module-to-module payloads:
+  `references/main-thread-dispatch-task.template.md` and
+  `references/cross-thread-task.template.md`
 - Current snapshots: `references/current-prd.template.md`,
   `references/current-technical-design.template.md`, and
   `references/current-work.template.md`
@@ -247,6 +302,9 @@ Read only the resources needed for the selected mode:
 
 - Is Native Mode used unless there is a concrete need for Portable Controls?
 - Does each stable module map to one long-lived visible task?
+- Does every registered task check ownership before nontrivial execution?
+- Can a misrouted request move directly to its owning module while retaining
+  one lead, one return owner, and a loop-safe native routing trace?
 - Does dispatch reuse that task instead of spawning disposable module workers?
 - Are temporary subagents limited to bounded work?
 - Is the registry a small identity/ownership map rather than a duplicate queue?

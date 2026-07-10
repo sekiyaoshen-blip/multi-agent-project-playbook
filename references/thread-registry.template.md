@@ -7,7 +7,8 @@ It is an identity and ownership map, not a duplicate task queue or event log.
 
 ## Main Task
 
-- Role: planning, decomposition, routing, cross-module decisions, result review
+- Role: project planning, unresolved ownership decisions, cross-module
+  decisions, result review; not the only routing entrypoint
 - Native task ID/link: <native task ID or link>
 - State: active | paused | replaced
 - Replaces: none | <previous task ID/link>
@@ -30,9 +31,19 @@ private URLs, or signed links.
 
 ## Routing Rules
 
+- Treat every registered task as both a work surface and an intake surface.
+- Before nontrivial execution, identify actual ownership; the task where a user
+  asked does not automatically own the request.
 - Reuse the registered visible module task for module-owned work.
 - Use native task messaging for ordinary dispatch and native task reads for
   progress/result review.
+- Permit direct module-to-module routing. Use one lead for cross-module work and
+  keep request key, source/intake, assigned slice, visited tasks, and return
+  owner in native history.
+- Do not route the same or broader slice back to a visited task, broadcast
+  unresolved work to every module, or duplicate active work.
+- Escalate unresolved ownership, routing loops, and missing authorized module
+  tasks to the main task or user.
 - Do not register temporary subagents used for bounded disposable work.
 - Create or replace a visible module task only when the boundary is stable and
   the required user/runtime authorization exists.

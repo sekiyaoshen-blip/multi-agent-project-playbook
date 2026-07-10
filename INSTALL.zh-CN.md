@@ -41,12 +41,13 @@ Requirements:
 
 要求：
 - 优先复用项目已有的 PRD、技术文档、issue tracker、roadmap 和状态文档，不要重复创建。
-- 明确主任务职责和稳定的模块归属边界。
+- 明确主任务职责和稳定的模块归属边界，并要求主任务和每个长期模块任务在非简单执行前都先判断实际归属；用户在哪个任务提问，不代表问题属于该模块。
+- 允许模块任务直接横向转派：误投的问题转给实际负责模块；多模块工作只设一个 lead 并拆成互不重叠的子任务；使用原生轻量路由轨迹防止循环、广播和重复执行。
 - 模块实现优先交给长期显性的原生模块任务；临时子智能体只用于一次性的调研、评审、搜索、测试或验证。
 - 自动发现并复用已有模块任务。创建缺失的显性任务前，遵守当前产品要求的用户授权规则。
 - 保持文档精简：稳定事实落项目文档，临时执行过程留在原生任务历史。
 - 除非存在明确的恢复、审计、异步、高风险或跨工具需求，否则不要启用 thread-run、Return Packet、锁或 archive。
-- 每次调用已有任务或在获得授权后新建任务前，都先判断具体任务并检查当前工具支持值，然后同时显式传入 `model` 和 `thinking`。不要依赖继承默认值，也不要把日常路由流水写入项目文档。
+- 每次调用已有任务、模块间再次转派或在获得授权后新建任务前，都先判断具体任务并检查当前工具支持值，然后同时显式传入 `model` 和 `thinking`。不要依赖继承默认值，也不要把日常路由流水写入项目文档。
 - 最后报告所选模式、新建或映射的文件、模块到长期任务的路由表、启用或省略的可选控制，以及尚未确认的假设。
 ```
 
@@ -57,12 +58,16 @@ Use $project-agent-operating-model to initialize this project in Native Mode for
 
 Requirements:
 - Reuse existing PRDs, technical docs, issue trackers, roadmaps, and status docs instead of duplicating them.
-- Define the main task and stable module ownership boundaries.
+- Define the main task, stable module ownership boundaries, and an ownership
+  check that runs in every registered task before nontrivial execution.
+- Allow direct loop-safe module-to-module routing. A misrouted request must move
+  to its registered owner; cross-module work must keep one lead and
+  non-overlapping slices.
 - Prefer long-lived visible native module tasks for module implementation. Use temporary subagents only for bounded disposable research, review, search, test, or verification work.
 - Discover and reuse existing visible module tasks. Before creating any missing visible task, follow the current product's user-authorization requirement.
 - Keep docs minimal: stable facts in project docs; transient execution in native task history.
 - Do not enable thread-runs, Return Packets, locks, or archives unless a concrete recovery, audit, asynchronous, high-risk, or cross-tool need exists.
-- Before every existing-task call or authorized new-task creation, classify the concrete task, inspect supported values, and pass both `model` and `thinking` explicitly. Do not rely on inherited defaults or add routine routing telemetry to project docs.
+- Before every existing-task call, re-route, or authorized new-task creation, classify the concrete task, inspect supported values, and pass both `model` and `thinking` explicitly. Do not rely on inherited defaults or add routine routing telemetry to project docs.
 - Report the selected mode, files created or mapped, module-to-task routing map, optional controls omitted/enabled, and unresolved assumptions.
 ```
 
@@ -76,7 +81,7 @@ Requirements:
 
 ## 派单时动态模型路由
 
-每次调用已有任务或在授权后新建任务前，都先判断任务类型、复杂度、风险、上下文、可逆性和并行性，再显式传入当前工具支持的 `model` / `thinking`。快速任务使用 fast + low/medium，日常任务使用 balanced + medium/high，深度任务使用 strongest + high/xhigh，关键任务使用 strongest + max。GPT-5.6 的 Luna/Terra/Sol 是从当前工具能力中动态发现的示例，不是长期项目硬编码。高风险任务不允许静默降级。
+每次调用已有任务、模块间再次转派或在授权后新建任务前，都先判断任务类型、复杂度、风险、上下文、可逆性和并行性，再显式传入当前工具支持的 `model` / `thinking`。快速任务使用 fast + low/medium，日常任务使用 balanced + medium/high，深度任务使用 strongest + high/xhigh，关键任务使用 strongest + max。GPT-5.6 的 Luna/Terra/Sol 是从当前工具能力中动态发现的示例，不是长期项目硬编码。高风险任务不允许静默降级。
 
 ## 日常使用
 

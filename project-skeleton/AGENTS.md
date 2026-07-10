@@ -18,13 +18,32 @@ This project uses a native-first project agent operating model.
   current risks, and current outcomes in project docs.
 - Keep transient prompts, progress events, temporary plans, and ordinary task
   results in native task history.
-- The main task owns planning, decomposition, module routing, cross-module
-  decisions, result review, and project-state hygiene.
-- Route module-owned implementation to the existing registered long-lived
-  visible module task.
+- The main task owns project-level planning, unresolved module boundaries,
+  cross-module decisions, result review, and project-state hygiene. It is not
+  the only routing entrypoint.
+- Before nontrivial execution, every main or registered module task must classify
+  ownership. The task where the user asked is an intake surface, not proof of
+  ownership.
+- If another module owns the work, route it directly to that registered
+  long-lived visible task. Do not implement it locally merely because the
+  current task can.
+- If ownership is unclear, perform only a minimal read-only impact scan. Route
+  after likely owners are known; escalate unresolved boundaries to the main
+  task or user.
+- For cross-module work, select exactly one lead. The lead owns decomposition,
+  shared contracts, integration, and result return; other modules receive
+  explicit non-overlapping slices.
+- Keep a lightweight native routing trace with request key, intake/source, lead,
+  assigned slice, visited tasks, and return owner. Never route the same or a
+  broader slice back to a visited task, broadcast blindly, or duplicate active
+  work.
+- The intake task remains responsible for giving its user a coherent result
+  unless another return owner is explicitly named.
 - Do not replace a long-lived module task with a temporary subagent. Use
   temporary subagents only for bounded disposable research, review, search,
   test, or verification work.
+- A temporary subagent that discovers misowned work reports it to its
+  parent/lead; it does not become another routing coordinator.
 - Prefer native task tools for discovery, messaging, progress inspection,
   forking, handoff, and result review.
 - Create a separate visible task only with the authorization required by the

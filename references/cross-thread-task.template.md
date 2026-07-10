@@ -1,8 +1,14 @@
 # Cross-Task Request
 
+- Request key:
+- Intake task/module:
 - Source task/module:
 - Target long-lived task/module:
 - Native target ID/link:
+- Lead task/module:
+- Assigned slice:
+- Visited tasks/modules (do not route the same or broader slice back):
+- Return owner:
 - Request type: implement | investigate | review | verify | unblock | decide
 
 ## Desired Outcome
@@ -45,6 +51,11 @@
 
 Pass both values through the native invocation. Do not rely on inherited target
 settings.
+
+If this target does not own the slice, preserve the request key, extend the
+visited list, keep exactly one lead, and re-route only to a registered likely
+owner. Stop and escalate instead of looping, broadcasting, duplicating active
+work, or creating an unauthorized visible task.
 
 ## Priority / Deadline
 

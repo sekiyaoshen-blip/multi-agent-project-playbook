@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Added an every-task ownership gate: the main task and every registered module
+  task classify ownership before nontrivial execution.
+- Added direct module-to-module re-routing for misrouted requests, minimal
+  read-only impact discovery for unclear ownership, and one-lead cross-module
+  decomposition.
+- Added native routing traces and guards against cycles, blind broadcast,
+  duplicate active work, unauthorized task creation, and competing
+  coordinators.
+- Clarified that the intake task remains responsible for a coherent user result
+  unless another return owner is explicitly named.
 - Added mandatory dispatch-time task classification for every existing-task
   message and authorized new-task creation.
 - Added explicit `model` and `thinking` parameters for every native task
@@ -24,7 +34,8 @@
 - Made thread-runs, Return Packets, archives, and compaction locks opt-in
   Portable Controls.
 - Removed hard-coded GPT-5.3 Spark/GPT-5.5 quota routing and routine model
-  telemetry; current clients inherit their configured model by default.
+  telemetry; current model/Thinking values are discovered and explicitly
+  passed at dispatch time.
 - Added capability-oriented GPT-5.6 guidance for Sol, Terra, Luna, and
   parallel/Ultra-style execution without making model names durable contracts.
 - Added contract-first cross-module dispatch guidance and clarified that docs

@@ -26,13 +26,16 @@ docs for durable truth. It does not mirror every native task event into files.
    handoff, and archiving when available.
 2. **Long-lived modules:** route module-owned implementation to the registered
    visible module task. Do not replace it with a temporary subagent.
-3. **Docs for durable truth:** keep product behavior, architecture, ownership,
+3. **Every-task routing:** treat every registered task as an intake surface.
+   Check actual ownership before nontrivial execution and route misdirected work
+   to its registered owner.
+4. **Docs for durable truth:** keep product behavior, architecture, ownership,
    accepted decisions, risks, and current outcomes in project docs.
-4. **Native state for transient work:** keep prompts, progress events, temporary
+5. **Native state for transient work:** keep prompts, progress events, temporary
    plans, and ordinary task results in native task history.
-5. **Conditional controls:** add thread-runs, Return Packets, locks, and archives
+6. **Conditional controls:** add thread-runs, Return Packets, locks, and archives
    only when risk, recovery, audit, or cross-tool operation requires them.
-6. **One primary home:** link to facts instead of copying them across docs.
+7. **One primary home:** link to facts instead of copying them across docs.
 
 ## Roles And Ownership
 
@@ -47,7 +50,9 @@ The main task owns:
 - result review and integration
 - project-state hygiene
 
-The main task should not become the implementation task for every module.
+The main task should not become the implementation task for every module, but
+it is also not the only routing entrypoint. It resolves boundaries and
+project-level decisions that module tasks cannot safely settle themselves.
 
 ### Module Tasks
 
@@ -55,6 +60,9 @@ Each stable module may have one long-lived visible task. That task owns:
 
 - implementation and local debugging inside the module
 - module-local verification
+- ownership checks for every incoming request
+- direct routing of work that belongs to another registered module
+- decomposition and delegation when this module is the selected lead
 - compact module status and handoff
 - recovery notes only when native history is insufficient
 - escalation of contract, product, security, or cross-module decisions
@@ -76,6 +84,9 @@ Use temporary subagents for bounded disposable work such as:
 
 Do not use a temporary subagent for work that should build durable module
 memory, maintain module ownership, or continue across milestones.
+If a temporary subagent discovers that its bounded slice belongs to another
+module, it reports that finding to its parent/lead. It does not become another
+cross-task coordinator.
 
 ## Long-Lived Visible Module Tasks
 
@@ -105,23 +116,66 @@ Never invent IDs or store credentials, cookies, or signed URLs.
 
 ## Dispatch And Return Flow
 
-### Main Task Dispatch
+### Every-Task Intake And Routing
 
-When work is parallelizable or belongs to a module:
+The main task and every registered module task run the same lightweight gate
+before nontrivial analysis or changes. The task where the user asked is an
+intake surface; it does not automatically own the problem.
 
-1. Classify the work: decision, module implementation, cross-module feature,
-   investigation, review, or verification.
-2. Identify the owning module. Assign a lead module for cross-module features.
-   Stabilize the shared contract before fully parallel execution; downstream
-   modules may proceed only on slices that do not require inventing it.
-3. Check `docs/thread-registry.md` for the existing visible module task.
-4. Classify the concrete task and choose supported `model` and `thinking`
+1. Classify the request: answer-only, clearly local, owned by another module,
+   cross-module, or ownership-unclear.
+2. Inspect the registry and only the project context needed to identify likely
+   owners. If ownership is unclear, perform a minimal read-only impact scan; do
+   not begin implementation.
+3. If the current task owns the work with high confidence, execute it within
+   that boundary.
+4. If another module owns it, send a compact native request directly to that
+   registered task. Do not relay through the main task unless a project-level
+   decision is needed.
+5. If multiple modules are required, select exactly one lead. The lead owns
+   decomposition, shared-contract stabilization, integration, and result
+   return. Other modules receive explicit non-overlapping slices and may start
+   only work that does not invent an unresolved contract.
+6. Classify every delegated slice and choose supported `model` and `thinking`
    parameters using Dispatch-Time Model Routing below.
-5. Send a compact task payload through the native task messaging tool, passing
-   both selected parameters explicitly.
-6. Use the native task state for progress unless Portable Controls are needed.
-7. Review the result through native delivery or by reading the target task.
-8. Update durable docs only when project truth changed.
+7. Keep progress and a lightweight routing trace in native task state unless
+   Portable Controls are needed.
+8. The intake task remains responsible for returning a coherent result to its
+   user unless another return owner is explicitly named.
+9. Update durable docs only when project truth changed.
+
+Answer-only or clearly local work may stay in the current task only when it has
+no plausible module ownership conflict, persistent change, or cross-module
+effect. The fact that the current model can solve a problem is not evidence
+that the current task should own it.
+
+### Routing Trace And Loop Prevention
+
+Include this compact routing envelope in each native cross-task request:
+
+- request key
+- intake/source task and module
+- one lead task/module
+- assigned non-overlapping slice
+- visited tasks/modules
+- return owner
+- selected model/Thinking profile and one-line reason
+
+Use the same request key across re-routing. A receiving task may transfer work
+that it does not own, but it must extend the visited list and preserve one lead
+and one return owner.
+
+- Never send the same or a broader slice back to a visited task.
+- Never broadcast an unresolved request to every module. Perform a read-only
+  impact scan and contact only likely owners.
+- Inspect target native state before dispatch when duplicate work is plausible.
+- Do not let multiple tasks independently coordinate the same request.
+- If routing would loop, duplicate active work, or require a missing visible
+  task, stop and escalate. Create a missing task only with the authorization
+  required by the current product/runtime.
+- If native cross-task tools are unavailable, send the compact request to the
+  main task or use the project-approved Portable Controls fallback. State the
+  visibility limitation.
 
 Use this minimum task payload:
 
@@ -132,16 +186,21 @@ Use this minimum task payload:
 - relevant files/docs
 - expected verification
 - when to escalate to the main task
+- routing trace and named return owner
 - selected model/Thinking profile and one-line reason
 
-Do not dispatch vague ideas, duplicate active work, or tiny questions that the
-current task can resolve immediately.
+Do not dispatch vague ideas, duplicate active work, or answer-only questions
+with no ownership ambiguity. Do not retain module-owned work merely because the
+current task could resolve it immediately.
 
 ### Return Priority
 
 Use return channels in this order:
 
-1. Native result delivery or main-task inspection of the module task.
+1. Native result delivery to the named return owner, or active inspection by
+   that intake/lead task. Do not declare the intake request complete before the
+   delegated result is reviewed unless the runtime requires asynchronous
+   return and that limitation is stated.
 2. Compact module `handoff.md` update when the result must survive native task
    history, tool, or account boundaries.
 3. Return Packet only when cross-tool/asynchronous work, high-risk audit,
@@ -149,7 +208,7 @@ Use return channels in this order:
 
 Do not require both native delivery and a Return Packet for routine work.
 
-The main task should promote only durable outcomes:
+The return owner should promote only durable outcomes:
 
 - accepted product or technical truth
 - contract or architecture decisions
@@ -213,9 +272,10 @@ only when its responsibility is real and not already covered.
 
 ## Dispatch-Time Model Routing
 
-Every call to an existing visible task and every authorized creation of a new
-visible task must select and pass explicit `model` and `thinking` parameters.
-Do not inherit the target task's old settings or rely on the user's default.
+Every call to an existing visible task, including module-to-module re-routing,
+and every authorized creation of a new visible task must select and pass
+explicit `model` and `thinking` parameters. Do not inherit the target task's
+old settings or rely on the user's default.
 
 ### Classification Signals
 
@@ -368,11 +428,26 @@ reliable return path.
   security, cost, or product scope changes.
 - Archive or replace stale visible task mappings when module tasks are replaced.
 
-## Main Task Review Loop
+## Runtime Loops
+
+### Any Registered Task
+
+1. Read the minimum active context and its registry boundary.
+2. Classify ownership before nontrivial execution.
+3. Execute owned work, directly route misowned work, or perform a minimal
+   read-only impact scan when ownership is unclear.
+4. For cross-module work, keep one lead, non-overlapping slices, and a loop-safe
+   routing trace.
+5. Reclassify model/Thinking for every outward dispatch.
+6. Return a coherent result to the intake user or named return owner.
+
+### Main Task Review Loop
 
 1. Read the minimum active context.
 2. Inspect registered long-lived module tasks and current work.
-3. Decompose actionable work and route it to the owning visible module task.
+3. Decompose actionable work and route it to the owning visible module task;
+   accept escalations only when module tasks cannot resolve ownership or a
+   project-level decision is required.
 4. Use temporary subagents only for bounded side work.
 5. Review native results and promote durable truth to the correct doc.
 6. Resolve or escalate cross-module decisions.

@@ -1,7 +1,7 @@
 interface:
   display_name: "Project Agent Operating Model"
-  short_description: "Route visible tasks with adaptive model selection"
-  default_prompt: "Use $project-agent-operating-model to install or slim a native-first project operating model with long-lived visible module tasks and dispatch-time model/Thinking routing. 中文：使用 $project-agent-operating-model 安装或精简以长期显性模块任务和派单时动态 model/Thinking 路由为核心的 Native-first 项目运行模型。"
+  short_description: "Route every visible task to its owner"
+  default_prompt: "Use $project-agent-operating-model to install an every-task ownership gate with loop-safe routing between long-lived visible module tasks. 中文：使用 $project-agent-operating-model 安装覆盖所有长期任务的归属判断，以及模块任务之间防循环的自动路由。"
 
 policy:
   allow_implicit_invocation: false

@@ -1,7 +1,13 @@
 # Main Task Dispatch
 
+- Request key:
+- Intake/source task:
 - Target long-lived module task: `<module>`
 - Native task ID/link: <from `docs/thread-registry.md`>
+- Lead task/module:
+- Assigned slice:
+- Visited tasks/modules:
+- Return owner:
 - Type: implement | investigate | review | verify | unblock | decide
 - Priority: P0 | P1 | P2 | P3
 
@@ -61,3 +67,7 @@
 
 Pass both `model` and `thinking` as invocation parameters. Do not rely on the
 target task's existing settings or user defaults.
+
+The target may re-route a misowned slice directly to another registered task,
+but it must preserve the request key, extend the visited list, keep one lead,
+and never send the same or broader slice back to a visited task.

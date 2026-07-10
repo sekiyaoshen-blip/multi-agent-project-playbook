@@ -9,6 +9,9 @@ Thanks for considering a contribution to Project Agent Operating Model.
   tasks execute, and project docs preserve durable truth.
 - Keep long-lived module task routing explicit; do not replace it with mandatory
   temporary subagents or file-based task telemetry.
+- Preserve the every-task ownership gate and direct module-to-module routing.
+  Cross-module work must keep one lead, non-overlapping slices, and loop-safe
+  native routing traces.
 - Keep dispatch-time model routing explicit and capability-driven: every native
   invocation passes supported `model` and `thinking` values, while exact model
   IDs remain discoverable current mappings rather than permanent contracts.
@@ -24,6 +27,8 @@ Thanks for considering a contribution to Project Agent Operating Model.
 - [ ] Model guidance does not hard-code stale quota or version assumptions.
 - [ ] Existing/new native task calls classify risk and pass explicit model and
   Thinking parameters without silently downgrading high-risk work.
+- [ ] Misrouted requests can reach the owning registered task without blind
+  broadcast, routing cycles, duplicate execution, or competing coordinators.
 - [ ] Context governance rules are not duplicated across many files unless necessary.
 - [ ] Markdown code fences are balanced.
 - [ ] `MANIFEST.md` is regenerated if package contents changed.
