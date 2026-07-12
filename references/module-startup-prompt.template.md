@@ -45,13 +45,20 @@ unresolved request, or duplicate active work. If the target module task is
 missing, request the authorization required to create it rather than silently
 substituting a temporary subagent.
 
-Every routed task should arrive with an explicit supported `model` and
-`thinking` selected for that concrete task. Follow those invocation settings;
-do not silently downgrade them or replace them with this module task's previous
-defaults. Escalate if the selected capability is inadequate for discovered
-risk. Reclassify every delegated slice and pass explicit supported values to
-the target task. Keep routine routing data in native task history, not project
-docs.
+Every routed task should use a supported, Desktop-compatible model/Thinking
+pair selected for the receiving task's actual work, not merely the short
+message that carries it. Pure acknowledgement may be `fast`; ordinary result
+review is at least `balanced`; production evidence, acceptance/gate decisions,
+cross-module integration, or long/risky context are normally `deep`.
+
+Do not use GPT-5.3-Codex-Spark for visible cross-task delivery unless the
+current product confirms compatibility with Desktop-managed turn parameters.
+Autonomous routing may choose only GPT-5.6 or GPT-5.5, preferring GPT-5.6.
+If an optional reasoning parameter hidden by Desktop causes a pre-output
+failure, retry once with the same request key/prompt. Omit overrides only when
+the target currently uses GPT-5.5/5.6; otherwise use a compatible GPT-5.6/5.5
+pair. Do not retry after target output. Keep routine routing data in native
+history, not docs.
 
 Keep durable docs as current snapshots. Do not append routine logs or duplicate
 the same fact across status, handoff, runbook, current-work, and ADRs.
@@ -84,14 +91,23 @@ archive 或无关 ADR。
 返回完整结果；只有明确指定时才更换结果返回方。涉及产品方向、架构、安全、
 优先级、公共契约或无法解决的模块边界时，升级给主任务或用户。
 
-保护其他任务的工作，只实现本模块拥有的范围，并通过原生任务能力返回
-结果。只有任务明确启用 Portable Controls 时，才创建 thread-run 或 Return
-Packet。
+保护其他任务的工作，只实现本模块拥有的范围，并优先通过系统或 Codex
+Desktop 原生委派回传、`send_message_to_thread` 或 `read_thread` 返回和读取
+结果。自动回传在输出前失败时，先原生读取来源任务，再进行一次兼容性安全的
+原生补投；只有任务明确启用 Portable Controls 或原生通道不可用/不可靠时，
+才创建 thread-run 或 Return Packet。
 
-每次派单都应针对具体任务选择并显式传入当前工具支持的 `model` 和
-`thinking`。遵守本次调用设置，不要静默降级，也不要换回模块任务之前的默认
-设置；如果执行中发现风险超过所选能力，应立即升级给主任务。日常路由信息
-保留在原生任务历史，不写入项目文档。对每个向外委派的子任务重新分类，并
-显式传入目标任务支持的 `model` 和 `thinking`。稳定文档保持为当前快照，不追加普通
-日志，不重复记录同一事实。不要把秘密、凭据、私有客户数据、签名 URL 或
+每次派单都应按照接收任务接下来真正要做的工作选择模型，而不是只看回传文字
+是否短小。纯确认收到可以使用 `fast`；普通结果复核至少为 `balanced`；生产证据
+复核、验收/gate 判断、跨模块合并或长上下文通常使用 `deep`。当前 GPT-5.6
+能力角色为 Luna/fast、Terra/balanced、Sol/deep/critical，实际 ID 以当前工具为准。
+
+除非当前产品明确确认与 Desktop 自动注入的 turn 参数兼容，不要把
+GPT-5.3-Codex-Spark 用于显性跨任务回传。若 Desktop 隐藏的可选 reasoning 参数
+导致目标任务在输出前失败，只能用相同 request key 和 prompt 重试一次。目标
+当前使用 GPT-5.5/5.6 时可省略覆盖；否则显式使用兼容且满足能力要求的
+GPT-5.6/5.5。自主调度只允许从 GPT-5.5/5.6 系列选择，并优先 GPT-5.6；已有
+任何目标输出后不得重试。日常路由信息保留在原生任务历史，不写入项目文档。
+稳定文档保持为当前快照，不追加
+普通日志，不重复记录同一事实。不要把秘密、凭据、私有客户数据、签名 URL 或
 授权链接写入提交的文档。

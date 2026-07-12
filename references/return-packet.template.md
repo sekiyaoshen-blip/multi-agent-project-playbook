@@ -15,9 +15,12 @@ Last updated: YYYY-MM-DD HH:MM
 
 ## Invocation Routing
 
+- Receiver follow-up: routine-review | integrate-state | acceptance-review | gate-update | execute-action
 - Profile: fast | balanced | deep | critical
 - Requested/actual model:
 - Requested/actual Thinking:
+- Desktop compatibility checked: yes | no
+- Autonomous candidate family: GPT-5.6 | GPT-5.5
 - Fallback and reason, if any:
 
 ## Result

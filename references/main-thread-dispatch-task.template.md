@@ -53,6 +53,7 @@
 
 - Classification:
   - Type:
+  - Receiver follow-up: ack-only | routine-review | integrate-state | acceptance-review | gate-update | execute-action
   - Complexity: deterministic | normal | ambiguous | highly-coupled
   - Risk: low | moderate | high | critical
   - Context: short | multi-file/module | long-history
@@ -62,11 +63,18 @@
 - Selected supported model ID:
 - Selected supported Thinking: low | medium | high | xhigh | max | <tool-supported>
 - Active tool schema checked: yes | no
+- Desktop compatibility checked: yes | no
+- Autonomous candidate family: GPT-5.6 | GPT-5.5
 - Fallback, if any:
 - One-line reason:
 
-Pass both `model` and `thinking` as invocation parameters. Do not rely on the
-target task's existing settings or user defaults.
+Classify the target's follow-up work, not just the transport message. Normally
+pass both `model` and `thinking`. Do not use GPT-5.3-Codex-Spark for visible
+cross-task delivery without current Desktop compatibility confirmation. If a
+hidden optional reasoning parameter causes a pre-output compatibility failure,
+retry once with the same request key/prompt. Omit overrides only when the target
+currently uses GPT-5.5/5.6; otherwise use a compatible GPT-5.6/5.5 pair. Never
+retry after target output.
 
 The target may re-route a misowned slice directly to another registered task,
 but it must preserve the request key, extend the visited list, keep one lead,

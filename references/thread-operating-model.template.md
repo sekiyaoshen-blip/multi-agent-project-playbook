@@ -197,10 +197,13 @@ current task could resolve it immediately.
 
 Use return channels in this order:
 
-1. Native result delivery to the named return owner, or active inspection by
-   that intake/lead task. Do not declare the intake request complete before the
+1. System/Codex Desktop native result delivery to the named return owner:
+   native delegation return, `send_message_to_thread`, or active inspection
+   with `read_thread`. Do not declare the intake request complete before the
    delegated result is reviewed unless the runtime requires asynchronous
-   return and that limitation is stated.
+   return and that limitation is stated. If automatic return fails before
+   output, prefer native read plus one compatibility-safe native send before a
+   file-based fallback.
 2. Compact module `handoff.md` update when the result must survive native task
    history, tool, or account boundaries.
 3. Return Packet only when cross-tool/asynchronous work, high-risk audit,
@@ -270,12 +273,12 @@ Do not create optional docs preemptively. Add a roadmap, global status,
 module-level PRD/design, runbook, thread-run, Return Inbox, lock, or archive
 only when its responsibility is real and not already covered.
 
-## Dispatch-Time Model Routing
+## Receiver-Aware Model Routing
 
-Every call to an existing visible task, including module-to-module re-routing,
-and every authorized creation of a new visible task must select and pass
-explicit `model` and `thinking` parameters. Do not inherit the target task's
-old settings or rely on the user's default.
+Every call to an existing visible task, module-to-module re-route, automatic
+owner return, or authorized new visible task must classify the work the target
+will perform after receiving the message. Do not classify by payload length or
+transport simplicity alone.
 
 ### Classification Signals
 
@@ -288,12 +291,14 @@ Assess the concrete task before invocation:
 - **Context:** short/local, multi-file/module, or long-history synthesis
 - **Reversibility:** easy rollback, costly rollback, or irreversible step
 - **Parallelism:** one owner, independent module slices, or tightly coupled work
+- **Receiver duty:** acknowledge, review, integrate, decide, update a gate, or
+  execute an action
 
 ### Routing Matrix
 
 | Profile | Typical Work | Model Capability | Thinking |
 |---|---|---|---|
-| `fast` | formatting, simple docs, narrow lookup, lint/test check, low-risk deterministic fix | fastest capable | `low`; use `medium` when context is not trivial |
+| `fast` | receipt-only acknowledgement or mechanical low-risk work with no review/merge/decision duty | efficient general model | `low`; use `medium` when context is not trivial |
 | `balanced` | normal implementation, clear bug fix, routine review, single-module work | balanced general | `medium`; use `high` for uncertainty or broader verification |
 | `deep` | ambiguous bug, repeated failure, long context, cross-module contract, architecture, read-only auth/security/payment investigation | strongest available | `high` or `xhigh` |
 | `critical` | executing/authorizing irreversible migration or production action, active financial/data/security loss, highest failure cost | strongest available | `max` |
@@ -302,13 +307,28 @@ Current GPT-5.6 mappings are typically Luna -> `fast`, Terra -> `balanced`, and
 Sol -> `deep`/`critical`. Discover actual current model IDs from the active tool
 schema. These names are examples, not durable project configuration.
 
+Autonomous routing may select only GPT-5.6 or GPT-5.5 families. Prefer GPT-5.6;
+use GPT-5.5 only as a supported compatibility fallback. Do not autonomously
+select GPT-5.4, mini/nano, Codex-Spark, or older families. A user's explicit
+model request may override this pool only when supported and compatible.
+
+Apply these receiver floors:
+
+- `fast`: pure acknowledgement with no review, merge, decision, or state change
+- `balanced`: ordinary owner-result review or routine state integration
+- `deep`: production evidence, acceptance/gate review, cross-module integration,
+  or long/risky context
+- `critical`: the high-consequence action or active severe incident itself, not
+  merely the review of production evidence
+
 Do not route from keywords alone. Reversible read-only work in a sensitive
 domain is normally `deep`; reserve `critical` for the action/exposure itself.
 
 ### Invocation Rules
 
-- Existing visible task: call `send_message_to_thread` with both `model` and
-  `thinking` on every dispatch.
+- Existing visible task: inspect the active schema and normally call
+  `send_message_to_thread` with explicit supported `model` and `thinking` that
+  pass the Desktop compatibility gate below.
 - New visible task: after required user authorization, call `create_thread`
   with both parameters selected for its first concrete task.
 - New role-only task with no concrete work: use the current `balanced` mapping
@@ -316,15 +336,31 @@ domain is normally `deep`; reserve `critical` for the action/exposure itself.
 - Temporary subagent, when permitted: apply the same classification and pass
   explicit model/reasoning parameters supported by that tool.
 - Include `Routing: <profile>; model=<id>; thinking=<effort>; reason=<short>` in
-  the native prompt for observability. Do not duplicate routine routing data in
-  project docs.
+  the native prompt for observability. Actual tool arguments and product
+  compatibility are authoritative; this text cannot force unsupported params.
 - Explicit user model/Thinking instructions take precedence.
 - Use `ultra` only when the active invocation schema accepts it and the work
   genuinely benefits from that mode. If visible-task tools expose only up to
   `max`, do not send `ultra` to them.
 
-### Fallback Safety
+### Desktop Compatibility Gate
+- Refresh current model examples from the official current-model guide during
+  skill audit/upgrade. During routine work, use the active tool schema and the
+  project's current capability mapping.
+- Do not use GPT-5.3-Codex-Spark or another preview/specialized model for visible
+  cross-task delivery or continuation unless the current product explicitly
+  confirms compatibility with all Desktop-managed turn options. Spark is not a
+  compatibility fallback.
+- A visible task tool may expose only `model`, `thinking`, and `prompt`. If it
+  does not expose `reasoning.summary`, the source task cannot set or remove that
+  hidden field. Attribute an incompatibility to the Desktop turn-start/adapter
+  layer rather than claiming the source sent it.
+- Product-managed automatic returns must use the same receiver-aware profile and
+  compatibility gate. A completed task is not automatically a `fast` return.
+- Explicit user model/Thinking choices take precedence only when the selected
+  pair is supported and compatible with the active Desktop path.
 
+### Fallback Safety
 If a preferred model or effort is unavailable:
 
 1. Re-read the active tool's supported model/Thinking values.
@@ -332,6 +368,20 @@ If a preferred model or effort is unavailable:
 3. State the fallback in the native dispatch prompt.
 4. Never silently downgrade `deep` or `critical` work below a safe level. Stop
    and ask the user if no supported option is adequate.
+
+If an invocation fails before the target produces output because a
+Desktop-managed optional reasoning parameter is unsupported:
+
+1. Confirm that the target produced no response and that retry cannot duplicate
+   work.
+2. Reuse the same request key and prompt.
+3. If the target currently uses GPT-5.5/5.6, retry once without overrides so it
+   keeps those settings. Otherwise retry once with a compatible GPT-5.6/5.5
+   pair that satisfies the receiver floor. State the fallback in the prompt.
+4. If product-managed automatic return cannot retry, recover the completed
+   source result with native task read and send one explicit compatibility-safe
+   message, or use the approved Return Packet fallback.
+5. Stop after a second failure and report the product-layer limitation.
 
 Only Portable Controls or audit-sensitive tasks should persist requested/actual
 model details outside native task history.
@@ -421,11 +471,9 @@ reliable return path.
   access-granting links.
 - Keep logs minimal and redacted; record the signal, not the full output.
 - Do not revert unrelated work from another task or agent.
-- Use a worktree, branch, or explicit ownership boundary for risky parallel code
-  changes.
+- Use a worktree, branch, or explicit ownership boundary for risky parallel code changes.
 - Update module status/handoff only when state changed.
-- Add or update an ADR when architecture, shared contracts, deployment,
-  security, cost, or product scope changes.
+- Add/update an ADR for architecture, shared contracts, deployment, security, cost, or product scope changes.
 - Archive or replace stale visible task mappings when module tasks are replaced.
 
 ## Runtime Loops
@@ -434,10 +482,8 @@ reliable return path.
 
 1. Read the minimum active context and its registry boundary.
 2. Classify ownership before nontrivial execution.
-3. Execute owned work, directly route misowned work, or perform a minimal
-   read-only impact scan when ownership is unclear.
-4. For cross-module work, keep one lead, non-overlapping slices, and a loop-safe
-   routing trace.
+3. Execute owned work, directly route misowned work, or perform a minimal read-only impact scan when ownership is unclear.
+4. For cross-module work, keep one lead, non-overlapping slices, and a loop-safe routing trace.
 5. Reclassify model/Thinking for every outward dispatch.
 6. Return a coherent result to the intake user or named return owner.
 
@@ -445,14 +491,10 @@ reliable return path.
 
 1. Read the minimum active context.
 2. Inspect registered long-lived module tasks and current work.
-3. Decompose actionable work and route it to the owning visible module task;
-   accept escalations only when module tasks cannot resolve ownership or a
-   project-level decision is required.
+3. Route actionable work to its owning visible module task; accept escalations only for unresolved ownership or project-level decisions.
 4. Use temporary subagents only for bounded side work.
 5. Review native results and promote durable truth to the correct doc.
 6. Resolve or escalate cross-module decisions.
 7. Compact project docs only when a real trigger exists.
 
-Keep the main task focused on planning quality, routing, integration, and
-durable project truth rather than duplicating module implementation or task
-telemetry.
+Keep the main task focused on planning, routing, integration, and durable truth rather than duplicating module implementation or task telemetry.

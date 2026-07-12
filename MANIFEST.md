@@ -3,16 +3,16 @@
 Generated package contents. `MANIFEST.md` is excluded to avoid self-referential hashes.
 
 - `.gitignore` — package file — 69 bytes — sha256 `d4efada4bfb23875`
-- `CHANGELOG.md` — package file — 3777 bytes — sha256 `9a11bacc378c498a`
-- `CONTRIBUTING.md` — package file — 2041 bytes — sha256 `14a6d3240bf209d1`
-- `INSTALL.md` — installation notes — 6678 bytes — sha256 `0ba5df38a7133e4a`
-- `INSTALL.zh-CN.md` — Chinese installation notes — 6350 bytes — sha256 `cc3a42b937aba8b0`
+- `CHANGELOG.md` — package file — 5007 bytes — sha256 `de8382f8524fe67f`
+- `CONTRIBUTING.md` — package file — 2139 bytes — sha256 `206a694e62ea75a9`
+- `INSTALL.md` — installation notes — 8447 bytes — sha256 `1840d46bccf6922c`
+- `INSTALL.zh-CN.md` — Chinese installation notes — 8030 bytes — sha256 `1f4df163693ac5e9`
 - `LICENSE` — MIT open-source license — 1099 bytes — sha256 `71004cf9167540a8`
-- `README.md` — package overview — 4885 bytes — sha256 `6aa06dc5e2bb0a70`
-- `README.zh-CN.md` — Chinese package overview — 4790 bytes — sha256 `65ed0ab1c1c5bdd2`
-- `SKILL.md` — native-first bootstrap/audit/repair skill — 16219 bytes — sha256 `2c802cf01a971f2a`
-- `agents/openai.yaml` — Codex App metadata and invocation policy — 470 bytes — sha256 `2ed05da0fe4592d1`
-- `project-skeleton/AGENTS.md` — Native Mode project skeleton file — 6188 bytes — sha256 `f6b9a6081588c039`
+- `README.md` — package overview — 5706 bytes — sha256 `c47457a5c13502ec`
+- `README.zh-CN.md` — Chinese package overview — 5636 bytes — sha256 `54ba5e2c46917fa0`
+- `SKILL.md` — native-first bootstrap/audit/repair skill — 19766 bytes — sha256 `79cef6d93c68dadc`
+- `agents/openai.yaml` — Codex App metadata and invocation policy — 450 bytes — sha256 `d2ccc0c9b545d76f`
+- `project-skeleton/AGENTS.md` — Native Mode project skeleton file — 7448 bytes — sha256 `fa8c101ecff41668`
 - `project-skeleton/CLAUDE.md` — Native Mode project skeleton file — 935 bytes — sha256 `2c578be0b911560f`
 - `project-skeleton/docs/current-prd.md` — Native Mode project skeleton file — 1744 bytes — sha256 `7263b66ec960a7df`
 - `project-skeleton/docs/current-technical-design.md` — Native Mode project skeleton file — 1907 bytes — sha256 `001398f99d4a288b`
@@ -21,30 +21,30 @@ Generated package contents. `MANIFEST.md` is excluded to avoid self-referential 
 - `project-skeleton/docs/modules/example-module/handoff.md` — Native Mode project skeleton file — 1010 bytes — sha256 `30f2b3986703eb2a`
 - `project-skeleton/docs/modules/example-module/status.md` — Native Mode project skeleton file — 1038 bytes — sha256 `ff5a26dc92c66731`
 - `project-skeleton/docs/project-brief.md` — Native Mode project skeleton file — 727 bytes — sha256 `0466c1664235c081`
-- `project-skeleton/docs/thread-operating-model.md` — Native Mode project skeleton file — 19451 bytes — sha256 `7a436c19a15214f9`
+- `project-skeleton/docs/thread-operating-model.md` — Native Mode project skeleton file — 22393 bytes — sha256 `da7c16ed41a946dc`
 - `project-skeleton/docs/thread-registry.md` — Native Mode project skeleton file — 3355 bytes — sha256 `5eca288a9a2fff1c`
 - `references/adr.template.md` — reference template — 413 bytes — sha256 `1a0b003361eebd3c`
-- `references/agents.template.md` — reference template — 6188 bytes — sha256 `f6b9a6081588c039`
+- `references/agents.template.md` — reference template — 7448 bytes — sha256 `fa8c101ecff41668`
 - `references/claude.template.md` — reference template — 935 bytes — sha256 `2c578be0b911560f`
 - `references/compaction-lock.template.md` — reference template — 1416 bytes — sha256 `ceb6cecaa6f0ef54`
 - `references/context-compaction-note.template.md` — reference template — 1124 bytes — sha256 `3fa69b91034bc8ab`
-- `references/cross-thread-task.template.md` — reference template — 1484 bytes — sha256 `bb5ffc310a8f55f8`
+- `references/cross-thread-task.template.md` — reference template — 2295 bytes — sha256 `6db9337166b9f8a7`
 - `references/current-prd.template.md` — reference template — 1744 bytes — sha256 `7263b66ec960a7df`
 - `references/current-technical-design.template.md` — reference template — 1907 bytes — sha256 `001398f99d4a288b`
 - `references/current-work.template.md` — reference template — 4146 bytes — sha256 `f56d1fe54fc3be8b`
 - `references/global-status.template.md` — reference template — 1168 bytes — sha256 `0ac4dcd6e1933955`
 - `references/handoff.template.md` — reference template — 1010 bytes — sha256 `30f2b3986703eb2a`
-- `references/main-thread-dispatch-task.template.md` — reference template — 2081 bytes — sha256 `4389944a47067cd4`
+- `references/main-thread-dispatch-task.template.md` — reference template — 2662 bytes — sha256 `ad08875460f0699f`
 - `references/module-boundary-map.template.md` — reference template — 781 bytes — sha256 `8709982bed766b59`
 - `references/module-current-prd.template.md` — reference template — 1041 bytes — sha256 `e28d6fbfbef71d3b`
 - `references/module-current-technical-design.template.md` — reference template — 1166 bytes — sha256 `1f326facfe012d9a`
-- `references/module-startup-prompt.template.md` — reference template — 5566 bytes — sha256 `5c8176c83c4bc9c2`
+- `references/module-startup-prompt.template.md` — reference template — 6788 bytes — sha256 `16fb9afcdbb9cac8`
 - `references/module-status.template.md` — reference template — 1038 bytes — sha256 `ff5a26dc92c66731`
 - `references/project-brief.template.md` — reference template — 727 bytes — sha256 `0466c1664235c081`
-- `references/return-packet.template.md` — reference template — 1428 bytes — sha256 `2a455cb5b7b3ca49`
+- `references/return-packet.template.md` — reference template — 1625 bytes — sha256 `acffc54147ac9b32`
 - `references/roadmap.template.md` — reference template — 1615 bytes — sha256 `61ddfcc592094b64`
 - `references/runbook.template.md` — reference template — 978 bytes — sha256 `3aa7b44fe956b440`
-- `references/thread-operating-model.template.md` — reference template — 19451 bytes — sha256 `7a436c19a15214f9`
+- `references/thread-operating-model.template.md` — reference template — 22393 bytes — sha256 `da7c16ed41a946dc`
 - `references/thread-registry.template.md` — reference template — 3355 bytes — sha256 `5eca288a9a2fff1c`
-- `references/thread-run.template.md` — reference template — 2058 bytes — sha256 `daa13e019885921c`
+- `references/thread-run.template.md` — reference template — 2266 bytes — sha256 `62c24f520da6f87e`
 - `scripts/publish-to-github.sh` — helper script — 797 bytes — sha256 `127786adfcb25cf2`

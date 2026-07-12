@@ -102,9 +102,9 @@ Add only when native task state is insufficient:
 8. If a required visible module task does not exist, ask for or rely on explicit
    user authorization before creating it. Generate its startup prompt from
    `references/module-startup-prompt.template.md`.
-9. Install dispatch-time model routing so every existing-task message or
-   authorized new-task creation passes an explicit supported `model` and
-   `thinking` selected for the concrete task.
+9. Install receiver-aware model routing so every existing-task message,
+   automatic return, or authorized new-task creation selects a supported,
+   Desktop-compatible model/Thinking pair for the receiver's next work.
 10. Install loop-safe direct routing so any registered module task can transfer
     or split misrouted work without routing every request through the main task.
 11. Add Portable Controls only for a concrete risk or interoperability need.
@@ -182,10 +182,13 @@ and return owner. Do not write routine traces to project docs.
 
 Use this priority:
 
-1. Native result delivery to the named return owner, or active inspection by
-   that intake/lead task. Do not declare the intake request complete until the
-   delegated result has been reviewed, unless the runtime requires an
-   asynchronous return and that limitation is stated.
+1. Codex Desktop or system-native result delivery to the named return owner,
+   including native delegation return, `send_message_to_thread`, or active
+   inspection with `read_thread`. Do not declare the intake request complete
+   until the delegated result has been reviewed, unless the runtime requires an
+   asynchronous return and that limitation is stated. If automatic return
+   fails before output, prefer native read plus one compatibility-safe native
+   send before creating a file-based fallback.
 2. Compact update to module `handoff.md` when the result must survive task UI,
    tool, or account boundaries.
 3. Return Packet only for cross-tool/asynchronous work, high-risk audit trails,
@@ -193,18 +196,21 @@ Use this priority:
 
 Do not require both native return and a Return Packet for ordinary work.
 
-### Mandatory Dispatch-Time Model Routing
+### Receiver-Aware Model Routing
 
 Before every native call to an existing visible task, including a re-route from
 one module task to another, or authorized creation of a new visible task:
 
-1. Classify task type, complexity, risk, context size, reversibility, and
-   parallelism.
+1. Classify both the message and the work the receiving task must perform next:
+   task type, complexity, risk, context size, reversibility, parallelism,
+   review/integration duty, and decision authority. Message length and the
+   simplicity of transport never determine the profile by themselves.
 2. Inspect the active tool/client schema for supported model IDs and Thinking
-   values. Do not invent a model or send an unsupported effort.
+   values, then apply the Desktop compatibility gate below. Do not invent a
+   model, effort, or hidden request parameter.
 3. Select a capability profile:
-   - `fast`: deterministic, bounded, low-risk work -> fastest capable model;
-     `low` or `medium`
+   - `fast`: deterministic, bounded work whose receiver only acknowledges or
+     performs a mechanical low-risk action -> efficient model; `low` or `medium`
    - `balanced`: normal implementation/review with clear scope -> balanced
      model; `medium` or `high`
    - `deep`: ambiguous, long-context, cross-module, architecture, repeated
@@ -213,11 +219,20 @@ one module task to another, or authorized creation of a new visible task:
    - `critical`: executing/authorizing an irreversible migration or production
      action, responding to active financial/data/security loss, or other
      highest-failure-cost work -> strongest model; `max`
-4. Pass both `model` and `thinking` explicitly to `send_message_to_thread` or,
-   after required user authorization, `create_thread`. Do not rely on the
-   target task's previous settings or the user's default model.
-5. Include a one-line routing reason in the native dispatch prompt. Do not
-   create routine model/version/quota telemetry in project docs.
+4. Apply receiver floors:
+   - pure receipt acknowledgement with no review, merge, decision, or state
+     change may use `fast`
+   - ordinary owner result review or routine state integration is at least
+     `balanced`
+   - production evidence review, acceptance/needs-followup verdicts, project
+     gate updates, cross-module integration, or long/risky context are normally
+     `deep`
+   - use `critical` only when the receiver will execute/authorize an
+     irreversible high-consequence action or handle an active severe incident
+5. Pass explicit supported `model` and `thinking` when the invocation exposes
+   those controls and the selected pair passes the compatibility gate. Include
+   a one-line routing reason in the native prompt. Do not create routine
+   model/version/quota telemetry in project docs.
 
 Current GPT-5.6 examples are Luna for `fast`, Terra for `balanced`, and Sol for
 `deep`/`critical`. Treat these as discoverable current mappings, not durable
@@ -225,15 +240,47 @@ project contracts. Use `ultra` only when the active invocation schema supports
 it and the task genuinely benefits from that execution mode; otherwise use the
 highest supported effort or route independent work to registered module tasks.
 
+For autonomous routing, limit the candidate pool to GPT-5.6 and GPT-5.5
+families. Prefer GPT-5.6; use GPT-5.5 only as a supported compatibility fallback.
+Do not autonomously select GPT-5.4, mini/nano, Codex-Spark, or older families.
+An explicit user model request may override this pool only when the active path
+supports it and the compatibility/risk checks pass.
+
 Do not classify by sensitive keywords alone. A reversible read-only
 investigation in a high-risk domain is normally `deep`; use `critical` when the
 task itself performs/authorizes a high-consequence action or an active incident
 creates immediate severe exposure.
 
-Explicit user model/Thinking instructions win. If a preferred option is
-unavailable, choose the closest supported option that still meets the risk
-requirement and state the fallback in the native prompt. Never silently lower a
-`deep` or `critical` task below a safe capability level; ask the user or stop if
+### Desktop Compatibility Gate
+
+- Treat exact model IDs as runtime-discovered values. During skill audit or
+  upgrade, refresh examples from the current official model guide; during
+  routine dispatch, use the active tool schema and current project mapping.
+- For visible cross-task delivery or continuation in Codex Desktop, do not use
+  GPT-5.3-Codex-Spark or another preview/specialized model unless the current
+  product explicitly confirms compatibility with all Desktop-managed turn
+  options. Spark is not a cross-task fallback.
+- The visible `send_message_to_thread` contract may expose only `model`,
+  `thinking`, and `prompt`. If it does not expose `reasoning.summary`, the skill
+  cannot add, remove, or retry that hidden field directly. Attribute such a
+  failure to the Desktop turn-start/adapter layer, not to the source task.
+- Treat the `Routing:` line as an audit statement. Actual tool arguments and
+  product compatibility are authoritative; text must never force an
+  unsupported parameter combination.
+- If a cross-task invocation fails before the target produces output because a
+  Desktop-managed optional reasoning parameter is unsupported, retry exactly
+  once with the same request key and prompt. Omit `model` and `thinking` only
+  when the target's current model is confirmed as GPT-5.5/5.6; otherwise use a
+  compatible GPT-5.6 or GPT-5.5 pair that meets the receiver floor. Record the
+  fallback and do not retry after any target output exists.
+- If a product-managed automatic return cannot perform that retry, recover the
+  result with native task read plus an explicit compatibility-safe message, or
+  use the approved Return Packet fallback. State the product-layer limitation.
+
+Explicit user model/Thinking instructions win only when the pair is supported
+and Desktop-compatible. If a preferred option is unavailable, choose the
+closest supported option that still meets the receiver's risk requirement and
+state the fallback. Never silently lower `deep` or `critical`; ask or stop when
 no safe supported option exists.
 
 For a new role-only module task with no concrete work yet, use the current
@@ -311,7 +358,14 @@ Read only the resources needed for the selected mode:
 - Are native task state and `current-work.md` the default active work surfaces?
 - Are thread-runs and Return Packets conditional instead of mandatory?
 - Does every native existing/new task invocation classify the concrete task and
-  pass explicit supported `model` and `thinking` values?
+  the receiver's follow-up duty before selecting compatible model/Thinking
+  values?
+- Are production evidence, acceptance review, gate updates, and cross-module
+  integration protected from transport-only `fast` classification?
+- Are preview/specialized models excluded from cross-task delivery unless their
+  Desktop-managed parameter compatibility is confirmed?
+- Is autonomous model selection limited to GPT-5.5/5.6 unless the user
+  explicitly requests another supported compatible model?
 - Do high-risk routing fallbacks avoid silent capability downgrades and stale
   hard-coded quota rules?
 - Are active docs current, compact, non-duplicative, and read selectively?

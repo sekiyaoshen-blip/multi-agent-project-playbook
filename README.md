@@ -34,12 +34,13 @@ results stay in native task history.
 - Cross-module work has exactly one lead and non-overlapping delegated slices.
 - Native routing traces prevent loops, blind broadcasts, duplicate work, and
   competing coordinators without creating a file-based task log.
-- Every existing/new native task invocation classifies the concrete work and
-  passes explicit supported `model` and `thinking` parameters.
+- Every existing/new native task invocation classifies the receiver's actual
+  follow-up work and uses a supported, Desktop-compatible model/Thinking pair.
 - Temporary subagents are limited to bounded disposable research, review,
   search, test, or verification work.
-- Native delivery is the default result path. Compact handoffs preserve durable
-  cross-task or cross-tool context.
+- System/Codex Desktop native delivery is the default result path. If automatic
+  return fails, prefer native read plus one compatibility-safe native send;
+  compact handoffs preserve only durable cross-task or cross-tool context.
 - Thread-runs and Return Packets are optional controls, not routine ceremony.
 
 ## Operating Modes
@@ -53,10 +54,10 @@ results stay in native task history.
 
 ## Dispatch-Time Model Routing
 
-Before every call to an existing visible task, including module-to-module
-re-routing, or authorized creation of a new one, classify task type,
-complexity, risk, context, reversibility, and parallelism. Inspect the active
-tool schema and pass both `model` and `thinking` explicitly.
+Before every call to an existing visible task, module-to-module re-route,
+automatic owner return, or authorized creation of a new task, classify what the
+receiver must do next. A short return that requires evidence review, state
+integration, or a gate decision is not a `fast` transport message.
 
 - `fast`: fastest capable model, `low`/`medium`
 - `balanced`: balanced model, `medium`/`high`
@@ -69,6 +70,18 @@ invented, and deep/critical work is not silently downgraded. Routine routing
 reasons stay in native task history rather than project docs. Classification is
 action-based, not keyword-based: read-only sensitive-domain investigation is
 normally `deep`; irreversible action or active severe exposure is `critical`.
+
+Autonomous routing is limited to GPT-5.6 and GPT-5.5 families. GPT-5.6 is the
+default; GPT-5.5 is a compatibility fallback. Older, mini/nano, and preview
+models are not autonomous choices.
+
+GPT-5.3-Codex-Spark is excluded from visible cross-task delivery unless the
+current Desktop path explicitly confirms compatibility with its managed turn
+parameters. If a hidden optional reasoning parameter causes a pre-output
+failure, retry once using target settings only when they are GPT-5.5/5.6;
+otherwise use a compatible GPT-5.6/5.5 pair. The visible task tool does not
+expose `reasoning.summary`, so the skill does not pretend it can directly remove
+that product-managed field.
 
 ## Project Skeleton
 

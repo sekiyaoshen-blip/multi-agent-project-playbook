@@ -48,21 +48,38 @@ This project uses a native-first project agent operating model.
   forking, handoff, and result review.
 - Create a separate visible task only with the authorization required by the
   current product/runtime, then register its durable identity.
-- Use native result delivery first. Update module `handoff.md` when durable
-  cross-task or cross-tool recovery matters. Use Return Packets only when
-  explicitly required by risk, audit, asynchronous work, or unavailable native
-  delivery.
+- Use system/Codex Desktop native result delivery first: native delegation
+  return, `send_message_to_thread`, or `read_thread` inspection. If automatic
+  return fails before output, prefer native read plus one compatibility-safe
+  native send. Update module `handoff.md` only when durable recovery matters;
+  use Return Packets only for explicit risk, audit, asynchronous work, or
+  unavailable/unreliable native delivery.
 - Before every existing-task message or authorized new-task creation, classify
-  the concrete task by type, complexity, risk, context, reversibility, and
-  parallelism.
-- Inspect the active tool schema, select a supported capability profile, and
-  pass both `model` and `thinking` explicitly. Do not rely on target-task or
-  user defaults.
-- Use fast/low-medium for deterministic low-risk work, balanced/medium-high for
-  normal work, strongest/high-xhigh for deep work, and strongest/max for
-  critical work. Current GPT-5.6 examples are Luna, Terra, and Sol respectively.
+  both the message and the receiving task's next work: review, integration,
+  decision, context, risk, reversibility, and parallelism. Do not classify by
+  message length or transport simplicity alone.
+- A pure receipt-only acknowledgement may use `fast`. Ordinary owner-result
+  review is at least `balanced`. Production evidence, acceptance verdicts,
+  project gate updates, cross-module integration, or long/risky context are
+  normally `deep`.
+- Inspect the active tool schema and select a supported, Desktop-compatible
+  model/Thinking pair. Current GPT-5.6 roles are Luna for `fast`, Terra for
+  `balanced`, and Sol for `deep`/`critical`; exact IDs are runtime-discovered.
+- Autonomous routing may select only GPT-5.6 or GPT-5.5 families. Prefer GPT-5.6
+  and use GPT-5.5 only as a compatibility fallback. Do not autonomously select
+  GPT-5.4, mini/nano, Codex-Spark, or older families.
+- Do not use GPT-5.3-Codex-Spark or another preview/specialized model for visible
+  cross-task delivery unless the current product confirms compatibility with
+  Desktop-managed turn parameters.
+- If the visible tool does not expose `reasoning.summary`, do not claim the
+  source task set it. On a pre-output optional-parameter compatibility failure,
+  retry once with the same request key/prompt. Omit overrides only when the
+  target currently uses GPT-5.5/5.6; otherwise explicitly use a compatible
+  GPT-5.6/5.5 pair. Never retry after target output exists.
 - Explicit user choices win. Never silently downgrade deep/critical work when
   no safe supported model/Thinking combination exists.
+- Treat a `Routing:` line as observability only; actual tool arguments and
+  product compatibility are authoritative.
 - Keep routine routing data in the native dispatch prompt, not project docs.
 - Update docs only for substantive state changes. Active docs are current
   snapshots, not task logs.

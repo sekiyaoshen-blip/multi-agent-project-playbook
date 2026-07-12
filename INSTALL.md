@@ -52,7 +52,10 @@ Requirements:
 - Discover and reuse existing visible module tasks. Before creating any missing visible task, follow the current product's user-authorization requirement.
 - Keep docs minimal: stable facts in project docs; transient execution in native task history.
 - Do not enable thread-runs, Return Packets, locks, or archives unless a concrete recovery, audit, asynchronous, high-risk, or cross-tool need exists.
-- Before every existing-task call, re-route, or authorized new-task creation, classify the concrete task, inspect supported values, and pass both `model` and `thinking` explicitly. Do not rely on inherited defaults or add routine routing telemetry to project docs.
+- Before every existing-task call, re-route, automatic owner return, or authorized new-task creation, classify the receiver's follow-up work and choose a Desktop-compatible model/Thinking pair. Do not classify by message length alone, use preview/specialized models as cross-task fallbacks, or add routine routing telemetry to project docs.
+- Limit autonomous model selection to GPT-5.6 and GPT-5.5 families. Prefer GPT-5.6 and use GPT-5.5 only as a compatibility fallback; other families require an explicit user request.
+- Return delegated results through system or Codex Desktop native delivery first. If automatic return fails before output, prefer native read plus one compatibility-safe native send before a Return Packet.
+- If a Desktop-managed optional reasoning parameter causes a pre-output failure, retry once with the same request key and prompt. Omit model/Thinking overrides only when the target already uses GPT-5.5/5.6; otherwise select a compatible GPT-5.6/5.5 pair. Do not claim the source task set hidden parameters that the visible tool does not expose.
 - Report the selected mode, files created or mapped, module-to-task routing map, optional controls omitted/enabled, and unresolved assumptions.
 ```
 
@@ -69,7 +72,10 @@ Requirements:
 - 自动发现并复用已有模块任务。创建缺失的显性任务前，遵守当前产品要求的用户授权规则。
 - 保持文档精简：稳定事实落项目文档，临时执行过程留在原生任务历史。
 - 除非存在明确的恢复、审计、异步、高风险或跨工具需求，否则不要启用 thread-run、Return Packet、锁或 archive。
-- 每次调用已有任务、模块间再次转派或在获得授权后新建任务前，都先判断具体任务并检查当前工具支持值，然后同时显式传入 `model` 和 `thinking`。不要依赖继承默认值，也不要把日常路由流水写入项目文档。
+- 每次调用已有任务、模块间再次转派、自动 owner 回传或在获得授权后新建任务前，都按照接收方接下来真正要完成的复核、合并、决策和执行工作选择 Desktop 兼容的 `model` 和 `thinking`，不能只按消息长短判断，也不能把预览/专用模型当作跨任务兜底。
+- 自主调度只允许选择 GPT-5.6 或 GPT-5.5 系列；默认优先 GPT-5.6，GPT-5.5 只作兼容兜底，其他系列必须由用户明确指定。
+- 派发结果优先通过系统或 Codex Desktop 原生能力回传或投递。自动回传在输出前失败时，先原生读取来源任务，再进行一次兼容性安全的原生补投，最后才考虑 Return Packet。
+- 如果 Desktop 自动注入的可选 reasoning 参数导致目标任务在输出前失败，使用相同 request key 和 prompt 只重试一次。目标当前使用 GPT-5.5/5.6 时可省略 model/Thinking 覆盖；否则显式改用兼容的 GPT-5.6/5.5。可见工具未暴露的隐藏参数不能归因于来源任务。
 - 最后报告所选模式、新建或映射的文件、模块到长期任务的路由表、启用或省略的可选控制，以及尚未确认的假设。
 ```
 
@@ -93,13 +99,15 @@ The project skeleton represents Native Mode. Optional templates remain in
 
 ## Dispatch-Time Model Routing
 
-Every native existing/new task invocation or module-to-module re-route
-classifies type, complexity, risk, context, reversibility, and parallelism,
-then passes explicit supported
-`model`/`thinking` values. Use fast + low/medium, balanced + medium/high, strong
-+ high/xhigh for deep work, and strongest + max for critical work. GPT-5.6
-Luna/Terra/Sol are current examples discovered from the active tool schema, not
-durable project contracts. Never silently downgrade unsafe work.
+Every native invocation classifies the receiver's follow-up responsibility,
+then selects a supported, Desktop-compatible model/Thinking pair. Use GPT-5.6
+Luna for `fast`, Terra for `balanced`, and Sol for `deep`/`critical` as current
+examples, while discovering exact IDs at runtime. Owner returns that require
+production evidence review, acceptance, gate updates, or cross-module
+integration are normally `deep`, not transport-only `fast` work.
+Autonomous routing may select only GPT-5.6 or GPT-5.5, preferring GPT-5.6 and
+using GPT-5.5 only as a compatibility fallback. Native system/Desktop delivery
+is preferred for returns; file-based Return Packets remain a last resort.
 
 ## Codex Metadata
 

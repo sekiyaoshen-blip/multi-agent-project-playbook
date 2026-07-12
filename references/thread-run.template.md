@@ -64,9 +64,12 @@ Return Packet.
 
 ## Dispatch-Time Routing
 
+- Receiver follow-up: ack-only | routine-review | integrate-state | acceptance-review | gate-update | execute-action
 - Profile: fast | balanced | deep | critical
 - Requested/actual model:
 - Requested/actual Thinking:
+- Desktop compatibility checked: yes | no
+- Autonomous candidate family: GPT-5.6 | GPT-5.5
 - Fallback, if any:
 - Why this routing matters to recovery or interpretation:
 

@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+- Changed model routing to classify the receiver's review, integration,
+  decision, and execution duty instead of the transport message alone.
+- Added receiver floors so production evidence, acceptance verdicts, project
+  gate updates, and cross-module integration cannot be routed as `fast` merely
+  because the return payload is short.
+- Excluded GPT-5.3-Codex-Spark and other unconfirmed preview/specialized models
+  from visible cross-task delivery, and refreshed current examples to the
+  GPT-5.6 Luna/Terra/Sol capability family.
+- Documented that hidden `reasoning.summary` injection belongs to the Desktop
+  turn-start layer when the visible tool does not expose that field.
+- Added a single compatibility retry that preserves the request key/prompt,
+  keeps target settings when they are GPT-5.5/5.6, and otherwise selects a
+  compatible GPT-5.6/5.5 pair after a pre-output optional-parameter failure.
+- Made system/Codex Desktop native delivery the preferred return path, including
+  native read plus one compatibility-safe native send before file fallback.
+- Limited autonomous model selection to GPT-5.6 and GPT-5.5 families, preferring
+  GPT-5.6 and reserving GPT-5.5 for compatibility fallback.
 - Added an every-task ownership gate: the main task and every registered module
   task classify ownership before nontrivial execution.
 - Added direct module-to-module re-routing for misrouted requests, minimal
@@ -14,8 +31,8 @@
   unless another return owner is explicitly named.
 - Added mandatory dispatch-time task classification for every existing-task
   message and authorized new-task creation.
-- Added explicit `model` and `thinking` parameters for every native task
-  invocation instead of inheriting target-task or user defaults.
+- Added explicit model/Thinking control for normal native task invocations, now
+  bounded by receiver-aware classification and Desktop compatibility fallback.
 - Added fast/balanced/deep/critical routing profiles, active-tool capability
   discovery, explicit fallback reasons, and no-silent-downgrade rules for
   high-risk work.

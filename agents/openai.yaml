@@ -1,7 +1,7 @@
 interface:
   display_name: "Project Agent Operating Model"
-  short_description: "Route every visible task to its owner"
-  default_prompt: "Use $project-agent-operating-model to install an every-task ownership gate with loop-safe routing between long-lived visible module tasks. 中文：使用 $project-agent-operating-model 安装覆盖所有长期任务的归属判断，以及模块任务之间防循环的自动路由。"
+  short_description: "Route tasks with compatible model settings"
+  default_prompt: "Use $project-agent-operating-model to install receiver-aware, Desktop-compatible routing for long-lived visible module tasks. 中文：使用 $project-agent-operating-model 安装按接收方工作量选型、兼容 Codex Desktop 的长期模块任务路由。"
 
 policy:
   allow_implicit_invocation: false
