@@ -48,6 +48,7 @@
 - Task profile: fast | balanced | deep | critical
 - Selected supported model ID:
 - Selected supported Thinking:
+- Model-specific Thinking checked: yes | no
 - Desktop compatibility checked: yes | no
 - Autonomous candidate family: GPT-5.6 | GPT-5.5
 - Classification reason: <type/complexity/risk/context/reversibility>
@@ -61,8 +62,11 @@ without current Desktop compatibility confirmation.
 
 Autonomous selection is limited to GPT-5.6/5.5. Normally pass both values. On a
 pre-output hidden-parameter failure, retry once with the same request key and
-prompt. Omit overrides only when the target currently uses GPT-5.5/5.6;
-otherwise choose a compatible GPT-5.6/5.5 pair. Do not retry after output.
+prompt. Omit overrides only when the target's current GPT-5.5/5.6
+model/Thinking pair is confirmed compatible; otherwise choose a compatible
+pair. Do not retry after output.
+The tool enum may exceed one model's capability: default `critical` to `xhigh`,
+never send GPT-5.5 with `max`, and use `max` only with exact model/path support.
 
 If this target does not own the slice, preserve the request key, extend the
 visited list, keep exactly one lead, and re-route only to a registered likely

@@ -53,9 +53,10 @@ Requirements:
 - Keep docs minimal: stable facts in project docs; transient execution in native task history.
 - Do not enable thread-runs, Return Packets, locks, or archives unless a concrete recovery, audit, asynchronous, high-risk, or cross-tool need exists.
 - Before every existing-task call, re-route, automatic owner return, or authorized new-task creation, classify the receiver's follow-up work and choose a Desktop-compatible model/Thinking pair. Do not classify by message length alone, use preview/specialized models as cross-task fallbacks, or add routine routing telemetry to project docs.
+- Validate Thinking against both the tool and selected model/path. Treat a generic tool enum as an outer bound: default critical work to `xhigh`, never send GPT-5.5 with `max`, and use `max` only after exact model/path support is confirmed.
 - Limit autonomous model selection to GPT-5.6 and GPT-5.5 families. Prefer GPT-5.6 and use GPT-5.5 only as a compatibility fallback; other families require an explicit user request.
 - Return delegated results through system or Codex Desktop native delivery first. If automatic return fails before output, prefer native read plus one compatibility-safe native send before a Return Packet.
-- If a Desktop-managed optional reasoning parameter causes a pre-output failure, retry once with the same request key and prompt. Omit model/Thinking overrides only when the target already uses GPT-5.5/5.6; otherwise select a compatible GPT-5.6/5.5 pair. Do not claim the source task set hidden parameters that the visible tool does not expose.
+- If a Desktop-managed optional reasoning parameter causes a pre-output failure, retry once with the same request key and prompt. Omit model/Thinking overrides only when the target's current GPT-5.5/5.6 pair is confirmed compatible; otherwise select a compatible pair. Do not claim the source task set hidden parameters that the visible tool does not expose.
 - Report the selected mode, files created or mapped, module-to-task routing map, optional controls omitted/enabled, and unresolved assumptions.
 ```
 
@@ -73,9 +74,10 @@ Requirements:
 - 保持文档精简：稳定事实落项目文档，临时执行过程留在原生任务历史。
 - 除非存在明确的恢复、审计、异步、高风险或跨工具需求，否则不要启用 thread-run、Return Packet、锁或 archive。
 - 每次调用已有任务、模块间再次转派、自动 owner 回传或在获得授权后新建任务前，都按照接收方接下来真正要完成的复核、合并、决策和执行工作选择 Desktop 兼容的 `model` 和 `thinking`，不能只按消息长短判断，也不能把预览/专用模型当作跨任务兜底。
+- 同时校验工具和具体模型/调用路径支持的 Thinking。工具枚举只是外层边界：critical 默认使用 `xhigh`，GPT-5.5 禁止使用 `max`，只有具体模型和路径明确支持时才允许 `max`。
 - 自主调度只允许选择 GPT-5.6 或 GPT-5.5 系列；默认优先 GPT-5.6，GPT-5.5 只作兼容兜底，其他系列必须由用户明确指定。
 - 派发结果优先通过系统或 Codex Desktop 原生能力回传或投递。自动回传在输出前失败时，先原生读取来源任务，再进行一次兼容性安全的原生补投，最后才考虑 Return Packet。
-- 如果 Desktop 自动注入的可选 reasoning 参数导致目标任务在输出前失败，使用相同 request key 和 prompt 只重试一次。目标当前使用 GPT-5.5/5.6 时可省略 model/Thinking 覆盖；否则显式改用兼容的 GPT-5.6/5.5。可见工具未暴露的隐藏参数不能归因于来源任务。
+- 如果 Desktop 自动注入的可选 reasoning 参数导致目标任务在输出前失败，使用相同 request key 和 prompt 只重试一次。只有目标当前 GPT-5.5/5.6 模型/Thinking 组合确认兼容时才可省略覆盖；否则显式改用兼容组合。可见工具未暴露的隐藏参数不能归因于来源任务。
 - 最后报告所选模式、新建或映射的文件、模块到长期任务的路由表、启用或省略的可选控制，以及尚未确认的假设。
 ```
 
@@ -108,6 +110,8 @@ integration are normally `deep`, not transport-only `fast` work.
 Autonomous routing may select only GPT-5.6 or GPT-5.5, preferring GPT-5.6 and
 using GPT-5.5 only as a compatibility fallback. Native system/Desktop delivery
 is preferred for returns; file-based Return Packets remain a last resort.
+Thinking must be valid for both the tool and selected model/path. Default
+`critical` to `xhigh`; GPT-5.5 must never receive `max`.
 
 ## Codex Metadata
 

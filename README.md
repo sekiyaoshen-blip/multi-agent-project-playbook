@@ -62,7 +62,8 @@ integration, or a gate decision is not a `fast` transport message.
 - `fast`: fastest capable model, `low`/`medium`
 - `balanced`: balanced model, `medium`/`high`
 - `deep`: strongest model, `high`/`xhigh`
-- `critical`: strongest model, `max`
+- `critical`: strongest model, `xhigh` by default; `max` only with exact
+  model/path support
 
 Current GPT-5.6 examples are Luna, Terra, and Sol. They are discoverable current
 mappings, not durable contracts. User choices win, unsupported values are never
@@ -75,11 +76,15 @@ Autonomous routing is limited to GPT-5.6 and GPT-5.5 families. GPT-5.6 is the
 default; GPT-5.5 is a compatibility fallback. Older, mini/nano, and preview
 models are not autonomous choices.
 
+Tool schemas may expose a union of values across models. Routing therefore uses
+the intersection of tool, selected model, and invocation-path support. GPT-5.5
+cross-task calls are capped at `xhigh`; never send GPT-5.5 with `thinking=max`.
+
 GPT-5.3-Codex-Spark is excluded from visible cross-task delivery unless the
 current Desktop path explicitly confirms compatibility with its managed turn
 parameters. If a hidden optional reasoning parameter causes a pre-output
-failure, retry once using target settings only when they are GPT-5.5/5.6;
-otherwise use a compatible GPT-5.6/5.5 pair. The visible task tool does not
+failure, retry once using target settings only when that GPT-5.5/5.6
+model/Thinking pair is confirmed compatible; otherwise use a compatible pair. The visible task tool does not
 expose `reasoning.summary`, so the skill does not pretend it can directly remove
 that product-managed field.
 

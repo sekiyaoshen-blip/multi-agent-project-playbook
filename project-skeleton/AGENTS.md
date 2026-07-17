@@ -65,6 +65,9 @@ This project uses a native-first project agent operating model.
 - Inspect the active tool schema and select a supported, Desktop-compatible
   model/Thinking pair. Current GPT-5.6 roles are Luna for `fast`, Terra for
   `balanced`, and Sol for `deep`/`critical`; exact IDs are runtime-discovered.
+- Intersect tool-level values with the selected model/path capability; a tool
+  enum may be broader than one model. Default `critical` to `xhigh`. Use `max`
+  only with exact model/path confirmation; GPT-5.5 must never receive `max`.
 - Autonomous routing may select only GPT-5.6 or GPT-5.5 families. Prefer GPT-5.6
   and use GPT-5.5 only as a compatibility fallback. Do not autonomously select
   GPT-5.4, mini/nano, Codex-Spark, or older families.
@@ -74,8 +77,11 @@ This project uses a native-first project agent operating model.
 - If the visible tool does not expose `reasoning.summary`, do not claim the
   source task set it. On a pre-output optional-parameter compatibility failure,
   retry once with the same request key/prompt. Omit overrides only when the
-  target currently uses GPT-5.5/5.6; otherwise explicitly use a compatible
-  GPT-5.6/5.5 pair. Never retry after target output exists.
+  target's current GPT-5.5/5.6 model/Thinking pair is confirmed compatible;
+  otherwise explicitly use a compatible pair. Never retry after target output.
+- If a pre-output error lists supported Thinking values, retry once with the
+  same model/request key/prompt and highest safe listed effort (`xhigh` for a
+  rejected GPT-5.5 `max`).
 - Explicit user choices win. Never silently downgrade deep/critical work when
   no safe supported model/Thinking combination exists.
 - Treat a `Routing:` line as observability only; actual tool arguments and

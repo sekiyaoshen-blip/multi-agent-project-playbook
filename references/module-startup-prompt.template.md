@@ -50,14 +50,16 @@ pair selected for the receiving task's actual work, not merely the short
 message that carries it. Pure acknowledgement may be `fast`; ordinary result
 review is at least `balanced`; production evidence, acceptance/gate decisions,
 cross-module integration, or long/risky context are normally `deep`.
+Intersect tool, selected-model, and invocation-path support. Default `critical`
+to `xhigh`; never send GPT-5.5 with `max`. Use `max` only with exact support.
 
 Do not use GPT-5.3-Codex-Spark for visible cross-task delivery unless the
 current product confirms compatibility with Desktop-managed turn parameters.
 Autonomous routing may choose only GPT-5.6 or GPT-5.5, preferring GPT-5.6.
 If an optional reasoning parameter hidden by Desktop causes a pre-output
 failure, retry once with the same request key/prompt. Omit overrides only when
-the target currently uses GPT-5.5/5.6; otherwise use a compatible GPT-5.6/5.5
-pair. Do not retry after target output. Keep routine routing data in native
+the target's current GPT-5.5/5.6 model/Thinking pair is confirmed compatible;
+otherwise use a compatible pair. Do not retry after target output. Keep routing data in native
 history, not docs.
 
 Keep durable docs as current snapshots. Do not append routine logs or duplicate
@@ -105,9 +107,11 @@ Desktop 原生委派回传、`send_message_to_thread` 或 `read_thread` 返回�
 除非当前产品明确确认与 Desktop 自动注入的 turn 参数兼容，不要把
 GPT-5.3-Codex-Spark 用于显性跨任务回传。若 Desktop 隐藏的可选 reasoning 参数
 导致目标任务在输出前失败，只能用相同 request key 和 prompt 重试一次。目标
-当前使用 GPT-5.5/5.6 时可省略覆盖；否则显式使用兼容且满足能力要求的
-GPT-5.6/5.5。自主调度只允许从 GPT-5.5/5.6 系列选择，并优先 GPT-5.6；已有
+当前的 GPT-5.5/5.6 模型/Thinking 组合确认兼容时才可省略覆盖；否则显式使用
+兼容组合。自主调度只允许从 GPT-5.5/5.6 系列选择，并优先 GPT-5.6；已有
 任何目标输出后不得重试。日常路由信息保留在原生任务历史，不写入项目文档。
+工具枚举可能大于具体模型能力；必须取工具、模型和调用路径的交集。critical 默认
+使用 `xhigh`，GPT-5.5 禁止 `max`；只有精确确认兼容时才允许 `max`。
 稳定文档保持为当前快照，不追加
 普通日志，不重复记录同一事实。不要把秘密、凭据、私有客户数据、签名 URL 或
 授权链接写入提交的文档。

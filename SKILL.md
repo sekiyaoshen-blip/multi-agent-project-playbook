@@ -205,9 +205,10 @@ one module task to another, or authorized creation of a new visible task:
    task type, complexity, risk, context size, reversibility, parallelism,
    review/integration duty, and decision authority. Message length and the
    simplicity of transport never determine the profile by themselves.
-2. Inspect the active tool/client schema for supported model IDs and Thinking
-   values, then apply the Desktop compatibility gate below. Do not invent a
-   model, effort, or hidden request parameter.
+2. Inspect both the active tool/client schema and the selected model's accepted
+   Thinking values on that invocation path, then use their intersection. A tool
+   enum may be broader than one model's actual support. Do not invent a model,
+   effort, or hidden request parameter.
 3. Select a capability profile:
    - `fast`: deterministic, bounded work whose receiver only acknowledges or
      performs a mechanical low-risk action -> efficient model; `low` or `medium`
@@ -218,7 +219,8 @@ one module task to another, or authorized creation of a new visible task:
      `high` or `xhigh`
    - `critical`: executing/authorizing an irreversible migration or production
      action, responding to active financial/data/security loss, or other
-     highest-failure-cost work -> strongest model; `max`
+     highest-failure-cost work -> strongest model; `xhigh` by default, with
+     `max` only when the exact model and invocation path explicitly support it
 4. Apply receiver floors:
    - pure receipt acknowledgement with no review, merge, decision, or state
      change may use `fast`
@@ -236,9 +238,10 @@ one module task to another, or authorized creation of a new visible task:
 
 Current GPT-5.6 examples are Luna for `fast`, Terra for `balanced`, and Sol for
 `deep`/`critical`. Treat these as discoverable current mappings, not durable
-project contracts. Use `ultra` only when the active invocation schema supports
+project contracts. Use `ultra` only when the exact model/invocation path supports
 it and the task genuinely benefits from that execution mode; otherwise use the
 highest supported effort or route independent work to registered module tasks.
+For GPT-5.5 cross-task calls, use `xhigh` as the ceiling and never send `max`.
 
 For autonomous routing, limit the candidate pool to GPT-5.6 and GPT-5.5
 families. Prefer GPT-5.6; use GPT-5.5 only as a supported compatibility fallback.
@@ -256,6 +259,9 @@ creates immediate severe exposure.
 - Treat exact model IDs as runtime-discovered values. During skill audit or
   upgrade, refresh examples from the current official model guide; during
   routine dispatch, use the active tool schema and current project mapping.
+- Treat a generic tool enum as an outer bound, not proof that every listed
+  effort works with every model. Confirm the selected model/path combination.
+  GPT-5.5 accepts at most `xhigh` on the observed Desktop cross-task path.
 - For visible cross-task delivery or continuation in Codex Desktop, do not use
   GPT-5.3-Codex-Spark or another preview/specialized model unless the current
   product explicitly confirms compatibility with all Desktop-managed turn
@@ -267,11 +273,15 @@ creates immediate severe exposure.
 - Treat the `Routing:` line as an audit statement. Actual tool arguments and
   product compatibility are authoritative; text must never force an
   unsupported parameter combination.
+- If a pre-output error lists supported Thinking values, retry at most once with
+  the same request key, prompt, and model, selecting the highest listed effort
+  that still satisfies the profile. For GPT-5.5, `max` falls back to `xhigh`.
+  Never retry after any target output.
 - If a cross-task invocation fails before the target produces output because a
   Desktop-managed optional reasoning parameter is unsupported, retry exactly
   once with the same request key and prompt. Omit `model` and `thinking` only
-  when the target's current model is confirmed as GPT-5.5/5.6; otherwise use a
-  compatible GPT-5.6 or GPT-5.5 pair that meets the receiver floor. Record the
+  when the target's current model/Thinking pair is confirmed compatible and
+  uses GPT-5.5/5.6; otherwise use a compatible GPT-5.6 or GPT-5.5 pair. Record the
   fallback and do not retry after any target output exists.
 - If a product-managed automatic return cannot perform that retry, recover the
   result with native task read plus an explicit compatibility-safe message, or

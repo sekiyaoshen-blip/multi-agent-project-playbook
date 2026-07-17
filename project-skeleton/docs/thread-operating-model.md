@@ -301,7 +301,7 @@ Assess the concrete task before invocation:
 | `fast` | receipt-only acknowledgement or mechanical low-risk work with no review/merge/decision duty | efficient general model | `low`; use `medium` when context is not trivial |
 | `balanced` | normal implementation, clear bug fix, routine review, single-module work | balanced general | `medium`; use `high` for uncertainty or broader verification |
 | `deep` | ambiguous bug, repeated failure, long context, cross-module contract, architecture, read-only auth/security/payment investigation | strongest available | `high` or `xhigh` |
-| `critical` | executing/authorizing irreversible migration or production action, active financial/data/security loss, highest failure cost | strongest available | `max` |
+| `critical` | executing/authorizing irreversible migration or production action, active financial/data/security loss, highest failure cost | strongest available | `xhigh` by default; `max` only with exact model/path support |
 
 Current GPT-5.6 mappings are typically Luna -> `fast`, Terra -> `balanced`, and
 Sol -> `deep`/`critical`. Discover actual current model IDs from the active tool
@@ -339,22 +339,17 @@ domain is normally `deep`; reserve `critical` for the action/exposure itself.
   the native prompt for observability. Actual tool arguments and product
   compatibility are authoritative; this text cannot force unsupported params.
 - Explicit user model/Thinking instructions take precedence.
-- Use `ultra` only when the active invocation schema accepts it and the work
-  genuinely benefits from that mode. If visible-task tools expose only up to
-  `max`, do not send `ultra` to them.
+- Use `max`/`ultra` only when the exact model/path accepts it and the work needs it; a generic tool enum is insufficient.
 
 ### Desktop Compatibility Gate
-- Refresh current model examples from the official current-model guide during
-  skill audit/upgrade. During routine work, use the active tool schema and the
-  project's current capability mapping.
+- Refresh model examples from the official guide during audit/upgrade; during routine work use the active schema and project mapping.
+- Intersect tool values with model/path capability. A tool enum may span models;
+  GPT-5.5 accepts up to `xhigh` on the observed Desktop path, never `max`.
 - Do not use GPT-5.3-Codex-Spark or another preview/specialized model for visible
-  cross-task delivery or continuation unless the current product explicitly
-  confirms compatibility with all Desktop-managed turn options. Spark is not a
-  compatibility fallback.
-- A visible task tool may expose only `model`, `thinking`, and `prompt`. If it
-  does not expose `reasoning.summary`, the source task cannot set or remove that
-  hidden field. Attribute an incompatibility to the Desktop turn-start/adapter
-  layer rather than claiming the source sent it.
+  cross-task work unless the product confirms all Desktop-managed turn options.
+  Spark is not a compatibility fallback.
+- If a visible tool lacks `reasoning.summary`, the source cannot set/remove it.
+  Attribute incompatibility to the Desktop turn-start/adapter layer, not source.
 - Product-managed automatic returns must use the same receiver-aware profile and
   compatibility gate. A completed task is not automatically a `fast` return.
 - Explicit user model/Thinking choices take precedence only when the selected
@@ -375,13 +370,17 @@ Desktop-managed optional reasoning parameter is unsupported:
 1. Confirm that the target produced no response and that retry cannot duplicate
    work.
 2. Reuse the same request key and prompt.
-3. If the target currently uses GPT-5.5/5.6, retry once without overrides so it
-   keeps those settings. Otherwise retry once with a compatible GPT-5.6/5.5
-   pair that satisfies the receiver floor. State the fallback in the prompt.
+3. Retry without overrides only when the target's current GPT-5.5/5.6
+   model/Thinking pair is confirmed compatible. Otherwise retry once with a
+   compatible pair that satisfies the receiver floor. State the fallback.
 4. If product-managed automatic return cannot retry, recover the completed
    source result with native task read and send one explicit compatibility-safe
    message, or use the approved Return Packet fallback.
 5. Stop after a second failure and report the product-layer limitation.
+
+If a pre-output error lists supported Thinking values, preserve key/prompt/model
+and retry once at the highest safe listed value (GPT-5.5 `max` -> `xhigh`). Do
+not retry after output or lower a profile below its safe floor.
 
 Only Portable Controls or audit-sensitive tasks should persist requested/actual
 model details outside native task history.

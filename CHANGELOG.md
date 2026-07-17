@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Replaced the hard-coded `critical` -> `max` mapping with portable `xhigh` and
+  require exact model/path confirmation before using `max` or `ultra`.
+- Added model-specific Thinking validation because tool schemas may expose a
+  union broader than one model; GPT-5.5 cross-task calls are capped at `xhigh`.
+- Added one safe pre-output retry using the highest effort listed by the runtime
+  error while preserving the model, request key, and prompt.
 - Changed model routing to classify the receiver's review, integration,
   decision, and execution duty instead of the transport message alone.
 - Added receiver floors so production evidence, acceptance verdicts, project
@@ -13,8 +19,8 @@
 - Documented that hidden `reasoning.summary` injection belongs to the Desktop
   turn-start layer when the visible tool does not expose that field.
 - Added a single compatibility retry that preserves the request key/prompt,
-  keeps target settings when they are GPT-5.5/5.6, and otherwise selects a
-  compatible GPT-5.6/5.5 pair after a pre-output optional-parameter failure.
+  keeps target settings only when the current GPT-5.5/5.6 model/Thinking pair
+  is confirmed compatible, and otherwise selects a compatible pair.
 - Made system/Codex Desktop native delivery the preferred return path, including
   native read plus one compatibility-safe native send before file fallback.
 - Limited autonomous model selection to GPT-5.6 and GPT-5.5 families, preferring

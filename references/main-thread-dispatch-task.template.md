@@ -61,7 +61,8 @@
   - Parallelism: single-owner | independent-slices | tightly-coupled
 - Profile: fast | balanced | deep | critical
 - Selected supported model ID:
-- Selected supported Thinking: low | medium | high | xhigh | max | <tool-supported>
+- Selected supported Thinking: low | medium | high | xhigh | max only when exact model/path support is confirmed
+- Model-specific Thinking checked: yes | no
 - Active tool schema checked: yes | no
 - Desktop compatibility checked: yes | no
 - Autonomous candidate family: GPT-5.6 | GPT-5.5
@@ -72,9 +73,9 @@ Classify the target's follow-up work, not just the transport message. Normally
 pass both `model` and `thinking`. Do not use GPT-5.3-Codex-Spark for visible
 cross-task delivery without current Desktop compatibility confirmation. If a
 hidden optional reasoning parameter causes a pre-output compatibility failure,
-retry once with the same request key/prompt. Omit overrides only when the target
-currently uses GPT-5.5/5.6; otherwise use a compatible GPT-5.6/5.5 pair. Never
-retry after target output.
+retry once with the same request key/prompt. Omit overrides only when the
+target's current GPT-5.5/5.6 model/Thinking pair is confirmed compatible;
+otherwise use a compatible pair. Never retry after target output.
 
 The target may re-route a misowned slice directly to another registered task,
 but it must preserve the request key, extend the visited list, keep one lead,

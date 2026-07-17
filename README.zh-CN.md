@@ -43,13 +43,15 @@ ChatGPT Desktop / Codex：负责操作长期显性任务
 - `fast`：最快且能力足够的模型，`low` / `medium`
 - `balanced`：平衡型模型，`medium` / `high`
 - `deep`：当前最强模型，`high` / `xhigh`
-- `critical`：当前最强模型，`max`
+- `critical`：当前最强模型，默认 `xhigh`；只有具体模型和调用路径明确支持时才使用 `max`
 
 GPT-5.6 当前可对应 Luna、Terra 和 Sol，但这些是动态发现的当前映射，不是长期硬编码。用户明确选择优先；不虚构工具不支持的参数；`deep` / `critical` 任务不允许静默降级。分类看任务动作而不是敏感关键词：只读的敏感领域调查通常是 `deep`，真正执行不可逆动作或存在持续严重暴露时才是 `critical`。普通路由理由保留在原生任务历史，不写成项目文档流水账。
 
 自主调度的候选模型只允许 GPT-5.6 和 GPT-5.5 系列：默认优先 GPT-5.6，GPT-5.5 只作为兼容兜底；GPT-5.4、mini/nano、Spark 和更旧系列不会被自主选择。
 
-除非当前 Desktop 明确确认与自动注入的 turn 参数兼容，否则 GPT-5.3-Codex-Spark 不用于显性跨任务回传。若 Desktop 隐藏的可选 reasoning 参数导致目标任务在输出前失败，只重试一次：目标当前为 GPT-5.5/5.6 时可沿用原设置，否则显式改用兼容的 GPT-5.6/5.5。可见线程工具并不暴露 `reasoning.summary`，因此 skill 不会假装能直接删除这个产品层字段。
+工具 schema 可能展示多个模型能力的并集，实际派发必须取“工具、具体模型、调用路径”三者支持值的交集。GPT-5.5 跨任务调用最高使用 `xhigh`，禁止传入 `thinking=max`。
+
+除非当前 Desktop 明确确认与自动注入的 turn 参数兼容，否则 GPT-5.3-Codex-Spark 不用于显性跨任务回传。若 Desktop 隐藏的可选 reasoning 参数导致目标任务在输出前失败，只重试一次：只有目标当前 GPT-5.5/5.6 模型/Thinking 组合确认兼容时才沿用原设置，否则显式改用兼容组合。可见线程工具并不暴露 `reasoning.summary`，因此 skill 不会假装能直接删除这个产品层字段。
 
 ## 默认项目骨架
 
