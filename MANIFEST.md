@@ -1,50 +1,56 @@
 # Manifest
 
-Generated package contents. `MANIFEST.md` is excluded to avoid self-referential hashes.
+Generated package contents. `MANIFEST.md`, local duplicate backups, `.DS_Store`,
+and Git metadata are excluded to avoid self-reference and machine-local files.
 
-- `.gitignore` — package file — 69 bytes — sha256 `d4efada4bfb23875`
-- `CHANGELOG.md` — package file — 5451 bytes — sha256 `a627eb796c240e3a`
-- `CONTRIBUTING.md` — package file — 2139 bytes — sha256 `206a694e62ea75a9`
-- `INSTALL.md` — installation notes — 9069 bytes — sha256 `2e4b9b95811a359b`
-- `INSTALL.zh-CN.md` — Chinese installation notes — 8631 bytes — sha256 `a659d929ab4ad408`
-- `LICENSE` — MIT open-source license — 1099 bytes — sha256 `71004cf9167540a8`
-- `README.md` — package overview — 6031 bytes — sha256 `e8c97c772aa50422`
-- `README.zh-CN.md` — Chinese package overview — 5963 bytes — sha256 `cb3ae099585a2502`
-- `SKILL.md` — native-first bootstrap/audit/repair skill — 20530 bytes — sha256 `4f635f032d2da600`
-- `agents/openai.yaml` — Codex App metadata and invocation policy — 450 bytes — sha256 `d2ccc0c9b545d76f`
-- `project-skeleton/AGENTS.md` — Native Mode project skeleton file — 7884 bytes — sha256 `07da3c05e1c5dabf`
-- `project-skeleton/CLAUDE.md` — Native Mode project skeleton file — 935 bytes — sha256 `2c578be0b911560f`
-- `project-skeleton/docs/current-prd.md` — Native Mode project skeleton file — 1744 bytes — sha256 `7263b66ec960a7df`
-- `project-skeleton/docs/current-technical-design.md` — Native Mode project skeleton file — 1907 bytes — sha256 `001398f99d4a288b`
-- `project-skeleton/docs/current-work.md` — Native Mode project skeleton file — 4146 bytes — sha256 `f56d1fe54fc3be8b`
-- `project-skeleton/docs/decisions/ADR-0001-title.md` — Native Mode project skeleton file — 413 bytes — sha256 `8ca3f006f50157ac`
-- `project-skeleton/docs/modules/example-module/handoff.md` — Native Mode project skeleton file — 1010 bytes — sha256 `30f2b3986703eb2a`
-- `project-skeleton/docs/modules/example-module/status.md` — Native Mode project skeleton file — 1038 bytes — sha256 `ff5a26dc92c66731`
-- `project-skeleton/docs/project-brief.md` — Native Mode project skeleton file — 727 bytes — sha256 `0466c1664235c081`
-- `project-skeleton/docs/thread-operating-model.md` — Native Mode project skeleton file — 22496 bytes — sha256 `d12754a0d523d812`
-- `project-skeleton/docs/thread-registry.md` — Native Mode project skeleton file — 3355 bytes — sha256 `5eca288a9a2fff1c`
-- `references/adr.template.md` — reference template — 413 bytes — sha256 `1a0b003361eebd3c`
-- `references/agents.template.md` — reference template — 7884 bytes — sha256 `07da3c05e1c5dabf`
-- `references/claude.template.md` — reference template — 935 bytes — sha256 `2c578be0b911560f`
-- `references/compaction-lock.template.md` — reference template — 1416 bytes — sha256 `ceb6cecaa6f0ef54`
-- `references/context-compaction-note.template.md` — reference template — 1124 bytes — sha256 `3fa69b91034bc8ab`
-- `references/cross-thread-task.template.md` — reference template — 2527 bytes — sha256 `9327274db4a66042`
-- `references/current-prd.template.md` — reference template — 1744 bytes — sha256 `7263b66ec960a7df`
-- `references/current-technical-design.template.md` — reference template — 1907 bytes — sha256 `001398f99d4a288b`
-- `references/current-work.template.md` — reference template — 4146 bytes — sha256 `f56d1fe54fc3be8b`
-- `references/global-status.template.md` — reference template — 1168 bytes — sha256 `0ac4dcd6e1933955`
-- `references/handoff.template.md` — reference template — 1010 bytes — sha256 `30f2b3986703eb2a`
-- `references/main-thread-dispatch-task.template.md` — reference template — 2762 bytes — sha256 `5a96f6aead6f5240`
-- `references/module-boundary-map.template.md` — reference template — 781 bytes — sha256 `8709982bed766b59`
-- `references/module-current-prd.template.md` — reference template — 1041 bytes — sha256 `e28d6fbfbef71d3b`
-- `references/module-current-technical-design.template.md` — reference template — 1166 bytes — sha256 `1f326facfe012d9a`
-- `references/module-startup-prompt.template.md` — reference template — 7168 bytes — sha256 `0dc8a651299842f3`
-- `references/module-status.template.md` — reference template — 1038 bytes — sha256 `ff5a26dc92c66731`
-- `references/project-brief.template.md` — reference template — 727 bytes — sha256 `0466c1664235c081`
-- `references/return-packet.template.md` — reference template — 1625 bytes — sha256 `acffc54147ac9b32`
-- `references/roadmap.template.md` — reference template — 1615 bytes — sha256 `61ddfcc592094b64`
-- `references/runbook.template.md` — reference template — 978 bytes — sha256 `3aa7b44fe956b440`
-- `references/thread-operating-model.template.md` — reference template — 22496 bytes — sha256 `d12754a0d523d812`
-- `references/thread-registry.template.md` — reference template — 3355 bytes — sha256 `5eca288a9a2fff1c`
-- `references/thread-run.template.md` — reference template — 2266 bytes — sha256 `62c24f520da6f87e`
-- `scripts/publish-to-github.sh` — helper script — 797 bytes — sha256 `127786adfcb25cf2`
+- `.gitignore` — 69 bytes — sha256 `d4efada4bfb23875`
+- `CHANGELOG.md` — 6040 bytes — sha256 `13032fec457a2e99`
+- `CONTRIBUTING.md` — 2127 bytes — sha256 `2039c84ca997491e`
+- `INSTALL.md` — 9971 bytes — sha256 `122727b9f3d30c99`
+- `INSTALL.zh-CN.md` — 9574 bytes — sha256 `97da7027526bfd98`
+- `LICENSE` — 1087 bytes — sha256 `0b0599b3bfd40e56`
+- `README.md` — 7083 bytes — sha256 `264cff4b701a995d`
+- `README.zh-CN.md` — 6950 bytes — sha256 `8b2bef47881c0e48`
+- `SKILL.md` — 24571 bytes — sha256 `9473e3adb0e17fab`
+- `agents/openai.yaml` — 326 bytes — sha256 `f1ceef56aeaa6edb`
+- `project-skeleton/AGENTS.md` — 9278 bytes — sha256 `fe4653ce2249c269`
+- `project-skeleton/CLAUDE.md` — 1153 bytes — sha256 `f43f9a10ff70715d`
+- `project-skeleton/docs/current-prd.md` — 1744 bytes — sha256 `7263b66ec960a7df`
+- `project-skeleton/docs/current-technical-design.md` — 1907 bytes — sha256 `001398f99d4a288b`
+- `project-skeleton/docs/current-work.md` — 4146 bytes — sha256 `f56d1fe54fc3be8b`
+- `project-skeleton/docs/decisions/ADR-0001-title.md` — 413 bytes — sha256 `8ca3f006f50157ac`
+- `project-skeleton/docs/modules/example-module/handoff.md` — 1010 bytes — sha256 `30f2b3986703eb2a`
+- `project-skeleton/docs/modules/example-module/status.md` — 1038 bytes — sha256 `ff5a26dc92c66731`
+- `project-skeleton/docs/project-brief.md` — 727 bytes — sha256 `0466c1664235c081`
+- `project-skeleton/docs/thread-operating-model.md` — 24139 bytes — sha256 `87107d22ed977b4a`
+- `project-skeleton/docs/thread-registry.md` — 3355 bytes — sha256 `5eca288a9a2fff1c`
+- `references/adr.template.md` — 413 bytes — sha256 `1a0b003361eebd3c`
+- `references/agents.template.md` — 9278 bytes — sha256 `fe4653ce2249c269`
+- `references/claude.template.md` — 1153 bytes — sha256 `f43f9a10ff70715d`
+- `references/compaction-lock.template.md` — 1416 bytes — sha256 `ceb6cecaa6f0ef54`
+- `references/context-compaction-note.template.md` — 1124 bytes — sha256 `3fa69b91034bc8ab`
+- `references/cross-thread-task.template.md` — 2527 bytes — sha256 `9327274db4a66042`
+- `references/current-prd.template.md` — 1744 bytes — sha256 `7263b66ec960a7df`
+- `references/current-technical-design.template.md` — 1907 bytes — sha256 `001398f99d4a288b`
+- `references/current-work.template.md` — 4146 bytes — sha256 `f56d1fe54fc3be8b`
+- `references/focus-lease.template.md` — 1547 bytes — sha256 `4d37783da24c343e`
+- `references/global-status.template.md` — 1168 bytes — sha256 `0ac4dcd6e1933955`
+- `references/handoff.template.md` — 1010 bytes — sha256 `30f2b3986703eb2a`
+- `references/main-thread-dispatch-task.template.md` — 2762 bytes — sha256 `5a96f6aead6f5240`
+- `references/module-boundary-map.template.md` — 781 bytes — sha256 `8709982bed766b59`
+- `references/module-current-prd.template.md` — 1041 bytes — sha256 `e28d6fbfbef71d3b`
+- `references/module-current-technical-design.template.md` — 1166 bytes — sha256 `1f326facfe012d9a`
+- `references/module-startup-prompt.template.md` — 8164 bytes — sha256 `157f35491fe860ab`
+- `references/module-status.template.md` — 1038 bytes — sha256 `ff5a26dc92c66731`
+- `references/project-brief.template.md` — 727 bytes — sha256 `0466c1664235c081`
+- `references/return-packet.template.md` — 1625 bytes — sha256 `acffc54147ac9b32`
+- `references/roadmap.template.md` — 1615 bytes — sha256 `61ddfcc592094b64`
+- `references/runbook.template.md` — 978 bytes — sha256 `3aa7b44fe956b440`
+- `references/thread-operating-model.template.md` — 24139 bytes — sha256 `87107d22ed977b4a`
+- `references/thread-registry.template.md` — 3355 bytes — sha256 `5eca288a9a2fff1c`
+- `references/thread-run.template.md` — 2266 bytes — sha256 `62c24f520da6f87e`
+- `references/verification-operating-model.template.md` — 6436 bytes — sha256 `afc7a7e3ebc9493d`
+- `references/verification-request.template.md` — 1109 bytes — sha256 `d5e2e258d690f89d`
+- `references/verification-result-packet.template.md` — 979 bytes — sha256 `961be576d0a01350`
+- `references/verification-thread-startup-prompt.template.md` — 1207 bytes — sha256 `0f8f1767409e2b28`
+- `scripts/publish-to-github.sh` — 774 bytes — sha256 `5fb2ddf148f97e66`

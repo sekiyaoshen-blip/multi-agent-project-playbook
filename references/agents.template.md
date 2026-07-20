@@ -87,6 +87,24 @@ This project uses a native-first project agent operating model.
 - Treat a `Routing:` line as observability only; actual tool arguments and
   product compatibility are authoritative.
 - Keep routine routing data in the native dispatch prompt, not project docs.
+- Preserve one visible mainline in each long-lived owner task. Keep task-local
+  self-verification with the owner; route unrelated cross-task checks to a
+  bounded verifier with a `VAL-*` key and a fixed target when possible.
+- Verification is read-only by default. Findings that require changes become a
+  separate `TASK-*`; do not let a verifier silently become an implementer.
+- Classify external verification as `background`, `checkpoint`, `blocking`, or
+  `emergency`. Only an active severe production, data-loss, security,
+  credential, or irreversible-failure risk may immediately preempt a focused
+  owner. Blocking work waits for the next safe checkpoint.
+- Pull pass/informational results from native task state at safe checkpoints;
+  do not push them into the owner task. Push actionable failure, decision,
+  blocker, or emergency results through native delivery at the allowed point.
+- Use an optional `docs/.locks/focus/` Focus Lease only when concurrent tools or
+  tasks create a real interruption risk. It protects attention, not files,
+  branches, migrations, deployments, or transactions. Never silently replace a
+  stale lease.
+- File-based verification requests/results are Portable Controls for cross-tool,
+  audit, asynchronous, or unreliable native delivery, not routine requirements.
 - Update docs only for substantive state changes. Active docs are current
   snapshots, not task logs.
 - Keep each fact in one primary home and link instead of copying.
@@ -106,6 +124,8 @@ This project uses a native-first project agent operating model.
 - Durable decisions: `docs/decisions/`
 - Portable Controls, only when enabled: `docs/thread-runs/`, `docs/.locks/`,
   and `docs/archive/`
+- Non-preemptive verification details, only when enabled:
+  `docs/verification-operating-model.md`
 
 Do not read all runbooks, historical task records, archives, or unrelated ADRs
 by default.
@@ -136,5 +156,5 @@ by default.
   contracts.
 - Do not silently replace a stale lock; report it to the main task or user.
 
-Do not invoke `$project-agent-operating-model` for routine implementation. Use
+Do not invoke `$multi-agent-model` for routine implementation. Use
 it for initialization, audit, repair, compaction, or operating-model upgrades.

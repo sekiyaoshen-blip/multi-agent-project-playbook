@@ -11,6 +11,7 @@ docs for durable truth. It does not mirror every native task event into files.
 - Roles and ownership
 - Long-lived visible module tasks
 - Dispatch and return flow
+- Non-preemptive verification
 - Temporary subagents
 - Durable project state
 - Dispatch-time model routing
@@ -222,6 +223,33 @@ The return owner should promote only durable outcomes:
 Do not promote raw logs, full transcripts, abandoned local attempts, or routine
 file lists.
 
+## Non-Preemptive Verification
+
+Keep task-local self-verification with its owner. Give unrelated independent
+checks a `VAL-*` key and route them to a bounded verifier so each long-lived
+owner retains one visible mainline.
+
+- Prefer a fixed commit, diff, recorded branch head, checkpoint, artifact, or
+  isolated worktree. Mark the result `stale` if that target changes.
+- Verification is read-only by default. A fix becomes a separate `TASK-*`.
+- Classify interruption as `background`, `checkpoint`, `blocking`, or
+  `emergency`. Background/pass/informational results are pull-only. Checkpoint
+  and blocking results wait for a safe checkpoint; only an active severe
+  production, data-loss, security, credential, or irreversible-failure risk
+  may immediately preempt as an emergency.
+- Pull native completion/results before a new task, after a checkpoint or stable
+  commit, when blocked/idle, and before acceptance, merge, release, or deployment
+  review. Do not harvest ordinary results during unstable edits, migrations,
+  high-risk actions, or unfinished debug/test-fix cycles.
+- Use `docs/.locks/focus/` only when concurrent tools/tasks create a real
+  interruption risk. A Focus Lease protects attention, not files or execution
+  locks, and a stale lease must never be silently replaced.
+- Native task state and `read_thread` are primary. Add file requests/results
+  only for cross-tool, audit, asynchronous, or unreliable-native-state work.
+
+Install/read `docs/verification-operating-model.md` only when this optional side
+lane is active.
+
 ## Durable Project State
 
 Reuse existing project docs first. The names below are defaults, not a mandate.
@@ -400,6 +428,7 @@ Available controls:
 - `docs/thread-runs/<task-id>.md`: compact checkpoint and resume state
 - `docs/thread-runs/inbox/main/RET-*.md`: unprocessed Return Packets only
 - `docs/.locks/context-compaction.lock`: broad shared-doc compaction ownership
+- `docs/.locks/focus/`: optional cross-tool interruption leases
 - `docs/archive/`: useful history removed from active context
 
 Do not mirror every native event. A thread-run should contain only the brief,

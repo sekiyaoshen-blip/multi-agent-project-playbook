@@ -1,12 +1,13 @@
 ---
-name: project-agent-operating-model
+name: multi-agent-model
 description: >
   Bootstrap, audit, slim, repair, or upgrade a native-first operating model for
   long-running agent-assisted projects. Use when a project needs a main planning
   task, durable visible module tasks, automatic intake and cross-task module
   routing, project-local
   AGENTS.md rules, dispatch-time model/Thinking selection, compact current-state
-  docs, cross-tool compatibility, or lock-safe docs compaction. Prefer ChatGPT
+  docs, non-preemptive verification, Focus Leases, pull-based result harvesting,
+  cross-tool compatibility, or lock-safe docs compaction. Prefer ChatGPT
   Desktop/Codex native task tools for visible long-lived work and temporary
   subagents only for bounded disposable work. Do not use for routine
   implementation after the project contract is
@@ -16,7 +17,7 @@ description: >
   长期模块线程, 主线程派单, 模型路由, 推理强度, 文档压缩.
 ---
 
-# Project Agent Operating Model
+# Multi-Agent Model
 
 ## Purpose
 
@@ -44,6 +45,9 @@ Choose the smallest mode that solves the real coordination problem.
   read, continue, fork, or hand off visible tasks.
 - Add **Portable Controls** only for cross-tool, compliance, high-risk,
   asynchronous, or unreliable-runtime work.
+- Activate the **Verification Side Lane** only when an unrelated cross-task
+  check could interrupt a long-lived owner or when a fixed-target independent
+  review is useful. Task-local self-verification stays with the owner.
 - Reuse existing PRDs, architecture docs, issue trackers, and status docs.
   Map responsibilities instead of duplicating them.
 - If project docs are already bloated, compact or consolidate them before
@@ -82,6 +86,8 @@ Add only when native task state is insufficient:
 - Return Packets for cross-tool/asynchronous return delivery
 - `docs/.locks/context-compaction.lock` for broad shared-doc compaction
 - archives for useful history removed from active context
+- Focus Leases and file-based verification records when native state cannot
+  coordinate interruption or evidence across tools
 - `CLAUDE.md` or another tool-specific entrypoint that imports `AGENTS.md`
 
 ## Installation Workflow
@@ -107,8 +113,12 @@ Add only when native task state is insufficient:
    Desktop-compatible model/Thinking pair for the receiver's next work.
 10. Install loop-safe direct routing so any registered module task can transfer
     or split misrouted work without routing every request through the main task.
-11. Add Portable Controls only for a concrete risk or interoperability need.
-12. Report the installed mode, mapped docs, visible task map, assumptions, and
+11. Install the non-preemptive verification summary. Add Focus Leases or
+    file-based `VAL-*` records only for concrete concurrent, cross-tool, audit,
+    or unreliable-runtime needs.
+12. Add other Portable Controls only for a concrete risk or interoperability
+    need.
+13. Report the installed mode, mapped docs, visible task map, assumptions, and
     omitted optional controls.
 
 ## Native-First Runtime Contract
@@ -195,6 +205,52 @@ Use this priority:
    unreliable native delivery, or explicit project policy.
 
 Do not require both native return and a Return Packet for ordinary work.
+
+### Non-Preemptive Verification Side Lane
+
+Preserve one visible mainline in every long-lived main or module task. Keep
+task-local tests and self-verification with that owner, but route unrelated
+cross-task review, testing, or evidence checks to a bounded verifier by default.
+
+- Give independent verification a `VAL-*` request key and one immutable target
+  when possible: commit, diff, recorded branch head, artifact, checkpoint, or
+  isolated worktree snapshot.
+- Verification is read-only by default. A discovered fix becomes a separate
+  `TASK-*` owned by the relevant module; a verifier must not silently turn into
+  an implementation worker.
+- Use four interruption classes:
+  - `background`: no push; harvest later
+  - `checkpoint`: deliver after the owner's next safe checkpoint
+  - `blocking`: prevent dependent acceptance/progress, but notify only at the
+    next safe checkpoint
+  - `emergency`: immediate preemption, reserved for active severe production,
+    data-loss, security, credential, or irreversible-failure risk
+- If concurrent tools or tasks could inject work into a focused owner, create a
+  cooperative Focus Lease under `docs/.locks/focus/`. It protects attention,
+  not files, branches, migrations, deployments, or transactions. Do not create
+  one for ordinary single-task work.
+- A valid lease records owner identity, active task, focus state, interruption
+  policy, safe-delivery event, heartbeat, expiry, and release state. Never
+  silently overwrite a stale lease; report it for explicit takeover.
+- Pull results at safe harvest points: before a new owner task, after a
+  checkpoint or stable commit, when blocked/idle, and before acceptance, merge,
+  release, or deployment review. Do not harvest ordinary results during
+  unstable edits, migrations, high-risk actions, or unfinished debug/test-fix
+  cycles.
+- Prefer native `read_thread`, task completion state, and system/Desktop result
+  delivery. `pass` and informational results stay pull-only; do not push them
+  into the owner task. Route actionable failure, decision, blocker, or emergency
+  results through native messaging at the allowed interruption point.
+- Add file-based verification requests/results only for Portable Controls:
+  cross-tool coordination, audit evidence, asynchronous work, or unreliable
+  native state. Do not require `thread-runs`, inboxes, or result packets for
+  routine native verification.
+- If the target changes before review completes, mark the result `stale` and
+  requeue against a new immutable target instead of merging stale evidence.
+
+Read `references/verification-operating-model.template.md` only when activating,
+recovering, or auditing this side lane. Use its request, result, startup, and
+Focus Lease templates only for the controls the project actually needs.
 
 ### Receiver-Aware Model Routing
 
@@ -353,6 +409,12 @@ Read only the resources needed for the selected mode:
   `references/return-packet.template.md`,
   `references/compaction-lock.template.md`, and
   `references/context-compaction-note.template.md`
+- Non-preemptive verification when activated:
+  `references/verification-operating-model.template.md`,
+  `references/verification-request.template.md`,
+  `references/verification-result-packet.template.md`,
+  `references/verification-thread-startup-prompt.template.md`, and
+  `references/focus-lease.template.md`
 - Cross-tool entrypoint: `references/claude.template.md`
 
 ## Audit Checklist
@@ -367,6 +429,11 @@ Read only the resources needed for the selected mode:
 - Is the registry a small identity/ownership map rather than a duplicate queue?
 - Are native task state and `current-work.md` the default active work surfaces?
 - Are thread-runs and Return Packets conditional instead of mandatory?
+- Does unrelated verification preserve the owner's visible mainline, use a
+  fixed target, remain read-only, and deliver according to one of four explicit
+  interruption classes?
+- Are pass/informational results pulled at safe checkpoints instead of pushed,
+  with Focus Leases used only when concurrent interruption is a real risk?
 - Does every native existing/new task invocation classify the concrete task and
   the receiver's follow-up duty before selecting compatible model/Thinking
   values?

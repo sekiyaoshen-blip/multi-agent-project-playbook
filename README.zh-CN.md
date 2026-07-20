@@ -1,6 +1,6 @@
-# Project Agent Operating Model
+# Multi-Agent Model
 
-这是一个面向新版 ChatGPT Desktop / Codex 的 Native-first 项目协作 skill。
+这是一个面向新版 ChatGPT Desktop / Codex 的 Native-first 多智能体项目协作 skill。
 
 它适合这样的项目：一个主任务负责项目级统筹和验收，多个长期显性的模块任务分别负责前端、后端、数据、运维等稳定模块，而且每个任务都能判断归属、拆分并横向转派。
 
@@ -30,11 +30,20 @@ ChatGPT Desktop / Codex：负责操作长期显性任务
 - 只有需要跨任务/跨工具长期保留时，才更新精简的 `handoff.md`。
 - thread-run 和 Return Packet 改为可选控制，不再每次派单都生成。
 
+## 非抢占式验证
+
+- 当前任务自己的测试仍由它完成；与当前主线无关的独立检查交给有明确边界的验证任务，并尽量固定到某个 commit、diff、checkpoint、产物或 worktree。
+- 验证默认只读。发现需要修改的问题时，另建一个归属明确的 `TASK-*`，验证任务不能顺手改代码。
+- 中断分为 `background`、`checkpoint`、`blocking`、`emergency` 四级。只有正在发生的严重生产、数据、安全、凭证或不可逆风险，才允许立即打断。
+- 通过和普通提示默认不主动塞回 owner，而是在安全时间点通过原生任务状态拉取；失败、决策、阻塞和紧急结果才按等级投递。
+- 多工具或多任务确实可能打断当前工作时，可使用 Focus Lease 保护注意力。它不是源码、迁移、部署或事务锁。
+- 验证请求/结果文件只用于跨工具、审计、异步或原生状态不可靠的场景。
+
 ## 三种模式
 
 - **Minimal：** 只有 `AGENTS.md` 和一个当前工作面。
 - **Native（默认）：** 增加精简运行规则、长期任务注册表、模块状态/交接，以及项目已有的产品和技术文档。
-- **Portable Controls（按需）：** 只有在跨工具、异步、高风险、可恢复或审计场景下，才增加 thread-run、Return Packet、压缩锁和 archive。
+- **Portable Controls（按需）：** 只有在跨工具、异步、高风险、可恢复或审计场景下，才增加 thread-run、Return Packet、Focus Lease、验证记录、压缩锁和 archive。
 
 ## 派单时动态模型路由
 

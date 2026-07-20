@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for considering a contribution to Project Agent Operating Model.
+Thanks for considering a contribution to Multi-Agent Model.
 
 ## Guidelines
 

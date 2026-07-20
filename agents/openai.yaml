@@ -1,7 +1,7 @@
 interface:
-  display_name: "Project Agent Operating Model"
-  short_description: "Route tasks with compatible model settings"
-  default_prompt: "Use $project-agent-operating-model to install receiver-aware, Desktop-compatible routing for long-lived visible module tasks. 中文：使用 $project-agent-operating-model 安装按接收方工作量选型、兼容 Codex Desktop 的长期模块任务路由。"
+  display_name: "Multi-Agent Model"
+  short_description: "Route durable tasks without interrupting owners"
+  default_prompt: "Use $multi-agent-model to initialize native-first module routing, compatible model selection, and non-preemptive verification for this project."
 
 policy:
   allow_implicit_invocation: false

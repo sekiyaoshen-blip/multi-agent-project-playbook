@@ -1,4 +1,4 @@
-# Project Agent Operating Model
+# Multi-Agent Model
 
 Chinese documentation: [`README.zh-CN.md`](README.zh-CN.md)
 
@@ -7,8 +7,10 @@ long-lived visible module tasks, and ownership-aware routing from every task.
 
 The skill installs a small project-local contract for module ownership,
 automatic routing, durable project truth, cross-tool recovery, and safe docs
-compaction. It relies on ChatGPT Desktop/Codex native task tools for ordinary
-dispatch and progress instead of recreating the product's task system in files.
+compaction. It also provides an optional non-preemptive verification lane so
+independent checks do not derail a long-lived owner's current work. It relies
+on ChatGPT Desktop/Codex native task tools for ordinary dispatch and progress
+instead of recreating the product's task system in files.
 
 ## Core Model
 
@@ -43,14 +45,30 @@ results stay in native task history.
   compact handoffs preserve only durable cross-task or cross-tool context.
 - Thread-runs and Return Packets are optional controls, not routine ceremony.
 
+## Non-Preemptive Verification
+
+- Task-local tests stay with the owner; unrelated checks use a bounded verifier
+  and a fixed commit, diff, checkpoint, artifact, or worktree when possible.
+- Verification is read-only by default. A finding that needs a fix becomes a
+  separate module-owned task.
+- Four interruption classes control delivery: `background`, `checkpoint`,
+  `blocking`, and narrowly defined `emergency`.
+- Pass and informational results are pulled from native task state at safe
+  checkpoints. Only actionable failures, decisions, blockers, or emergencies
+  are pushed, and only when their class permits.
+- Optional Focus Leases protect an owner's attention across concurrent tools
+  and tasks. They are not code, migration, deployment, or transaction locks.
+- File-based verification packets are used only for cross-tool, audit,
+  asynchronous, or unreliable-native-state needs.
+
 ## Operating Modes
 
 - **Minimal:** `AGENTS.md` plus one current work surface.
 - **Native (default):** adds the compact operating model, visible task registry,
   module status/handoff, and existing or mapped product/technical docs.
 - **Portable Controls (opt-in):** adds thread-runs, Return Packets, compaction
-  locks, or archives only for concrete recovery, audit, asynchronous, high-risk,
-  or cross-tool needs.
+  locks, Focus Leases, verification records, or archives only for concrete
+  recovery, audit, asynchronous, high-risk, or cross-tool needs.
 
 ## Dispatch-Time Model Routing
 

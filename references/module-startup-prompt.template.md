@@ -38,6 +38,14 @@ For each routed task:
 9. Create a thread-run or Return Packet only when the task explicitly enables
    Portable Controls.
 
+Keep task-local self-verification in this task. Route unrelated independent
+checks through the non-preemptive `VAL-*` lane, pinned to a fixed target and
+read-only by default. Pull pass/informational results at a checkpoint, stable
+commit, blocked/idle state, or acceptance/release review. Only actionable
+failure, decision, blocker, or a narrowly defined emergency may be pushed, and
+only at the interruption point allowed by its class. Use a Focus Lease only
+when concurrent tools/tasks create a real interruption risk.
+
 For every outward delegation, preserve a native routing trace containing the
 request key, intake/source, one lead, assigned slice, visited tasks, and return
 owner. Never return the same or a broader slice to a visited task, broadcast an
@@ -98,6 +106,12 @@ Desktop 原生委派回传、`send_message_to_thread` 或 `read_thread` 返回�
 结果。自动回传在输出前失败时，先原生读取来源任务，再进行一次兼容性安全的
 原生补投；只有任务明确启用 Portable Controls 或原生通道不可用/不可靠时，
 才创建 thread-run 或 Return Packet。
+
+当前任务自己的验证仍在这里完成；与当前主线无关的独立检查走非抢占式
+`VAL-*` 验证旁路，尽量固定目标并默认只读。通过和普通提示只在 checkpoint、
+稳定提交、blocked/idle 或验收/发布复核时主动拉取；只有可执行失败、决策、
+阻塞或严格定义的紧急结果，才按允许的中断时间点主动投递。只有并发工具或任务
+确实可能干扰当前主线时才启用 Focus Lease。
 
 每次派单都应按照接收任务接下来真正要做的工作选择模型，而不是只看回传文字
 是否短小。纯确认收到可以使用 `fast`；普通结果复核至少为 `balanced`；生产证据

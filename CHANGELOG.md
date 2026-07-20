@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Renamed the project, skill invocation, installation directory, and repository
+  from `project-agent-operating-model` to `multi-agent-model`.
+- Added an optional non-preemptive verification side lane with fixed targets,
+  read-only-by-default execution, and separate `VAL-*` requests.
+- Added cooperative Focus Leases across tools/sessions and four interruption
+  classes: `background`, `checkpoint`, `blocking`, and `emergency`.
+- Switched routine verification to pull-based native result harvesting at safe
+  checkpoints; file requests/result packets remain opt-in Portable Controls.
 - Replaced the hard-coded `critical` -> `max` mapping with portable `xhigh` and
   require exact model/path confirmation before using `max` or `ultra`.
 - Added model-specific Thinking validation because tool schemas may expose a
@@ -68,7 +76,8 @@
 - Updated English and Chinese one-prompt installation and Native Mode project
   initialization prompts.
 
-- Renamed package from `project-thread-orchestration` to `project-agent-operating-model`.
+- Renamed package from `project-thread-orchestration` to
+  `project-agent-operating-model`.
 - Added MIT License and public repository support files.
 - Preserved the single-skill architecture: bootstrap/audit/repair/compact/upgrade only.
 - Added and preserved Chinese documentation: `README.zh-CN.md` and `INSTALL.zh-CN.md`.
