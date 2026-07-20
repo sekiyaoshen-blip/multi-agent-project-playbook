@@ -4,10 +4,10 @@ Generated package contents. `MANIFEST.md`, local duplicate backups, `.DS_Store`,
 and Git metadata are excluded to avoid self-reference and machine-local files.
 
 - `.gitignore` — 69 bytes — sha256 `d4efada4bfb23875`
-- `CHANGELOG.md` — 6040 bytes — sha256 `13032fec457a2e99`
+- `CHANGELOG.md` — 6028 bytes — sha256 `f8a507a439c7499c`
 - `CONTRIBUTING.md` — 2127 bytes — sha256 `2039c84ca997491e`
-- `INSTALL.md` — 9971 bytes — sha256 `122727b9f3d30c99`
-- `INSTALL.zh-CN.md` — 9574 bytes — sha256 `97da7027526bfd98`
+- `INSTALL.md` — 9995 bytes — sha256 `c32b3efc8f78144c`
+- `INSTALL.zh-CN.md` — 9598 bytes — sha256 `7f45ec1c51bb1635`
 - `LICENSE` — 1087 bytes — sha256 `0b0599b3bfd40e56`
 - `README.md` — 7083 bytes — sha256 `264cff4b701a995d`
 - `README.zh-CN.md` — 6950 bytes — sha256 `8b2bef47881c0e48`

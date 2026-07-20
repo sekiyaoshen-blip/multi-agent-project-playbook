@@ -2,8 +2,8 @@
 
 ## Unreleased
 
-- Renamed the project, skill invocation, installation directory, and repository
-  from `project-agent-operating-model` to `multi-agent-model`.
+- Renamed the project, skill invocation, and installation directory from
+  `project-agent-operating-model` to `multi-agent-model`.
 - Added an optional non-preemptive verification side lane with fixed targets,
   read-only-by-default execution, and separate `VAL-*` requests.
 - Added cooperative Focus Leases across tools/sessions and four interruption

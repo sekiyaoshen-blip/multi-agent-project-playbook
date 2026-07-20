@@ -5,7 +5,7 @@
 中文 prompt：
 
 ```text
-请从 https://github.com/sekiyaoshen-blip/multi-agent-model 安装 Multi-Agent Model skill 到这台机器的本地 Agent skill 目录。
+请从 https://github.com/sekiyaoshen-blip/project-agent-operating-model 安装 Multi-Agent Model skill 到这台机器的本地 Agent skill 目录。
 
 要求：
 - 自动检测本地 skill 根目录。Codex 优先使用 $CODEX_HOME/skills；如果没有设置，则使用 ~/.codex/skills。其他 Agent 应在写入前说明检测到的 skill/plugin 路径。
@@ -19,7 +19,7 @@
 English prompt:
 
 ```text
-Install the Multi-Agent Model skill from https://github.com/sekiyaoshen-blip/multi-agent-model into this machine's local agent skill directory.
+Install the Multi-Agent Model skill from https://github.com/sekiyaoshen-blip/project-agent-operating-model into this machine's local agent skill directory.
 
 Requirements:
 - Detect the local skill root. Prefer $CODEX_HOME/skills when set, otherwise ~/.codex/skills for Codex. For another agent, explain its detected skill/plugin path before writing.
