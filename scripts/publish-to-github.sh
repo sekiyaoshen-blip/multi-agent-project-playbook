@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_NAME="${1:-multi-agent-model}"
+REPO_NAME="${1:-multi-agent-project-playbook}"
 OWNER="${GITHUB_OWNER:-sekiyaoshen-blip}"
 DESCRIPTION="Native-first multi-agent routing with durable context and non-preemptive verification."
 

@@ -6,8 +6,8 @@ and Git metadata are excluded to avoid self-reference and machine-local files.
 - `.gitignore` — 69 bytes — sha256 `d4efada4bfb23875`
 - `CHANGELOG.md` — 6028 bytes — sha256 `f8a507a439c7499c`
 - `CONTRIBUTING.md` — 2127 bytes — sha256 `2039c84ca997491e`
-- `INSTALL.md` — 9995 bytes — sha256 `c32b3efc8f78144c`
-- `INSTALL.zh-CN.md` — 9598 bytes — sha256 `7f45ec1c51bb1635`
+- `INSTALL.md` — 9993 bytes — sha256 `5e85039b6ecb3591`
+- `INSTALL.zh-CN.md` — 9596 bytes — sha256 `3f1f5a5b8ef03887`
 - `LICENSE` — 1087 bytes — sha256 `0b0599b3bfd40e56`
 - `README.md` — 7083 bytes — sha256 `264cff4b701a995d`
 - `README.zh-CN.md` — 6950 bytes — sha256 `8b2bef47881c0e48`
@@ -53,4 +53,4 @@ and Git metadata are excluded to avoid self-reference and machine-local files.
 - `references/verification-request.template.md` — 1109 bytes — sha256 `d5e2e258d690f89d`
 - `references/verification-result-packet.template.md` — 979 bytes — sha256 `961be576d0a01350`
 - `references/verification-thread-startup-prompt.template.md` — 1207 bytes — sha256 `0f8f1767409e2b28`
-- `scripts/publish-to-github.sh` — 774 bytes — sha256 `5fb2ddf148f97e66`
+- `scripts/publish-to-github.sh` — 785 bytes — sha256 `496976f943f74e06`
