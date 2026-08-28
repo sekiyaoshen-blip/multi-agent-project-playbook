@@ -109,8 +109,9 @@ Add only when native task state is insufficient:
    user authorization before creating it. Generate its startup prompt from
    `references/module-startup-prompt.template.md`.
 9. Install receiver-aware model routing so every existing-task message,
-   automatic return, or authorized new-task creation selects a supported,
-   Desktop-compatible model/Thinking pair for the receiver's next work.
+   automatic return, or authorized new-task creation first identifies the
+   provider, then selects a supported model/Thinking pair only for official
+   OpenAI service; other services retain provider defaults.
 10. Install loop-safe direct routing so any registered module task can transfer
     or split misrouted work without routing every request through the main task.
 11. Install the non-preemptive verification summary. Add Focus Leases or
@@ -257,27 +258,25 @@ Focus Lease templates only for the controls the project actually needs.
 Before every native call to an existing visible task, including a re-route from
 one module task to another, or authorized creation of a new visible task:
 
-1. Classify both the message and the work the receiving task must perform next:
+1. Determine whether the invocation uses the official OpenAI service. If it
+   uses another provider, or the provider cannot be confirmed as official
+   OpenAI, do not route the model: omit `model` and `thinking` overrides and use
+   that service's default mode. Continue task ownership routing normally.
+2. For official OpenAI service calls, classify both the message and the work the receiving task must perform next:
    task type, complexity, risk, context size, reversibility, parallelism,
    review/integration duty, and decision authority. Message length and the
    simplicity of transport never determine the profile by themselves.
-2. Inspect both the active tool/client schema and the selected model's accepted
+3. Inspect both the active tool/client schema and the selected model's accepted
    Thinking values on that invocation path, then use their intersection. A tool
    enum may be broader than one model's actual support. Do not invent a model,
    effort, or hidden request parameter.
-3. Select a capability profile:
-   - `fast`: deterministic, bounded work whose receiver only acknowledges or
-     performs a mechanical low-risk action -> efficient model; `low` or `medium`
-   - `balanced`: normal implementation/review with clear scope -> balanced
-     model; `medium` or `high`
-   - `deep`: ambiguous, long-context, cross-module, architecture, repeated
-     failure, or read-only security/payment investigation -> strongest model;
-     `high` or `xhigh`
-   - `critical`: executing/authorizing an irreversible migration or production
-     action, responding to active financial/data/security loss, or other
-     highest-failure-cost work -> strongest model; `xhigh` by default, with
-     `max` only when the exact model and invocation path explicitly support it
-4. Apply receiver floors:
+4. Select the official OpenAI profile:
+   - `fast`: `gpt-5.6-luna`; `low`, or `medium` when context is not trivial
+   - `balanced`: `gpt-5.6-terra`; `medium`, or `high` for uncertainty
+   - `deep`: `gpt-5.6-sol`; `high` or `xhigh`
+   - `critical`: `gpt-5.6-sol`; `xhigh` by default, with `max` only when the
+     exact model and invocation path explicitly support it
+5. Apply receiver floors:
    - pure receipt acknowledgement with no review, merge, decision, or state
      change may use `fast`
    - ordinary owner result review or routine state integration is at least
@@ -287,23 +286,23 @@ one module task to another, or authorized creation of a new visible task:
      `deep`
    - use `critical` only when the receiver will execute/authorize an
      irreversible high-consequence action or handle an active severe incident
-5. Pass explicit supported `model` and `thinking` when the invocation exposes
+6. Pass explicit supported `model` and `thinking` only for confirmed official
+   OpenAI service calls when the invocation exposes
    those controls and the selected pair passes the compatibility gate. Include
    a one-line routing reason in the native prompt. Do not create routine
    model/version/quota telemetry in project docs.
 
-Current GPT-5.6 examples are Luna for `fast`, Terra for `balanced`, and Sol for
-`deep`/`critical`. Treat these as discoverable current mappings, not durable
-project contracts. Use `ultra` only when the exact model/invocation path supports
-it and the task genuinely benefits from that execution mode; otherwise use the
-highest supported effort or route independent work to registered module tasks.
-For GPT-5.5 cross-task calls, use `xhigh` as the ceiling and never send `max`.
+For official OpenAI service calls, the allowed model IDs are exactly
+`gpt-5.6-sol`, `gpt-5.6-terra`, and `gpt-5.6-luna`. Do not use GPT-5.5 or any
+older model, including as a fallback. Do not replace these explicit IDs with an
+older, preview, specialized, mini/nano, or provider-specific model.
 
-For autonomous routing, limit the candidate pool to GPT-5.6 and GPT-5.5
-families. Prefer GPT-5.6; use GPT-5.5 only as a supported compatibility fallback.
-Do not autonomously select GPT-5.4, mini/nano, Codex-Spark, or older families.
-An explicit user model request may override this pool only when the active path
-supports it and the compatibility/risk checks pass.
+The single compatibility fallback is `gpt-5.6-luna` with `medium` Thinking.
+Use it only for one pre-output retry with the same request key and prompt, and
+only when it still satisfies the receiver's risk floor. If `deep` or `critical`
+work cannot safely run on Luna/medium, stop and report the compatibility blocker
+instead of silently downgrading. This fallback never applies to non-OpenAI
+services; those always retain their provider defaults.
 
 Do not classify by sensitive keywords alone. A reversible read-only
 investigation in a high-risk domain is normally `deep`; use `critical` when the
@@ -312,16 +311,13 @@ creates immediate severe exposure.
 
 ### Desktop Compatibility Gate
 
-- Treat exact model IDs as runtime-discovered values. During skill audit or
-  upgrade, refresh examples from the current official model guide; during
-  routine dispatch, use the active tool schema and current project mapping.
+- Confirm the provider before selecting a model. Non-OpenAI services receive no
+  `model` or `thinking` override and no OpenAI compatibility fallback.
+- For official OpenAI service calls, use only `gpt-5.6-sol`,
+  `gpt-5.6-terra`, or `gpt-5.6-luna` and verify that the active invocation path
+  accepts the selected pair.
 - Treat a generic tool enum as an outer bound, not proof that every listed
   effort works with every model. Confirm the selected model/path combination.
-  GPT-5.5 accepts at most `xhigh` on the observed Desktop cross-task path.
-- For visible cross-task delivery or continuation in Codex Desktop, do not use
-  GPT-5.3-Codex-Spark or another preview/specialized model unless the current
-  product explicitly confirms compatibility with all Desktop-managed turn
-  options. Spark is not a cross-task fallback.
 - The visible `send_message_to_thread` contract may expose only `model`,
   `thinking`, and `prompt`. If it does not expose `reasoning.summary`, the skill
   cannot add, remove, or retry that hidden field directly. Attribute such a
@@ -330,28 +326,25 @@ creates immediate severe exposure.
   product compatibility are authoritative; text must never force an
   unsupported parameter combination.
 - If a pre-output error lists supported Thinking values, retry at most once with
-  the same request key, prompt, and model, selecting the highest listed effort
-  that still satisfies the profile. For GPT-5.5, `max` falls back to `xhigh`.
+  the same request key and prompt. On official OpenAI service, use
+  `gpt-5.6-luna` with `medium` only when it meets the receiver floor. On a
+  non-OpenAI service, keep provider defaults and do not perform model routing.
   Never retry after any target output.
 - If a cross-task invocation fails before the target produces output because a
-  Desktop-managed optional reasoning parameter is unsupported, retry exactly
-  once with the same request key and prompt. Omit `model` and `thinking` only
-  when the target's current model/Thinking pair is confirmed compatible and
-  uses GPT-5.5/5.6; otherwise use a compatible GPT-5.6 or GPT-5.5 pair. Record the
-  fallback and do not retry after any target output exists.
+  Desktop-managed optional reasoning parameter is unsupported, apply the same
+  one-retry rule. Never recover by selecting GPT-5.5 or an older model.
 - If a product-managed automatic return cannot perform that retry, recover the
   result with native task read plus an explicit compatibility-safe message, or
   use the approved Return Packet fallback. State the product-layer limitation.
 
-Explicit user model/Thinking instructions win only when the pair is supported
-and Desktop-compatible. If a preferred option is unavailable, choose the
-closest supported option that still meets the receiver's risk requirement and
-state the fallback. Never silently lower `deep` or `critical`; ask or stop when
-no safe supported option exists.
+If an explicit model request conflicts with this project's official OpenAI
+allowlist or the non-OpenAI default-mode rule, state the conflict instead of
+silently using an out-of-policy model. Never silently lower `deep` or
+`critical`; ask or stop when no safe supported option exists.
 
-For a new role-only module task with no concrete work yet, use the current
-`balanced` model mapping with `medium`; classify and override again on every
-future dispatch.
+For a new role-only module task with no concrete work yet, use
+`gpt-5.6-terra` with `medium` on confirmed official OpenAI service. On any other
+service, use its defaults. Classify again on every future dispatch.
 
 ## Durable State Rules
 
@@ -441,8 +434,9 @@ Read only the resources needed for the selected mode:
   integration protected from transport-only `fast` classification?
 - Are preview/specialized models excluded from cross-task delivery unless their
   Desktop-managed parameter compatibility is confirmed?
-- Is autonomous model selection limited to GPT-5.5/5.6 unless the user
-  explicitly requests another supported compatible model?
+- Are official OpenAI calls limited to Sol/Terra/Luna, with Luna/medium as the
+  only compatibility fallback and no GPT-5.5-or-older route?
+- Do non-OpenAI services omit model/Thinking overrides and keep their defaults?
 - Do high-risk routing fallbacks avoid silent capability downgrades and stale
   hard-coded quota rules?
 - Are active docs current, compact, non-duplicative, and read selectively?

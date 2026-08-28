@@ -160,7 +160,7 @@ Include this compact routing envelope in each native cross-task request:
 - assigned non-overlapping slice
 - visited tasks/modules
 - return owner
-- selected model/Thinking profile and one-line reason
+- selected model/Thinking profile, or provider-default mode, and one-line reason
 
 Use the same request key across re-routing. A receiving task may transfer work
 that it does not own, but it must extend the visited list and preserve one lead
@@ -188,7 +188,7 @@ Use this minimum task payload:
 - expected verification
 - when to escalate to the main task
 - routing trace and named return owner
-- selected model/Thinking profile and one-line reason
+- selected model/Thinking profile, or provider-default mode, and one-line reason
 
 Do not dispatch vague ideas, duplicate active work, or answer-only questions
 with no ownership ambiguity. Do not retain module-owned work merely because the
@@ -308,6 +308,10 @@ owner return, or authorized new visible task must classify the work the target
 will perform after receiving the message. Do not classify by payload length or
 transport simplicity alone.
 
+First determine the service provider. If it is not confirmed as official
+OpenAI, do not route the model or Thinking: omit both overrides and use the
+provider's default mode. The task ownership and dispatch flow still applies.
+
 ### Classification Signals
 
 Assess the concrete task before invocation:
@@ -326,19 +330,15 @@ Assess the concrete task before invocation:
 
 | Profile | Typical Work | Model Capability | Thinking |
 |---|---|---|---|
-| `fast` | receipt-only acknowledgement or mechanical low-risk work with no review/merge/decision duty | efficient general model | `low`; use `medium` when context is not trivial |
-| `balanced` | normal implementation, clear bug fix, routine review, single-module work | balanced general | `medium`; use `high` for uncertainty or broader verification |
-| `deep` | ambiguous bug, repeated failure, long context, cross-module contract, architecture, read-only auth/security/payment investigation | strongest available | `high` or `xhigh` |
-| `critical` | executing/authorizing irreversible migration or production action, active financial/data/security loss, highest failure cost | strongest available | `xhigh` by default; `max` only with exact model/path support |
+| `fast` | receipt-only acknowledgement or mechanical low-risk work with no review/merge/decision duty | `gpt-5.6-luna` | `low`; use `medium` when context is not trivial |
+| `balanced` | normal implementation, clear bug fix, routine review, single-module work | `gpt-5.6-terra` | `medium`; use `high` for uncertainty or broader verification |
+| `deep` | ambiguous bug, repeated failure, long context, cross-module contract, architecture, read-only auth/security/payment investigation | `gpt-5.6-sol` | `high` or `xhigh` |
+| `critical` | executing/authorizing irreversible migration or production action, active financial/data/security loss, highest failure cost | `gpt-5.6-sol` | `xhigh` by default; `max` only with exact model/path support |
 
-Current GPT-5.6 mappings are typically Luna -> `fast`, Terra -> `balanced`, and
-Sol -> `deep`/`critical`. Discover actual current model IDs from the active tool
-schema. These names are examples, not durable project configuration.
-
-Autonomous routing may select only GPT-5.6 or GPT-5.5 families. Prefer GPT-5.6;
-use GPT-5.5 only as a supported compatibility fallback. Do not autonomously
-select GPT-5.4, mini/nano, Codex-Spark, or older families. A user's explicit
-model request may override this pool only when supported and compatible.
+For confirmed official OpenAI service, the allowlist is exactly
+`gpt-5.6-sol`, `gpt-5.6-terra`, and `gpt-5.6-luna`. GPT-5.5 and all older,
+preview, specialized, mini/nano, or provider-specific models are prohibited,
+including as fallbacks.
 
 Apply these receiver floors:
 
@@ -354,42 +354,49 @@ domain is normally `deep`; reserve `critical` for the action/exposure itself.
 
 ### Invocation Rules
 
-- Existing visible task: inspect the active schema and normally call
+- Existing visible task on official OpenAI service: inspect the active schema and normally call
   `send_message_to_thread` with explicit supported `model` and `thinking` that
   pass the Desktop compatibility gate below.
-- New visible task: after required user authorization, call `create_thread`
-  with both parameters selected for its first concrete task.
+- Existing visible task on any other service: omit both overrides and retain
+  provider defaults.
+- New visible task: after required user authorization, call `create_thread`.
+  For official OpenAI service, pass the selected pair when supported; for any
+  other service, omit both overrides.
 - New role-only task with no concrete work: use the current `balanced` mapping
-  with `medium`; classify again on every later dispatch.
-- Temporary subagent, when permitted: apply the same classification and pass
-  explicit model/reasoning parameters supported by that tool.
-- Include `Routing: <profile>; model=<id>; thinking=<effort>; reason=<short>` in
-  the native prompt for observability. Actual tool arguments and product
-  compatibility are authoritative; this text cannot force unsupported params.
-- Explicit user model/Thinking instructions take precedence.
-- Use `max`/`ultra` only when the exact model/path accepts it and the work needs it; a generic tool enum is insufficient.
+  (`gpt-5.6-terra`, `medium`) on official OpenAI service; otherwise use provider
+  defaults. Classify again on every later dispatch.
+- Temporary subagent, when permitted: apply the same provider-first rule. Pass
+  explicit supported model/reasoning parameters only for official OpenAI.
+- For official OpenAI, include
+  `Routing: <profile>; model=<id>; thinking=<effort>; reason=<short>` in the
+  native prompt. For other services, use
+  `Routing: provider-default; reason=<short>` without model fields. Actual tool
+  arguments and product compatibility are authoritative; this text cannot
+  force unsupported params.
+- An explicit request outside the OpenAI allowlist or the non-OpenAI
+  default-mode rule is a policy conflict; report it instead of silently routing.
+- Use `max` only when the exact model/path accepts it and the work needs it; a generic tool enum is insufficient.
 
 ### Desktop Compatibility Gate
-- Refresh model examples from the official guide during audit/upgrade; during routine work use the active schema and project mapping.
-- Intersect tool values with model/path capability. A tool enum may span models;
-  GPT-5.5 accepts up to `xhigh` on the observed Desktop path, never `max`.
-- Do not use GPT-5.3-Codex-Spark or another preview/specialized model for visible
-  cross-task work unless the product confirms all Desktop-managed turn options.
-  Spark is not a compatibility fallback.
+- Confirm the provider first. Non-OpenAI services receive no `model` or
+  `thinking` override and do not use the OpenAI compatibility fallback.
+- On official OpenAI service, intersect tool values with the selected GPT-5.6
+  model/path capability. A generic tool enum may span models.
 - If a visible tool lacks `reasoning.summary`, the source cannot set/remove it.
   Attribute incompatibility to the Desktop turn-start/adapter layer, not source.
 - Product-managed automatic returns must use the same receiver-aware profile and
   compatibility gate. A completed task is not automatically a `fast` return.
-- Explicit user model/Thinking choices take precedence only when the selected
-  pair is supported and compatible with the active Desktop path.
 
 ### Fallback Safety
 If a preferred model or effort is unavailable:
 
-1. Re-read the active tool's supported model/Thinking values.
-2. Choose the closest supported option that still satisfies the risk profile.
-3. State the fallback in the native dispatch prompt.
-4. Never silently downgrade `deep` or `critical` work below a safe level. Stop
+1. Re-read the active tool's supported model/Thinking values and provider.
+2. For official OpenAI service, retry once with `gpt-5.6-luna` and `medium` only
+   when that pair still satisfies the receiver floor. Never select GPT-5.5 or
+   older.
+3. For non-OpenAI service, keep provider defaults without model routing.
+4. State the fallback in the native dispatch prompt when one is used.
+5. Never silently downgrade `deep` or `critical` work below a safe level. Stop
    and ask the user if no supported option is adequate.
 
 If an invocation fails before the target produces output because a
@@ -398,17 +405,17 @@ Desktop-managed optional reasoning parameter is unsupported:
 1. Confirm that the target produced no response and that retry cannot duplicate
    work.
 2. Reuse the same request key and prompt.
-3. Retry without overrides only when the target's current GPT-5.5/5.6
-   model/Thinking pair is confirmed compatible. Otherwise retry once with a
-   compatible pair that satisfies the receiver floor. State the fallback.
+3. On official OpenAI service, retry once with `gpt-5.6-luna` and `medium` only
+   when it satisfies the receiver floor. On non-OpenAI service, keep provider
+   defaults and do not introduce a model override.
 4. If product-managed automatic return cannot retry, recover the completed
    source result with native task read and send one explicit compatibility-safe
    message, or use the approved Return Packet fallback.
 5. Stop after a second failure and report the product-layer limitation.
 
-If a pre-output error lists supported Thinking values, preserve key/prompt/model
-and retry once at the highest safe listed value (GPT-5.5 `max` -> `xhigh`). Do
-not retry after output or lower a profile below its safe floor.
+If a pre-output error lists supported Thinking values, preserve the request key
+and prompt and apply the same provider-specific rule. Do not retry after output
+or lower a profile below its safe floor.
 
 Only Portable Controls or audit-sensitive tasks should persist requested/actual
 model details outside native task history.
@@ -512,7 +519,7 @@ reliable return path.
 2. Classify ownership before nontrivial execution.
 3. Execute owned work, directly route misowned work, or perform a minimal read-only impact scan when ownership is unclear.
 4. For cross-module work, keep one lead, non-overlapping slices, and a loop-safe routing trace.
-5. Reclassify model/Thinking for every outward dispatch.
+5. Reclassify provider and model/Thinking policy for every outward dispatch.
 6. Return a coherent result to the intake user or named return owner.
 
 ### Main Task Review Loop

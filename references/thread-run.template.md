@@ -69,7 +69,9 @@ Return Packet.
 - Requested/actual model:
 - Requested/actual Thinking:
 - Desktop compatibility checked: yes | no
-- Autonomous candidate family: GPT-5.6 | GPT-5.5
+- Service: official OpenAI | non-OpenAI | unknown
+- OpenAI model: `gpt-5.6-sol` | `gpt-5.6-terra` | `gpt-5.6-luna` | not applicable
+- Provider default mode used: yes | no
 - Fallback, if any:
 - Why this routing matters to recovery or interpretation:
 

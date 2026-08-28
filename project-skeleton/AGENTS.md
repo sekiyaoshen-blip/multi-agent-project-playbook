@@ -58,32 +58,29 @@ This project uses a native-first project agent operating model.
   both the message and the receiving task's next work: review, integration,
   decision, context, risk, reversibility, and parallelism. Do not classify by
   message length or transport simplicity alone.
+- Determine the service provider before model routing. If it is not confirmed
+  as official OpenAI, omit `model` and `thinking` overrides and use that
+  provider's default mode. Continue task routing without model routing.
 - A pure receipt-only acknowledgement may use `fast`. Ordinary owner-result
   review is at least `balanced`. Production evidence, acceptance verdicts,
   project gate updates, cross-module integration, or long/risky context are
   normally `deep`.
-- Inspect the active tool schema and select a supported, Desktop-compatible
-  model/Thinking pair. Current GPT-5.6 roles are Luna for `fast`, Terra for
-  `balanced`, and Sol for `deep`/`critical`; exact IDs are runtime-discovered.
+- On official OpenAI service, use exactly `gpt-5.6-luna` for `fast`,
+  `gpt-5.6-terra` for `balanced`, and `gpt-5.6-sol` for `deep`/`critical`.
+  No GPT-5.5 or older model may be used, including as a fallback.
 - Intersect tool-level values with the selected model/path capability; a tool
   enum may be broader than one model. Default `critical` to `xhigh`. Use `max`
-  only with exact model/path confirmation; GPT-5.5 must never receive `max`.
-- Autonomous routing may select only GPT-5.6 or GPT-5.5 families. Prefer GPT-5.6
-  and use GPT-5.5 only as a compatibility fallback. Do not autonomously select
-  GPT-5.4, mini/nano, Codex-Spark, or older families.
-- Do not use GPT-5.3-Codex-Spark or another preview/specialized model for visible
-  cross-task delivery unless the current product confirms compatibility with
-  Desktop-managed turn parameters.
+  only with exact model/path confirmation.
+- The only OpenAI compatibility fallback is `gpt-5.6-luna` with `medium`, used
+  for at most one pre-output retry with the same request key and prompt. Use it
+  only when it meets the receiver floor; never silently downgrade `deep` or
+  `critical`. Non-OpenAI services do not use this fallback.
 - If the visible tool does not expose `reasoning.summary`, do not claim the
   source task set it. On a pre-output optional-parameter compatibility failure,
-  retry once with the same request key/prompt. Omit overrides only when the
-  target's current GPT-5.5/5.6 model/Thinking pair is confirmed compatible;
-  otherwise explicitly use a compatible pair. Never retry after target output.
-- If a pre-output error lists supported Thinking values, retry once with the
-  same model/request key/prompt and highest safe listed effort (`xhigh` for a
-  rejected GPT-5.5 `max`).
-- Explicit user choices win. Never silently downgrade deep/critical work when
-  no safe supported model/Thinking combination exists.
+  apply the same one-retry provider rule. Never retry after target output.
+- If an explicit request conflicts with the OpenAI allowlist or non-OpenAI
+  default-mode rule, report the conflict. Never silently use an out-of-policy
+  model or downgrade deep/critical work.
 - Treat a `Routing:` line as observability only; actual tool arguments and
   product compatibility are authoritative.
 - Keep routine routing data in the native dispatch prompt, not project docs.

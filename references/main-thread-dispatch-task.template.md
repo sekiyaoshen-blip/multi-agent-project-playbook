@@ -51,6 +51,7 @@
 
 ## Dispatch-Time Model Routing (Required)
 
+- Service: official OpenAI | non-OpenAI | unknown
 - Classification:
   - Type:
   - Receiver follow-up: ack-only | routine-review | integrate-state | acceptance-review | gate-update | execute-action
@@ -65,17 +66,17 @@
 - Model-specific Thinking checked: yes | no
 - Active tool schema checked: yes | no
 - Desktop compatibility checked: yes | no
-- Autonomous candidate family: GPT-5.6 | GPT-5.5
+- OpenAI allowlist checked: `gpt-5.6-sol` | `gpt-5.6-terra` | `gpt-5.6-luna` | not applicable
+- Non-OpenAI default mode: yes | no | not applicable
 - Fallback, if any:
 - One-line reason:
 
-Classify the target's follow-up work, not just the transport message. Normally
-pass both `model` and `thinking`. Do not use GPT-5.3-Codex-Spark for visible
-cross-task delivery without current Desktop compatibility confirmation. If a
-hidden optional reasoning parameter causes a pre-output compatibility failure,
-retry once with the same request key/prompt. Omit overrides only when the
-target's current GPT-5.5/5.6 model/Thinking pair is confirmed compatible;
-otherwise use a compatible pair. Never retry after target output.
+Classify the target's follow-up work, not just the transport message. On
+official OpenAI service, use only Luna/fast, Terra/balanced, and
+Sol/deep/critical. The only compatibility fallback is Luna with `medium`, for
+one pre-output retry when it satisfies the receiver floor. Never use GPT-5.5 or
+older. On non-OpenAI or unknown service, omit `model` and `thinking` and retain
+provider defaults. Never retry after target output.
 
 The target may re-route a misowned slice directly to another registered task,
 but it must preserve the request key, extend the visited list, keep one lead,

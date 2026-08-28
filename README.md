@@ -37,7 +37,8 @@ results stay in native task history.
 - Native routing traces prevent loops, blind broadcasts, duplicate work, and
   competing coordinators without creating a file-based task log.
 - Every existing/new native task invocation classifies the receiver's actual
-  follow-up work and uses a supported, Desktop-compatible model/Thinking pair.
+  follow-up work and provider. Official OpenAI calls use a supported
+  model/Thinking pair; other services retain provider defaults.
 - Temporary subagents are limited to bounded disposable research, review,
   search, test, or verification work.
 - System/Codex Desktop native delivery is the default result path. If automatic
@@ -77,34 +78,27 @@ automatic owner return, or authorized creation of a new task, classify what the
 receiver must do next. A short return that requires evidence review, state
 integration, or a gate decision is not a `fast` transport message.
 
-- `fast`: fastest capable model, `low`/`medium`
-- `balanced`: balanced model, `medium`/`high`
-- `deep`: strongest model, `high`/`xhigh`
-- `critical`: strongest model, `xhigh` by default; `max` only with exact
+- `fast`: `gpt-5.6-luna`, `low`/`medium`
+- `balanced`: `gpt-5.6-terra`, `medium`/`high`
+- `deep`: `gpt-5.6-sol`, `high`/`xhigh`
+- `critical`: `gpt-5.6-sol`, `xhigh` by default; `max` only with exact
   model/path support
 
-Current GPT-5.6 examples are Luna, Terra, and Sol. They are discoverable current
-mappings, not durable contracts. User choices win, unsupported values are never
-invented, and deep/critical work is not silently downgraded. Routine routing
-reasons stay in native task history rather than project docs. Classification is
-action-based, not keyword-based: read-only sensitive-domain investigation is
-normally `deep`; irreversible action or active severe exposure is `critical`.
+For confirmed official OpenAI service, these three explicit GPT-5.6 IDs are the
+entire allowlist. GPT-5.5 and all older models are prohibited, including as
+fallbacks. The only compatibility fallback is `gpt-5.6-luna` with `medium`, for
+one pre-output retry when it still meets the receiver's risk floor. Deep or
+critical work is never silently downgraded.
 
-Autonomous routing is limited to GPT-5.6 and GPT-5.5 families. GPT-5.6 is the
-default; GPT-5.5 is a compatibility fallback. Older, mini/nano, and preview
-models are not autonomous choices.
+For any non-OpenAI service, model routing is disabled. The invocation omits
+both `model` and `thinking` and uses the provider's default mode. The OpenAI
+Luna fallback does not apply.
 
-Tool schemas may expose a union of values across models. Routing therefore uses
-the intersection of tool, selected model, and invocation-path support. GPT-5.5
-cross-task calls are capped at `xhigh`; never send GPT-5.5 with `thinking=max`.
-
-GPT-5.3-Codex-Spark is excluded from visible cross-task delivery unless the
-current Desktop path explicitly confirms compatibility with its managed turn
-parameters. If a hidden optional reasoning parameter causes a pre-output
-failure, retry once using target settings only when that GPT-5.5/5.6
-model/Thinking pair is confirmed compatible; otherwise use a compatible pair. The visible task tool does not
-expose `reasoning.summary`, so the skill does not pretend it can directly remove
-that product-managed field.
+Tool schemas may expose a union of values across models. Official OpenAI routing
+therefore uses the intersection of the selected GPT-5.6 model, tool, and
+invocation-path support. `max` is used only with exact support. The visible task
+tool may not expose product-managed fields such as `reasoning.summary`; the
+skill does not pretend it can directly remove them.
 
 ## Project Skeleton
 

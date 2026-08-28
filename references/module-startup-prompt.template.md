@@ -53,22 +53,18 @@ unresolved request, or duplicate active work. If the target module task is
 missing, request the authorization required to create it rather than silently
 substituting a temporary subagent.
 
-Every routed task should use a supported, Desktop-compatible model/Thinking
-pair selected for the receiving task's actual work, not merely the short
-message that carries it. Pure acknowledgement may be `fast`; ordinary result
-review is at least `balanced`; production evidence, acceptance/gate decisions,
-cross-module integration, or long/risky context are normally `deep`.
-Intersect tool, selected-model, and invocation-path support. Default `critical`
-to `xhigh`; never send GPT-5.5 with `max`. Use `max` only with exact support.
+Before model routing, determine the service provider. For official OpenAI
+service, use only `gpt-5.6-luna` for `fast`, `gpt-5.6-terra` for `balanced`, and
+`gpt-5.6-sol` for `deep`/`critical`, with Thinking selected for the receiver's
+actual work. Do not use GPT-5.5 or older models. For any non-OpenAI service,
+omit `model` and `thinking` overrides and keep provider defaults.
 
-Do not use GPT-5.3-Codex-Spark for visible cross-task delivery unless the
-current product confirms compatibility with Desktop-managed turn parameters.
-Autonomous routing may choose only GPT-5.6 or GPT-5.5, preferring GPT-5.6.
-If an optional reasoning parameter hidden by Desktop causes a pre-output
-failure, retry once with the same request key/prompt. Omit overrides only when
-the target's current GPT-5.5/5.6 model/Thinking pair is confirmed compatible;
-otherwise use a compatible pair. Do not retry after target output. Keep routing data in native
-history, not docs.
+The only OpenAI compatibility fallback is `gpt-5.6-luna` with `medium`, for one
+pre-output retry using the same request key/prompt and only when the receiver
+floor remains safe. Do not silently downgrade `deep` or `critical`; stop and
+report when Luna/medium is inadequate. Do not retry after target output. Keep
+routing data in native history, not docs. Use `max` only with exact
+model/invocation-path support.
 
 Keep durable docs as current snapshots. Do not append routine logs or duplicate
 the same fact across status, handoff, runbook, current-work, and ADRs.
@@ -113,19 +109,17 @@ Desktop 原生委派回传、`send_message_to_thread` 或 `read_thread` 返回�
 阻塞或严格定义的紧急结果，才按允许的中断时间点主动投递。只有并发工具或任务
 确实可能干扰当前主线时才启用 Focus Lease。
 
-每次派单都应按照接收任务接下来真正要做的工作选择模型，而不是只看回传文字
-是否短小。纯确认收到可以使用 `fast`；普通结果复核至少为 `balanced`；生产证据
-复核、验收/gate 判断、跨模块合并或长上下文通常使用 `deep`。当前 GPT-5.6
-能力角色为 Luna/fast、Terra/balanced、Sol/deep/critical，实际 ID 以当前工具为准。
+每次派单先判断服务提供方。官方 OpenAI 服务只允许使用
+`gpt-5.6-luna`/fast、`gpt-5.6-terra`/balanced 和
+`gpt-5.6-sol`/deep/critical，并按照接收任务真正要做的工作选择 Thinking；不再
+使用 GPT-5.5 或更旧模型。非 OpenAI 服务不做模型路由，不传 `model` 和
+`thinking`，一律沿用该服务默认模式。
 
-除非当前产品明确确认与 Desktop 自动注入的 turn 参数兼容，不要把
-GPT-5.3-Codex-Spark 用于显性跨任务回传。若 Desktop 隐藏的可选 reasoning 参数
-导致目标任务在输出前失败，只能用相同 request key 和 prompt 重试一次。目标
-当前的 GPT-5.5/5.6 模型/Thinking 组合确认兼容时才可省略覆盖；否则显式使用
-兼容组合。自主调度只允许从 GPT-5.5/5.6 系列选择，并优先 GPT-5.6；已有
-任何目标输出后不得重试。日常路由信息保留在原生任务历史，不写入项目文档。
-工具枚举可能大于具体模型能力；必须取工具、模型和调用路径的交集。critical 默认
-使用 `xhigh`，GPT-5.5 禁止 `max`；只有精确确认兼容时才允许 `max`。
+唯一兼容兜底是 `gpt-5.6-luna` + `medium`，只允许在目标尚未输出时，使用相同
+request key 和 prompt 重试一次，并且不得低于接收任务的安全能力要求。若
+`deep`/`critical` 无法安全降到 Luna/medium，停止并报告，不得静默降级。已有
+目标输出后不得重试。日常路由信息留在原生任务历史，不写入项目文档；`max`
+只有在具体模型和调用路径明确支持时才允许。
 稳定文档保持为当前快照，不追加
 普通日志，不重复记录同一事实。不要把秘密、凭据、私有客户数据、签名 URL 或
 授权链接写入提交的文档。

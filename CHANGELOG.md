@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Restricted official OpenAI dispatch routing to `gpt-5.6-sol`,
+  `gpt-5.6-terra`, and `gpt-5.6-luna`; GPT-5.5 and older models are no longer
+  used.
+- Standardized the only OpenAI compatibility fallback as
+  `gpt-5.6-luna` with `medium` Thinking for one safe pre-output retry.
+- Disabled model/Thinking routing for non-OpenAI services so provider defaults
+  remain authoritative.
 - Renamed the project, skill invocation, and installation directory from
   `project-agent-operating-model` to `multi-agent-model`.
 - Added an optional non-preemptive verification side lane with fixed targets,
@@ -11,11 +18,9 @@
 - Switched routine verification to pull-based native result harvesting at safe
   checkpoints; file requests/result packets remain opt-in Portable Controls.
 - Replaced the hard-coded `critical` -> `max` mapping with portable `xhigh` and
-  require exact model/path confirmation before using `max` or `ultra`.
+  require exact model/path confirmation before using `max`.
 - Added model-specific Thinking validation because tool schemas may expose a
-  union broader than one model; GPT-5.5 cross-task calls are capped at `xhigh`.
-- Added one safe pre-output retry using the highest effort listed by the runtime
-  error while preserving the model, request key, and prompt.
+  union broader than one model.
 - Changed model routing to classify the receiver's review, integration,
   decision, and execution duty instead of the transport message alone.
 - Added receiver floors so production evidence, acceptance verdicts, project
