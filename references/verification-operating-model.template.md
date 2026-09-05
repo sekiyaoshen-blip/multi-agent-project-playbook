@@ -1,5 +1,10 @@
 # Verification Operating Model
 
+Opt-in only. Do not load for ordinary implementation or local tests. The detailed
+protocol below applies only when the project explicitly needs formal independent
+verification or cross-tool interruption control; it does not make every review
+require a new task ID, lease, or file packet.
+
 Last updated: YYYY-MM-DD
 
 Use this optional document when independent verification could interrupt a

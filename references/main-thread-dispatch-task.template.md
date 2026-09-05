@@ -1,54 +1,9 @@
-# Main Task Dispatch
+# 主任务派单提示词
 
-- Request key:
-- Intake/source task:
-- Target long-lived module task: `<module>`
-- Native task ID/link: <from `docs/thread-registry.md`>
-- Lead task/module:
-- Assigned slice:
-- Visited tasks/modules:
-- Return owner:
-- Type: implement | investigate | review | verify | unblock | decide
-- Priority: P0 | P1 | P2 | P3
+请由 `<已登记模块任务>` 完成 `<目标和可观察的验收结果>`。
+范围是 `<本次负责部分>`，相关上下文：`<必要文件、输入或链接>`。
+不要修改 `<实际需要保留的边界；没有则删除>`。
+完成相关验证后，将结果、改动位置和剩余阻断返回 `<入口或牵头任务>`。
 
-## Desired Outcome
-
-- What should be true when this task is done:
-
-## Ownership Reason
-
-- Why this belongs to the target module:
-
-## Acceptance Criteria
-
-- [ ] Criterion 1
-- [ ] Criterion 2
-
-## Context
-
-- Relevant files/docs:
-- Lead module and shared contract, for cross-module work:
-- Dependencies:
-- Constraints / do not change:
-- Known risks:
-
-## Verification
-
-- Required checks:
-- Manual review, if any:
-
-## Escalate When
-
-- Product direction, architecture, security, priority, public contract, or
-  another module's ownership must change.
-
-## Return
-
-- Default: return through native task delivery so the main task can review it.
-- Update module `handoff.md` only if durable project context changed.
-- Portable Controls enabled: no | thread-run | Return Packet | both
-- If enabled, path/reason:
-
-The target may re-route a misowned slice directly to another registered task,
-but it must preserve the request key, extend the visited list, keep one lead,
-and never send the same or broader slice back to a visited task.
+涉及多模块时补充：本次牵头任务是 `<任务>`，其他模块负责 `<不重叠部分>`。
+任务很小时不必填表、创建任务编号或生成独立回传文件。

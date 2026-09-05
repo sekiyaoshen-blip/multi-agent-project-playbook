@@ -1,7 +1,7 @@
 interface:
   display_name: "Multi-Agent Model"
-  short_description: "Route durable tasks without interrupting owners"
-  default_prompt: "Use $multi-agent-model to initialize native-first module routing and non-preemptive verification for this project."
+  short_description: "Keep module ownership, remove coordination overhead"
+  default_prompt: "使用 $multi-agent-model 精简或初始化当前项目协作，保留长期模块归属，默认采用最小流程。"
 
 policy:
   allow_implicit_invocation: false

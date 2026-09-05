@@ -1,52 +1,10 @@
-# Cross-Task Request
+# 模块间转派提示词
 
-- Request key:
-- Intake task/module:
-- Source task/module:
-- Target long-lived task/module:
-- Native target ID/link:
-- Lead task/module:
-- Assigned slice:
-- Visited tasks/modules (do not route the same or broader slice back):
-- Return owner:
-- Request type: implement | investigate | review | verify | unblock | decide
+这个问题属于你负责的 `<模块范围>`：`<需要完成的目标和验收结果>`。
+本次只处理 `<分配范围>`，必要上下文是 `<文件、输入或链接>`。
+请完成实现和相关验证，并将结果返回 `<入口或唯一牵头任务>`。
+我这边继续处理 `<独立范围；没有则删除>`。
 
-## Desired Outcome
-
-- Result needed:
-
-## Ownership Reason
-
-- Why the target owns this work:
-
-## Acceptance Criteria
-
-- [ ] Criterion 1
-- [ ] Criterion 2
-
-## Inputs And Constraints
-
-- Relevant files/docs:
-- Inputs from source module:
-- Dependencies:
-- Must preserve:
-
-## Expected Verification
-
-- Checks or evidence:
-
-## Return
-
-- Default native return target:
-- Durable handoff path, only if needed:
-- Portable Controls enabled: no | thread-run | Return Packet | both
-
-If this target does not own the slice, preserve the request key, extend the
-visited list, keep exactly one lead, and re-route only to a registered likely
-owner. Stop and escalate instead of looping, broadcasting, duplicating active
-work, or creating an unauthorized visible task.
-
-## Priority / Deadline
-
-- Priority:
-- Deadline, if any:
+如果归属判断有误，请说明正确负责人或直接转给已登记的负责人，同时保留返回方。
+不要把相同工作反复转回已处理的任务；遇到循环或重复工作，交由牵头任务解决。
+普通转派无需额外编号、表单或回传文件。

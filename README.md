@@ -1,118 +1,64 @@
 # Multi-Agent Model
 
-Chinese documentation: [`README.zh-CN.md`](README.zh-CN.md)
+[中文说明](README.zh-CN.md) | [Installation](INSTALL.md)
 
-A native-first Codex skill for projects that need one main planning task,
-long-lived visible module tasks, and ownership-aware routing from every task.
+A Codex skill for stable module ownership with minimal coordination overhead.
+Use it to initialize or simplify collaboration, not for every implementation.
 
-The skill installs a small project-local contract for module ownership,
-automatic routing, durable project truth, cross-tool recovery, and safe docs
-compaction. It also provides an optional non-preemptive verification lane so
-independent checks do not derail a long-lived owner's current work. It relies
-on ChatGPT Desktop/Codex native task tools for ordinary dispatch and progress
-instead of recreating the product's task system in files.
+## Default Workflow
 
-## Core Model
+- A simple feature, page, or fix: implement in the existing stack, run relevant
+  checks, deliver, and stop. No automatic architecture or audit workflow.
+- One task: a short `AGENTS.md` is enough.
+- Several stable modules: add an ownership registry and reuse long-lived visible
+  module tasks. Any task can route directly to the actual owner.
+- Cross-module work: one lead, non-overlapping slices, and only the shared
+  interface decisions needed for the requested outcome.
+- Independent subagents: useful bounded work within the lead's scope, not
+  replacements for registered module owners.
+- Execution state: native tasks and existing trackers, not duplicate file logs.
+- Durable facts: update their existing documentation only when they change.
 
-```text
-Current model: detect ownership, decompose, and reason
-ChatGPT Desktop / Codex: operate visible long-lived tasks
-Project docs: preserve durable truth and cross-tool state
-Optional Portable Controls: cover recovery, audit, and unreliable boundaries
-```
+Native search, messaging, waits, result inspection, fork, and handoff are the
+preferred coordination tools when available. Creating a separate visible task
+still requires explicit user authorization.
 
-Stable facts belong in docs. Transient prompts, progress events, and routine
-results stay in native task history.
+## What Is No Longer Default
 
-## Long-Lived Module Routing
+Do not automatically create PRDs, architecture documents, status/handoff/runbook
+sets, formal dispatch forms, hash ledgers, locks, independent verification tasks,
+or return packets. Existing project requirements and concrete high-impact risks
+still apply. Optional controls remain available in `references/`.
 
-- The main task owns project-level planning, unresolved boundaries, review, and
-  cross-module decisions; it is not the only routing entrypoint.
-- Each stable module can own one registered long-lived visible task.
-- Every registered task checks ownership before nontrivial execution. Where the
-  user asked is not proof of which module owns the work.
-- A misrouted request moves directly to the registered owner. Ownership-unclear
-  requests get a minimal read-only impact scan before implementation.
-- Cross-module work has exactly one lead and non-overlapping delegated slices.
-- Native routing traces prevent loops, blind broadcasts, duplicate work, and
-  competing coordinators without creating a file-based task log.
-- Temporary subagents are limited to bounded disposable research, review,
-  search, test, or verification work.
-- System/Codex Desktop native delivery is the default result path. If automatic
-  return fails, prefer native read plus one native send;
-  compact handoffs preserve only durable cross-task or cross-tool context.
-- Thread-runs and Return Packets are optional controls, not routine ceremony.
-
-## Non-Preemptive Verification
-
-- Task-local tests stay with the owner; unrelated checks use a bounded verifier
-  and a fixed commit, diff, checkpoint, artifact, or worktree when possible.
-- Verification is read-only by default. A finding that needs a fix becomes a
-  separate module-owned task.
-- Four interruption classes control delivery: `background`, `checkpoint`,
-  `blocking`, and narrowly defined `emergency`.
-- Pass and informational results are pulled from native task state at safe
-  checkpoints. Only actionable failures, decisions, blockers, or emergencies
-  are pushed, and only when their class permits.
-- Optional Focus Leases protect an owner's attention across concurrent tools
-  and tasks. They are not code, migration, deployment, or transaction locks.
-- File-based verification packets are used only for cross-tool, audit,
-  asynchronous, or unreliable-native-state needs.
-
-## Operating Modes
-
-- **Minimal:** `AGENTS.md` plus one current work surface.
-- **Native (default):** adds the compact operating model, visible task registry,
-  module status/handoff, and existing or mapped product/technical docs.
-- **Portable Controls (opt-in):** adds thread-runs, Return Packets, compaction
-  locks, Focus Leases, verification records, or archives only for concrete
-  recovery, audit, asynchronous, high-risk, or cross-tool needs.
+The [capability notes](references/codex-native-notes.md) explain the relevant
+March-September 2026 Codex updates and GPT-6 Astra prompting implications.
+This skill contains no model selection, provider routing, or fallback policy.
 
 ## Project Skeleton
 
-The default skeleton is intentionally small:
+The skeleton is a menu, not a copy-all bundle:
 
 ```text
-AGENTS.md
-CLAUDE.md
-docs/
-  thread-operating-model.md
-  thread-registry.md
-  project-brief.md
-  current-prd.md
-  current-technical-design.md
-  current-work.md
-  decisions/
-  modules/example-module/
-    status.md
-    handoff.md
+AGENTS.md                       project entrypoint
+docs/thread-registry.md         only for stable visible module tasks
+docs/current-work.md            only if a shared snapshot is missing
 ```
 
-Add a module runbook from `references/runbook.template.md` only when native task
-history cannot reliably preserve required recovery context.
+Reuse existing project docs and work trackers. Extended operating notes,
+product/design templates, and recovery controls are optional references.
+Upgrading the skill does not silently migrate every existing project.
 
-Do not copy every template automatically. Reuse existing PRDs, design docs,
-issue trackers, roadmaps, and status surfaces whenever they already own the
-same responsibility.
+## Personal Preferences
 
-## Context Governance
+The [Chinese global preference example](references/personal-instructions.zh-CN.md)
+keeps language, concise delivery, proportional testing, Git boundaries, and
+existing commit/deploy workflows outside the project collaboration contract.
 
-- Active docs are current snapshots, not task logs.
-- Each durable fact has one primary home.
-- Native conversation compaction does not compact project docs.
-- LV2 docs-only compaction runs only after a real bloat, contradiction, or
-  staleness trigger.
-- Ordinary targeted doc edits need no lock.
-- Broad concurrent shared-doc rewrites use
-  `docs/.locks/context-compaction.lock` when Portable Controls are enabled.
-
-## Installation
-
-See [`INSTALL.md`](INSTALL.md) or [`INSTALL.zh-CN.md`](INSTALL.zh-CN.md).
-
-After initialization, routine work follows project `AGENTS.md` and current docs.
-Do not invoke this skill for every implementation or dispatch.
+Installing the skill does not change personal settings. Apply that example to
+the supported global `AGENTS.md` only when the user requests it; merge existing
+preferences instead of overwriting them. Do not duplicate old and new preference
+blocks in multiple settings surfaces.
 
 ## License
 
-MIT License. See [`LICENSE`](LICENSE).
+[MIT](LICENSE).

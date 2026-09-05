@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Simplified defaults using current Codex native coordination and GPT-6 Astra
+  prompting guidance; retained model-independent behavior and module ownership.
+- Reduced the default project skeleton to three conditional files. Product,
+  design, handoff, runbook, verification, and portable-control templates are
+  no longer default installation or startup requirements.
+- Replaced routine dispatch forms with short native messages and proportional
+  testing; independent verification and extra controls require a concrete need.
+- Added separate opt-in Chinese personal preferences and capability/source notes.
+
+### Earlier Changes
+
 - Removed model selection, reasoning-effort profiles, provider branches, and
   model compatibility fallbacks from dispatch, forwarding, and result returns.
 - Renamed the project, skill invocation, and installation directory from
