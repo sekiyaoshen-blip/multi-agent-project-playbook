@@ -62,19 +62,6 @@ Return Packet.
 - Risks / decisions needed:
 - Durable docs updated:
 
-## Dispatch-Time Routing
-
-- Receiver follow-up: ack-only | routine-review | integrate-state | acceptance-review | gate-update | execute-action
-- Profile: fast | balanced | deep | critical
-- Requested/actual model:
-- Requested/actual Thinking:
-- Desktop compatibility checked: yes | no
-- Service: official OpenAI | non-OpenAI | unknown
-- OpenAI model: `gpt-5.6-sol` | `gpt-5.6-terra` | `gpt-5.6-luna` | not applicable
-- Provider default mode used: yes | no
-- Fallback, if any:
-- Why this routing matters to recovery or interpretation:
-
 ## Closure
 
 - Main task reviewed: yes | no

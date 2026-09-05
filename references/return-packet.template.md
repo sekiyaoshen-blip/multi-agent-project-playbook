@@ -13,18 +13,6 @@ Last updated: YYYY-MM-DD HH:MM
 - Related thread-run, if any:
 - Return reason: cross-tool | asynchronous | audit | native-delivery-unavailable | policy
 
-## Invocation Routing
-
-- Receiver follow-up: routine-review | integrate-state | acceptance-review | gate-update | execute-action
-- Profile: fast | balanced | deep | critical
-- Requested/actual model:
-- Requested/actual Thinking:
-- Desktop compatibility checked: yes | no
-- Service: official OpenAI | non-OpenAI | unknown
-- OpenAI model: `gpt-5.6-sol` | `gpt-5.6-terra` | `gpt-5.6-luna` | not applicable
-- Provider default mode used: yes | no
-- Fallback and reason, if any:
-
 ## Result
 
 - State: completed | partial | blocked | failed | needs-decision | superseded

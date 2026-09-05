@@ -53,19 +53,6 @@ unresolved request, or duplicate active work. If the target module task is
 missing, request the authorization required to create it rather than silently
 substituting a temporary subagent.
 
-Before model routing, determine the service provider. For official OpenAI
-service, use only `gpt-5.6-luna` for `fast`, `gpt-5.6-terra` for `balanced`, and
-`gpt-5.6-sol` for `deep`/`critical`, with Thinking selected for the receiver's
-actual work. Do not use GPT-5.5 or older models. For any non-OpenAI service,
-omit `model` and `thinking` overrides and keep provider defaults.
-
-The only OpenAI compatibility fallback is `gpt-5.6-luna` with `medium`, for one
-pre-output retry using the same request key/prompt and only when the receiver
-floor remains safe. Do not silently downgrade `deep` or `critical`; stop and
-report when Luna/medium is inadequate. Do not retry after target output. Keep
-routing data in native history, not docs. Use `max` only with exact
-model/invocation-path support.
-
 Keep durable docs as current snapshots. Do not append routine logs or duplicate
 the same fact across status, handoff, runbook, current-work, and ADRs.
 
@@ -99,8 +86,7 @@ archive 或无关 ADR。
 
 保护其他任务的工作，只实现本模块拥有的范围，并优先通过系统或 Codex
 Desktop 原生委派回传、`send_message_to_thread` 或 `read_thread` 返回和读取
-结果。自动回传在输出前失败时，先原生读取来源任务，再进行一次兼容性安全的
-原生补投；只有任务明确启用 Portable Controls 或原生通道不可用/不可靠时，
+结果。自动回传在输出前失败时，先原生读取来源任务，再进行一次原生补投；只有任务明确启用 Portable Controls 或原生通道不可用/不可靠时，
 才创建 thread-run 或 Return Packet。
 
 当前任务自己的验证仍在这里完成；与当前主线无关的独立检查走非抢占式
@@ -109,17 +95,6 @@ Desktop 原生委派回传、`send_message_to_thread` 或 `read_thread` 返回�
 阻塞或严格定义的紧急结果，才按允许的中断时间点主动投递。只有并发工具或任务
 确实可能干扰当前主线时才启用 Focus Lease。
 
-每次派单先判断服务提供方。官方 OpenAI 服务只允许使用
-`gpt-5.6-luna`/fast、`gpt-5.6-terra`/balanced 和
-`gpt-5.6-sol`/deep/critical，并按照接收任务真正要做的工作选择 Thinking；不再
-使用 GPT-5.5 或更旧模型。非 OpenAI 服务不做模型路由，不传 `model` 和
-`thinking`，一律沿用该服务默认模式。
-
-唯一兼容兜底是 `gpt-5.6-luna` + `medium`，只允许在目标尚未输出时，使用相同
-request key 和 prompt 重试一次，并且不得低于接收任务的安全能力要求。若
-`deep`/`critical` 无法安全降到 Luna/medium，停止并报告，不得静默降级。已有
-目标输出后不得重试。日常路由信息留在原生任务历史，不写入项目文档；`max`
-只有在具体模型和调用路径明确支持时才允许。
 稳定文档保持为当前快照，不追加
 普通日志，不重复记录同一事实。不要把秘密、凭据、私有客户数据、签名 URL 或
 授权链接写入提交的文档。

@@ -14,7 +14,6 @@ docs for durable truth. It does not mirror every native task event into files.
 - Non-preemptive verification
 - Temporary subagents
 - Durable project state
-- Dispatch-time model routing
 - Portable Controls
 - Docs compaction and locks
 - Cross-tool compatibility
@@ -137,13 +136,11 @@ intake surface; it does not automatically own the problem.
    decomposition, shared-contract stabilization, integration, and result
    return. Other modules receive explicit non-overlapping slices and may start
    only work that does not invent an unresolved contract.
-6. Classify every delegated slice and choose supported `model` and `thinking`
-   parameters using Dispatch-Time Model Routing below.
-7. Keep progress and a lightweight routing trace in native task state unless
+6. Keep progress and a lightweight routing trace in native task state unless
    Portable Controls are needed.
-8. The intake task remains responsible for returning a coherent result to its
+7. The intake task remains responsible for returning a coherent result to its
    user unless another return owner is explicitly named.
-9. Update durable docs only when project truth changed.
+8. Update durable docs only when project truth changed.
 
 Answer-only or clearly local work may stay in the current task only when it has
 no plausible module ownership conflict, persistent change, or cross-module
@@ -160,7 +157,6 @@ Include this compact routing envelope in each native cross-task request:
 - assigned non-overlapping slice
 - visited tasks/modules
 - return owner
-- selected model/Thinking profile, or provider-default mode, and one-line reason
 
 Use the same request key across re-routing. A receiving task may transfer work
 that it does not own, but it must extend the visited list and preserve one lead
@@ -188,7 +184,6 @@ Use this minimum task payload:
 - expected verification
 - when to escalate to the main task
 - routing trace and named return owner
-- selected model/Thinking profile, or provider-default mode, and one-line reason
 
 Do not dispatch vague ideas, duplicate active work, or answer-only questions
 with no ownership ambiguity. Do not retain module-owned work merely because the
@@ -203,7 +198,7 @@ Use return channels in this order:
    with `read_thread`. Do not declare the intake request complete before the
    delegated result is reviewed unless the runtime requires asynchronous
    return and that limitation is stated. If automatic return fails before
-   output, prefer native read plus one compatibility-safe native send before a
+   output, prefer native read plus one native send before a
    file-based fallback.
 2. Compact module `handoff.md` update when the result must survive native task
    history, tool, or account boundaries.
@@ -300,125 +295,6 @@ home; other docs link to it.
 Do not create optional docs preemptively. Add a roadmap, global status,
 module-level PRD/design, runbook, thread-run, Return Inbox, lock, or archive
 only when its responsibility is real and not already covered.
-
-## Receiver-Aware Model Routing
-
-Every call to an existing visible task, module-to-module re-route, automatic
-owner return, or authorized new visible task must classify the work the target
-will perform after receiving the message. Do not classify by payload length or
-transport simplicity alone.
-
-First determine the service provider. If it is not confirmed as official
-OpenAI, do not route the model or Thinking: omit both overrides and use the
-provider's default mode. The task ownership and dispatch flow still applies.
-
-### Classification Signals
-
-Assess the concrete task before invocation:
-
-- **Type:** lookup/docs, verification, implementation, review, debugging,
-  architecture/decision, migration/operations, security/payment
-- **Complexity:** deterministic, normal, ambiguous, or highly coupled
-- **Risk:** low, moderate, high, or critical failure cost
-- **Context:** short/local, multi-file/module, or long-history synthesis
-- **Reversibility:** easy rollback, costly rollback, or irreversible step
-- **Parallelism:** one owner, independent module slices, or tightly coupled work
-- **Receiver duty:** acknowledge, review, integrate, decide, update a gate, or
-  execute an action
-
-### Routing Matrix
-
-| Profile | Typical Work | Model Capability | Thinking |
-|---|---|---|---|
-| `fast` | receipt-only acknowledgement or mechanical low-risk work with no review/merge/decision duty | `gpt-5.6-luna` | `low`; use `medium` when context is not trivial |
-| `balanced` | normal implementation, clear bug fix, routine review, single-module work | `gpt-5.6-terra` | `medium`; use `high` for uncertainty or broader verification |
-| `deep` | ambiguous bug, repeated failure, long context, cross-module contract, architecture, read-only auth/security/payment investigation | `gpt-5.6-sol` | `high` or `xhigh` |
-| `critical` | executing/authorizing irreversible migration or production action, active financial/data/security loss, highest failure cost | `gpt-5.6-sol` | `xhigh` by default; `max` only with exact model/path support |
-
-For confirmed official OpenAI service, the allowlist is exactly
-`gpt-5.6-sol`, `gpt-5.6-terra`, and `gpt-5.6-luna`. GPT-5.5 and all older,
-preview, specialized, mini/nano, or provider-specific models are prohibited,
-including as fallbacks.
-
-Apply these receiver floors:
-
-- `fast`: pure acknowledgement with no review, merge, decision, or state change
-- `balanced`: ordinary owner-result review or routine state integration
-- `deep`: production evidence, acceptance/gate review, cross-module integration,
-  or long/risky context
-- `critical`: the high-consequence action or active severe incident itself, not
-  merely the review of production evidence
-
-Do not route from keywords alone. Reversible read-only work in a sensitive
-domain is normally `deep`; reserve `critical` for the action/exposure itself.
-
-### Invocation Rules
-
-- Existing visible task on official OpenAI service: inspect the active schema and normally call
-  `send_message_to_thread` with explicit supported `model` and `thinking` that
-  pass the Desktop compatibility gate below.
-- Existing visible task on any other service: omit both overrides and retain
-  provider defaults.
-- New visible task: after required user authorization, call `create_thread`.
-  For official OpenAI service, pass the selected pair when supported; for any
-  other service, omit both overrides.
-- New role-only task with no concrete work: use the current `balanced` mapping
-  (`gpt-5.6-terra`, `medium`) on official OpenAI service; otherwise use provider
-  defaults. Classify again on every later dispatch.
-- Temporary subagent, when permitted: apply the same provider-first rule. Pass
-  explicit supported model/reasoning parameters only for official OpenAI.
-- For official OpenAI, include
-  `Routing: <profile>; model=<id>; thinking=<effort>; reason=<short>` in the
-  native prompt. For other services, use
-  `Routing: provider-default; reason=<short>` without model fields. Actual tool
-  arguments and product compatibility are authoritative; this text cannot
-  force unsupported params.
-- An explicit request outside the OpenAI allowlist or the non-OpenAI
-  default-mode rule is a policy conflict; report it instead of silently routing.
-- Use `max` only when the exact model/path accepts it and the work needs it; a generic tool enum is insufficient.
-
-### Desktop Compatibility Gate
-- Confirm the provider first. Non-OpenAI services receive no `model` or
-  `thinking` override and do not use the OpenAI compatibility fallback.
-- On official OpenAI service, intersect tool values with the selected GPT-5.6
-  model/path capability. A generic tool enum may span models.
-- If a visible tool lacks `reasoning.summary`, the source cannot set/remove it.
-  Attribute incompatibility to the Desktop turn-start/adapter layer, not source.
-- Product-managed automatic returns must use the same receiver-aware profile and
-  compatibility gate. A completed task is not automatically a `fast` return.
-
-### Fallback Safety
-If a preferred model or effort is unavailable:
-
-1. Re-read the active tool's supported model/Thinking values and provider.
-2. For official OpenAI service, retry once with `gpt-5.6-luna` and `medium` only
-   when that pair still satisfies the receiver floor. Never select GPT-5.5 or
-   older.
-3. For non-OpenAI service, keep provider defaults without model routing.
-4. State the fallback in the native dispatch prompt when one is used.
-5. Never silently downgrade `deep` or `critical` work below a safe level. Stop
-   and ask the user if no supported option is adequate.
-
-If an invocation fails before the target produces output because a
-Desktop-managed optional reasoning parameter is unsupported:
-
-1. Confirm that the target produced no response and that retry cannot duplicate
-   work.
-2. Reuse the same request key and prompt.
-3. On official OpenAI service, retry once with `gpt-5.6-luna` and `medium` only
-   when it satisfies the receiver floor. On non-OpenAI service, keep provider
-   defaults and do not introduce a model override.
-4. If product-managed automatic return cannot retry, recover the completed
-   source result with native task read and send one explicit compatibility-safe
-   message, or use the approved Return Packet fallback.
-5. Stop after a second failure and report the product-layer limitation.
-
-If a pre-output error lists supported Thinking values, preserve the request key
-and prompt and apply the same provider-specific rule. Do not retry after output
-or lower a profile below its safe floor.
-
-Only Portable Controls or audit-sensitive tasks should persist requested/actual
-model details outside native task history.
 
 ## Portable Controls
 
@@ -519,8 +395,7 @@ reliable return path.
 2. Classify ownership before nontrivial execution.
 3. Execute owned work, directly route misowned work, or perform a minimal read-only impact scan when ownership is unclear.
 4. For cross-module work, keep one lead, non-overlapping slices, and a loop-safe routing trace.
-5. Reclassify provider and model/Thinking policy for every outward dispatch.
-6. Return a coherent result to the intake user or named return owner.
+5. Return a coherent result to the intake user or named return owner.
 
 ### Main Task Review Loop
 

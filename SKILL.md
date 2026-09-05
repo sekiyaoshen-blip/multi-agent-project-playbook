@@ -5,7 +5,7 @@ description: >
   long-running agent-assisted projects. Use when a project needs a main planning
   task, durable visible module tasks, automatic intake and cross-task module
   routing, project-local
-  AGENTS.md rules, dispatch-time model/Thinking selection, compact current-state
+  AGENTS.md rules, compact current-state
   docs, non-preemptive verification, Focus Leases, pull-based result harvesting,
   cross-tool compatibility, or lock-safe docs compaction. Prefer ChatGPT
   Desktop/Codex native task tools for visible long-lived work and temporary
@@ -13,8 +13,8 @@ description: >
   implementation after the project contract is
   installed. Trigger terms include agent operating model, long-lived module
   threads, visible module tasks, main thread dispatch, thread routing, project
-  agent OS, model routing, thinking routing, context governance, 项目智能体协作,
-  长期模块线程, 主线程派单, 模型路由, 推理强度, 文档压缩.
+  agent OS, context governance, 项目智能体协作,
+  长期模块线程, 主线程派单, 文档压缩.
 ---
 
 # Multi-Agent Model
@@ -108,18 +108,14 @@ Add only when native task state is insufficient:
 8. If a required visible module task does not exist, ask for or rely on explicit
    user authorization before creating it. Generate its startup prompt from
    `references/module-startup-prompt.template.md`.
-9. Install receiver-aware model routing so every existing-task message,
-   automatic return, or authorized new-task creation first identifies the
-   provider, then selects a supported model/Thinking pair only for official
-   OpenAI service; other services retain provider defaults.
-10. Install loop-safe direct routing so any registered module task can transfer
+9. Install loop-safe direct routing so any registered module task can transfer
     or split misrouted work without routing every request through the main task.
-11. Install the non-preemptive verification summary. Add Focus Leases or
+10. Install the non-preemptive verification summary. Add Focus Leases or
     file-based `VAL-*` records only for concrete concurrent, cross-tool, audit,
     or unreliable-runtime needs.
-12. Add other Portable Controls only for a concrete risk or interoperability
+11. Add other Portable Controls only for a concrete risk or interoperability
     need.
-13. Report the installed mode, mapped docs, visible task map, assumptions, and
+12. Report the installed mode, mapped docs, visible task map, assumptions, and
     omitted optional controls.
 
 ## Native-First Runtime Contract
@@ -198,7 +194,7 @@ Use this priority:
    inspection with `read_thread`. Do not declare the intake request complete
    until the delegated result has been reviewed, unless the runtime requires an
    asynchronous return and that limitation is stated. If automatic return
-   fails before output, prefer native read plus one compatibility-safe native
+   fails before output, prefer native read plus one native
    send before creating a file-based fallback.
 2. Compact update to module `handoff.md` when the result must survive task UI,
    tool, or account boundaries.
@@ -252,99 +248,6 @@ cross-task review, testing, or evidence checks to a bounded verifier by default.
 Read `references/verification-operating-model.template.md` only when activating,
 recovering, or auditing this side lane. Use its request, result, startup, and
 Focus Lease templates only for the controls the project actually needs.
-
-### Receiver-Aware Model Routing
-
-Before every native call to an existing visible task, including a re-route from
-one module task to another, or authorized creation of a new visible task:
-
-1. Determine whether the invocation uses the official OpenAI service. If it
-   uses another provider, or the provider cannot be confirmed as official
-   OpenAI, do not route the model: omit `model` and `thinking` overrides and use
-   that service's default mode. Continue task ownership routing normally.
-2. For official OpenAI service calls, classify both the message and the work the receiving task must perform next:
-   task type, complexity, risk, context size, reversibility, parallelism,
-   review/integration duty, and decision authority. Message length and the
-   simplicity of transport never determine the profile by themselves.
-3. Inspect both the active tool/client schema and the selected model's accepted
-   Thinking values on that invocation path, then use their intersection. A tool
-   enum may be broader than one model's actual support. Do not invent a model,
-   effort, or hidden request parameter.
-4. Select the official OpenAI profile:
-   - `fast`: `gpt-5.6-luna`; `low`, or `medium` when context is not trivial
-   - `balanced`: `gpt-5.6-terra`; `medium`, or `high` for uncertainty
-   - `deep`: `gpt-5.6-sol`; `high` or `xhigh`
-   - `critical`: `gpt-5.6-sol`; `xhigh` by default, with `max` only when the
-     exact model and invocation path explicitly support it
-5. Apply receiver floors:
-   - pure receipt acknowledgement with no review, merge, decision, or state
-     change may use `fast`
-   - ordinary owner result review or routine state integration is at least
-     `balanced`
-   - production evidence review, acceptance/needs-followup verdicts, project
-     gate updates, cross-module integration, or long/risky context are normally
-     `deep`
-   - use `critical` only when the receiver will execute/authorize an
-     irreversible high-consequence action or handle an active severe incident
-6. Pass explicit supported `model` and `thinking` only for confirmed official
-   OpenAI service calls when the invocation exposes
-   those controls and the selected pair passes the compatibility gate. Include
-   a one-line routing reason in the native prompt. Do not create routine
-   model/version/quota telemetry in project docs.
-
-For official OpenAI service calls, the allowed model IDs are exactly
-`gpt-5.6-sol`, `gpt-5.6-terra`, and `gpt-5.6-luna`. Do not use GPT-5.5 or any
-older model, including as a fallback. Do not replace these explicit IDs with an
-older, preview, specialized, mini/nano, or provider-specific model.
-
-The single compatibility fallback is `gpt-5.6-luna` with `medium` Thinking.
-Use it only for one pre-output retry with the same request key and prompt, and
-only when it still satisfies the receiver's risk floor. If `deep` or `critical`
-work cannot safely run on Luna/medium, stop and report the compatibility blocker
-instead of silently downgrading. This fallback never applies to non-OpenAI
-services; those always retain their provider defaults.
-
-Do not classify by sensitive keywords alone. A reversible read-only
-investigation in a high-risk domain is normally `deep`; use `critical` when the
-task itself performs/authorizes a high-consequence action or an active incident
-creates immediate severe exposure.
-
-### Desktop Compatibility Gate
-
-- Confirm the provider before selecting a model. Non-OpenAI services receive no
-  `model` or `thinking` override and no OpenAI compatibility fallback.
-- For official OpenAI service calls, use only `gpt-5.6-sol`,
-  `gpt-5.6-terra`, or `gpt-5.6-luna` and verify that the active invocation path
-  accepts the selected pair.
-- Treat a generic tool enum as an outer bound, not proof that every listed
-  effort works with every model. Confirm the selected model/path combination.
-- The visible `send_message_to_thread` contract may expose only `model`,
-  `thinking`, and `prompt`. If it does not expose `reasoning.summary`, the skill
-  cannot add, remove, or retry that hidden field directly. Attribute such a
-  failure to the Desktop turn-start/adapter layer, not to the source task.
-- Treat the `Routing:` line as an audit statement. Actual tool arguments and
-  product compatibility are authoritative; text must never force an
-  unsupported parameter combination.
-- If a pre-output error lists supported Thinking values, retry at most once with
-  the same request key and prompt. On official OpenAI service, use
-  `gpt-5.6-luna` with `medium` only when it meets the receiver floor. On a
-  non-OpenAI service, keep provider defaults and do not perform model routing.
-  Never retry after any target output.
-- If a cross-task invocation fails before the target produces output because a
-  Desktop-managed optional reasoning parameter is unsupported, apply the same
-  one-retry rule. Never recover by selecting GPT-5.5 or an older model.
-- If a product-managed automatic return cannot perform that retry, recover the
-  result with native task read plus an explicit compatibility-safe message, or
-  use the approved Return Packet fallback. State the product-layer limitation.
-
-If an explicit model request conflicts with this project's official OpenAI
-allowlist or the non-OpenAI default-mode rule, state the conflict instead of
-silently using an out-of-policy model. Never silently lower `deep` or
-`critical`; ask or stop when no safe supported option exists.
-
-For a new role-only module task with no concrete work yet, use
-`gpt-5.6-terra` with `medium` on confirmed official OpenAI service. On any other
-service, use its defaults. Classify again on every future dispatch.
 
 ## Durable State Rules
 
@@ -427,18 +330,6 @@ Read only the resources needed for the selected mode:
   interruption classes?
 - Are pass/informational results pulled at safe checkpoints instead of pushed,
   with Focus Leases used only when concurrent interruption is a real risk?
-- Does every native existing/new task invocation classify the concrete task and
-  the receiver's follow-up duty before selecting compatible model/Thinking
-  values?
-- Are production evidence, acceptance review, gate updates, and cross-module
-  integration protected from transport-only `fast` classification?
-- Are preview/specialized models excluded from cross-task delivery unless their
-  Desktop-managed parameter compatibility is confirmed?
-- Are official OpenAI calls limited to Sol/Terra/Luna, with Luna/medium as the
-  only compatibility fallback and no GPT-5.5-or-older route?
-- Do non-OpenAI services omit model/Thinking overrides and keep their defaults?
-- Do high-risk routing fallbacks avoid silent capability downgrades and stale
-  hard-coded quota rules?
 - Are active docs current, compact, non-duplicative, and read selectively?
 - Are compaction locks used only for broad shared-doc rewrites?
 - Can another tool recover durable project truth without reading chat history?

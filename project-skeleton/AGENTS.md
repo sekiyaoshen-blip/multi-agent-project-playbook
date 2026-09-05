@@ -50,40 +50,10 @@ This project uses a native-first project agent operating model.
   current product/runtime, then register its durable identity.
 - Use system/Codex Desktop native result delivery first: native delegation
   return, `send_message_to_thread`, or `read_thread` inspection. If automatic
-  return fails before output, prefer native read plus one compatibility-safe
-  native send. Update module `handoff.md` only when durable recovery matters;
+  return fails before output, prefer native read plus one native send.
+  Update module `handoff.md` only when durable recovery matters;
   use Return Packets only for explicit risk, audit, asynchronous work, or
   unavailable/unreliable native delivery.
-- Before every existing-task message or authorized new-task creation, classify
-  both the message and the receiving task's next work: review, integration,
-  decision, context, risk, reversibility, and parallelism. Do not classify by
-  message length or transport simplicity alone.
-- Determine the service provider before model routing. If it is not confirmed
-  as official OpenAI, omit `model` and `thinking` overrides and use that
-  provider's default mode. Continue task routing without model routing.
-- A pure receipt-only acknowledgement may use `fast`. Ordinary owner-result
-  review is at least `balanced`. Production evidence, acceptance verdicts,
-  project gate updates, cross-module integration, or long/risky context are
-  normally `deep`.
-- On official OpenAI service, use exactly `gpt-5.6-luna` for `fast`,
-  `gpt-5.6-terra` for `balanced`, and `gpt-5.6-sol` for `deep`/`critical`.
-  No GPT-5.5 or older model may be used, including as a fallback.
-- Intersect tool-level values with the selected model/path capability; a tool
-  enum may be broader than one model. Default `critical` to `xhigh`. Use `max`
-  only with exact model/path confirmation.
-- The only OpenAI compatibility fallback is `gpt-5.6-luna` with `medium`, used
-  for at most one pre-output retry with the same request key and prompt. Use it
-  only when it meets the receiver floor; never silently downgrade `deep` or
-  `critical`. Non-OpenAI services do not use this fallback.
-- If the visible tool does not expose `reasoning.summary`, do not claim the
-  source task set it. On a pre-output optional-parameter compatibility failure,
-  apply the same one-retry provider rule. Never retry after target output.
-- If an explicit request conflicts with the OpenAI allowlist or non-OpenAI
-  default-mode rule, report the conflict. Never silently use an out-of-policy
-  model or downgrade deep/critical work.
-- Treat a `Routing:` line as observability only; actual tool arguments and
-  product compatibility are authoritative.
-- Keep routine routing data in the native dispatch prompt, not project docs.
 - Preserve one visible mainline in each long-lived owner task. Keep task-local
   self-verification with the owner; route unrelated cross-task checks to a
   bounded verifier with a `VAL-*` key and a fixed target when possible.

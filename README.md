@@ -15,7 +15,7 @@ instead of recreating the product's task system in files.
 ## Core Model
 
 ```text
-GPT-5.6 / current model: detect ownership, decompose, and reason
+Current model: detect ownership, decompose, and reason
 ChatGPT Desktop / Codex: operate visible long-lived tasks
 Project docs: preserve durable truth and cross-tool state
 Optional Portable Controls: cover recovery, audit, and unreliable boundaries
@@ -36,13 +36,10 @@ results stay in native task history.
 - Cross-module work has exactly one lead and non-overlapping delegated slices.
 - Native routing traces prevent loops, blind broadcasts, duplicate work, and
   competing coordinators without creating a file-based task log.
-- Every existing/new native task invocation classifies the receiver's actual
-  follow-up work and provider. Official OpenAI calls use a supported
-  model/Thinking pair; other services retain provider defaults.
 - Temporary subagents are limited to bounded disposable research, review,
   search, test, or verification work.
 - System/Codex Desktop native delivery is the default result path. If automatic
-  return fails, prefer native read plus one compatibility-safe native send;
+  return fails, prefer native read plus one native send;
   compact handoffs preserve only durable cross-task or cross-tool context.
 - Thread-runs and Return Packets are optional controls, not routine ceremony.
 
@@ -70,35 +67,6 @@ results stay in native task history.
 - **Portable Controls (opt-in):** adds thread-runs, Return Packets, compaction
   locks, Focus Leases, verification records, or archives only for concrete
   recovery, audit, asynchronous, high-risk, or cross-tool needs.
-
-## Dispatch-Time Model Routing
-
-Before every call to an existing visible task, module-to-module re-route,
-automatic owner return, or authorized creation of a new task, classify what the
-receiver must do next. A short return that requires evidence review, state
-integration, or a gate decision is not a `fast` transport message.
-
-- `fast`: `gpt-5.6-luna`, `low`/`medium`
-- `balanced`: `gpt-5.6-terra`, `medium`/`high`
-- `deep`: `gpt-5.6-sol`, `high`/`xhigh`
-- `critical`: `gpt-5.6-sol`, `xhigh` by default; `max` only with exact
-  model/path support
-
-For confirmed official OpenAI service, these three explicit GPT-5.6 IDs are the
-entire allowlist. GPT-5.5 and all older models are prohibited, including as
-fallbacks. The only compatibility fallback is `gpt-5.6-luna` with `medium`, for
-one pre-output retry when it still meets the receiver's risk floor. Deep or
-critical work is never silently downgraded.
-
-For any non-OpenAI service, model routing is disabled. The invocation omits
-both `model` and `thinking` and uses the provider's default mode. The OpenAI
-Luna fallback does not apply.
-
-Tool schemas may expose a union of values across models. Official OpenAI routing
-therefore uses the intersection of the selected GPT-5.6 model, tool, and
-invocation-path support. `max` is used only with exact support. The visible task
-tool may not expose product-managed fields such as `reasoning.summary`; the
-skill does not pretend it can directly remove them.
 
 ## Project Skeleton
 
