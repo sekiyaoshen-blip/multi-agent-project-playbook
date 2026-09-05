@@ -9,8 +9,10 @@ to the current request.
   relevant checks, and finish when the requested outcome is met.
 - Do not add architecture, abstractions, formal contracts, audit artifacts, or
   extra reviews without a concrete need. Preserve required project checks.
-- Keep ordinary tests with the implementer. Delegate only useful independent
-  slices; a small task needs neither a plan document nor a verifier task.
+- Keep ordinary tests with the implementer; test behavior and regression risks,
+  not merely implementation details. After relevant checks pass, expand or
+  repeat them only for new changes, failures, or unresolved doubts. A small task
+  needs neither a plan document nor a verifier task.
 - Update existing docs only when their maintained facts changed. Native task
   history holds routine progress; each durable fact has one primary home.
 - Preserve unrelated changes and active owners. Never commit secrets.
@@ -24,13 +26,16 @@ to the current request.
 - For cross-module work, keep one lead, explicit non-overlapping slices, and
   only the shared interface decisions actually needed. Continue independent work.
 - The intake task returns the final answer unless another return owner is named.
-  Dispatch in a short native message: outcome, scope, context, return destination.
+  Dispatch in a short native message: scope, necessary inputs, expected output,
+  completion criteria, and return destination. No extra form is needed.
 - Check active work when overlap is plausible. Do not broadcast, duplicate work,
   or route a slice in circles; resolve that slice with the lead.
 - Reuse existing visible module tasks. Create new visible tasks only with
   explicit user authorization and runtime support.
-- Temporary subagents can handle bounded independent work inside an owner's
-  scope, but do not replace stable module owners or become routing coordinators.
+- Delegate only genuinely independent work when it saves time or improves
+  quality. Keep coupled shared-state work and sequential decisions with the
+  responsible owner. Subagents do not replace stable module owners or become
+  routing coordinators; the lead integrates and verifies their results.
 - Prefer native task discovery, messaging, waits, and result inspection. Review
   delegated results before claiming completion; avoid unchanged-state polling
   and unrelated messages to a busy owner.

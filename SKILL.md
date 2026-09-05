@@ -24,7 +24,7 @@ for concrete risks introduced by the change.
 
 Single-task projects need no module machinery. Multi-module projects need an
 ownership map, not a full documentation suite. Parallelize only genuinely
-independent work whose saved time exceeds coordination cost.
+independent work when the time or quality benefit exceeds coordination cost.
 
 ## Install Or Upgrade
 
@@ -66,14 +66,17 @@ Load this skill again only for operating-model changes.
   actual shared interface needed; continue independent work while a decision
   is pending. No contract document is required for an ordinary API change.
 - The intake task owns the user's final answer unless another return owner is
-  named. Send the outcome, scope, relevant context, and return destination in a
-  short native message. Use existing task IDs/links instead of new tracking IDs.
+  named. Send scope, necessary inputs, expected output, completion criteria,
+  and return destination in a short native message, not an extra form. Use
+  existing task IDs/links instead of new tracking IDs.
 - Check target state when duplicate work or interruption is plausible. Do not
   blindly broadcast or route the same work back and forth. If routing loops,
   ask the lead to resolve that slice; continue unrelated owned work.
 - A stable module owner is not replaced by a temporary subagent. Use subagents
   for bounded independent implementation, research, review, or tests within the
-  lead's ownership. They return to the lead, not another routing coordinator.
+  lead's ownership when it saves time or improves quality. Keep coupled
+  shared-state work and sequential decisions with the responsible owner;
+  subagents return to the lead, who integrates and verifies their results.
 - Use native result delivery or bounded waits for completion; inspect task
   details only when needed. Review delegated results before claiming completion.
   Do not poll unchanged state or push routine pass notifications into busy tasks.
@@ -83,7 +86,9 @@ Load this skill again only for operating-model changes.
   capabilities. Handoff can interrupt running work, so coordinate it.
 - Keep local verification with the implementer. Independent review is optional
   unless required by the user, project, or a concrete high-impact change.
-  Run only relevant checks; do not rerun an unchanged passing check for ceremony.
+  Test behavior and regression risks, not merely implementation details.
+  After relevant checks pass, expand or repeat them only for new changes,
+  failures, or unresolved doubts; otherwise continue delivery.
 - Document changed usage, interfaces, deployment steps, or durable decisions in
   their existing home. No doc change is needed when no maintained fact changed.
 

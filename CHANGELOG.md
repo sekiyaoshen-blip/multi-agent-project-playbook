@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Strengthened existing preferences: useful work before clarification, relevant
+  technical detail, behavior-focused tests, bounded delegation, and cleanup
+  limited to disposable files created by the current task. No new workflow.
+
 - Simplified defaults using current Codex native coordination and GPT-6 Astra
   prompting guidance; retained model-independent behavior and module ownership.
 - Reduced the default project skeleton to three conditional files. Product,

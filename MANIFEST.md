@@ -4,20 +4,20 @@ Generated package contents. `MANIFEST.md`, local duplicate backups, `.DS_Store`,
 and Git metadata are excluded to avoid self-reference and machine-local files.
 
 - `.gitignore` — 69 bytes — sha256 `d4efada4bfb23875`
-- `CHANGELOG.md` — 4383 bytes — sha256 `315288031acdb2b6`
+- `CHANGELOG.md` — 4616 bytes — sha256 `46b92cd21e51bd02`
 - `CONTRIBUTING.md` — 812 bytes — sha256 `00be0feee4e57d75`
 - `INSTALL.md` — 3459 bytes — sha256 `124688fccaf4a1c9`
 - `INSTALL.zh-CN.md` — 2616 bytes — sha256 `a55c0e0669ed3908`
 - `LICENSE` — 1087 bytes — sha256 `0b0599b3bfd40e56`
 - `README.md` — 2840 bytes — sha256 `eb5ec4c241fa9103`
 - `README.zh-CN.md` — 2685 bytes — sha256 `1d5f00db577ff6fa`
-- `SKILL.md` — 6730 bytes — sha256 `2070412956cf41ed`
+- `SKILL.md` — 7062 bytes — sha256 `7ebad173f46bbd5c`
 - `agents/openai.yaml` — 306 bytes — sha256 `0542a251b9d91eb7`
-- `project-skeleton/AGENTS.md` — 2619 bytes — sha256 `656cd38dc194c185`
+- `project-skeleton/AGENTS.md` — 2968 bytes — sha256 `80c0338ece4ee6c8`
 - `project-skeleton/docs/current-work.md` — 589 bytes — sha256 `f532a2ae1e14d29d`
 - `project-skeleton/docs/thread-registry.md` — 977 bytes — sha256 `d6aa45d933205e46`
 - `references/adr.template.md` — 413 bytes — sha256 `1a0b003361eebd3c`
-- `references/agents.template.md` — 2619 bytes — sha256 `656cd38dc194c185`
+- `references/agents.template.md` — 2968 bytes — sha256 `80c0338ece4ee6c8`
 - `references/claude.template.md` — 1153 bytes — sha256 `f43f9a10ff70715d`
 - `references/codex-native-notes.md` — 2492 bytes — sha256 `8217746fa2f6f63d`
 - `references/compaction-lock.template.md` — 1416 bytes — sha256 `ceb6cecaa6f0ef54`
@@ -35,7 +35,7 @@ and Git metadata are excluded to avoid self-reference and machine-local files.
 - `references/module-current-technical-design.template.md` — 1166 bytes — sha256 `1f326facfe012d9a`
 - `references/module-startup-prompt.template.md` — 1559 bytes — sha256 `30bcd2b6b8797576`
 - `references/module-status.template.md` — 1038 bytes — sha256 `ff5a26dc92c66731`
-- `references/personal-instructions.zh-CN.md` — 3115 bytes — sha256 `42082bce60f56cc3`
+- `references/personal-instructions.zh-CN.md` — 3826 bytes — sha256 `f1810d4981fb05f2`
 - `references/project-brief.template.md` — 727 bytes — sha256 `0466c1664235c081`
 - `references/return-packet.template.md` — 1273 bytes — sha256 `ecb0998f52729b15`
 - `references/roadmap.template.md` — 1615 bytes — sha256 `61ddfcc592094b64`
