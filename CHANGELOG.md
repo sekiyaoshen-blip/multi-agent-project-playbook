@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Added lightweight receiving rules for concurrent messages: preserve unfinished
+  actions, separate notices from requests, resolve conflicting instructions, and
+  coordinate genuinely shared resources without a new queue or acknowledgment log.
+- Documented the maintainer update sequence: GitHub source, local skill, then
+  adopted project rules within the authorized scope.
+
 - Strengthened existing preferences: useful work before clarification, relevant
   technical detail, behavior-focused tests, bounded delegation, and cleanup
   limited to disposable files created by the current task. No new workflow.

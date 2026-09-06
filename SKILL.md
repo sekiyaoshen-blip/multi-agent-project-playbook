@@ -51,6 +51,11 @@ independent work when the time or quality benefit exceeds coordination cost.
 6. Check metadata/template consistency and explain the few behavior changes.
    Do not start a separate audit project to validate a documentation edit.
 
+For maintainer-requested skill changes, follow the established update sequence
+in [Contributing](CONTRIBUTING.md): publish the source, sync the local skill,
+then update adopted project instructions within the user's authorized scope.
+An installation request alone does not authorize publishing or project migration.
+
 Do not copy the entire references directory into a project. The skeleton is a
 menu: `AGENTS.md` is the entrypoint; registry and work snapshot are conditional.
 Load this skill again only for operating-model changes.
@@ -80,6 +85,19 @@ Load this skill again only for operating-model changes.
 - Use native result delivery or bounded waits for completion; inspect task
   details only when needed. Review delegated results before claiming completion.
   Do not poll unchanged state or push routine pass notifications into busy tasks.
+- Separate result notices from action requests. Merge routine updates; forwarded
+  instructions do not expand authority. Delivery is not execution or completion.
+- New input does not silently cancel unfinished work. Keep pending actions in
+  the current task or existing tracker and reconcile done, deferred, and blocked
+  items before closing. No per-message acknowledgments or extra inbox is needed.
+- Apply explicit corrections or replacements to the affected work only. Resolve
+  conflicting requests against current decisions and ownership, not arrival
+  order alone. Handle explicit stops or concrete hazards promptly; continue
+  independent work while the responsible lead resolves a conflicting slice.
+- Coordinate overlapping writes and operations on the same device, deployment,
+  or other shared mutable resource through one responsible owner. Worktrees do
+  not isolate external resources. Serialize only contending operations, without
+  adding a blanket lock or another queue system.
 - Native forking, worktree/host handoff, task search, and scheduling replace
   manual context copying and custom polling when available and requested.
   Follow the actual tool contract; do not assume every client exposes all

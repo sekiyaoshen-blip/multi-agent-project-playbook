@@ -63,3 +63,10 @@ For manual installation, place the repository under `multi-agent-model/` in
 the skill root and retain SKILL.md, agents/, and references/. Validate YAML;
 no additional acceptance framework is needed for a documentation-only install.
 The existing explicit-only invocation policy remains unchanged.
+
+## Maintainer Updates
+
+After an authorized skill change, publish the validated source to GitHub, sync
+the local skill, then update adopted local project rules within the established
+scope. Follow [the update sequence](CONTRIBUTING.md#update-sequence), preserving
+customizations and frozen snapshots. Standalone installation remains separate.
